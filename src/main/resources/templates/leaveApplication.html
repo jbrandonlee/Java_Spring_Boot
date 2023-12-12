@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product List</title>
+</head>
+<body>
+<br/>
+<h2 style="text-align: center;">Search Result</h2>
+<h3 style="text-align: center;" th:if="${#lists.isEmpty(leaveApplications)}">No Results.</h3>
+<table th:if="${not #lists.isEmpty(products)}" style="width:50%; margin-left: auto; margin-right: auto;">
+    <tr>
+        <th>Id</th>
+/>
+   © NUS All Rights Reserved Page 22 of 30
+Workshop Instructions – Spring MVC
+           <th>Name</th>
+        <th>Category</th>
+        <th>Description</th>
+</tr>
+<tr th:each="application:${leaveApplications}">
+<td th:text="${leaveApplications.id}">Id</td>
+<td><a th:text="${leaveApplications.name}">Name</a></td>
+<td th:text="${leaveApplications.category}">Category</td>
+<td th:text="${leaveApplications.description}">Description</td>
+    </tr>
+</table>
+</body>
+</div>
+</html>
