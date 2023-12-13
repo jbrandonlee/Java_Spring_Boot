@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import sg.nus.iss.javaproject.model.Staff;
 
 public interface StaffRepository extends JpaRepository<Staff,Integer> {
-	@Query("Select s from Staff as s where s.employeeName=:username")
-	public Staff getByName(@Param("username")String username);
+	@Query("Select s from Staff s JOIN s.account a where a.username=:username")
+	public Staff getByUsername(@Param("username")String username);
 }
 

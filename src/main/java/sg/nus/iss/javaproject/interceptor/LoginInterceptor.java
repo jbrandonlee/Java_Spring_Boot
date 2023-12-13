@@ -19,7 +19,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 							 throws IOException {
 		HttpSession sessionOBJ=request.getSession();
 		Staff staff=(Staff)sessionOBJ.getAttribute("staff");
-		String username=staff.getEmployeeName();
+		String username=staff.getAccount().getUsername();
 		if(username!=null) {
 			return true;
 		}

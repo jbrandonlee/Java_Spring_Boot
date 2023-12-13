@@ -14,7 +14,7 @@ public class StaffImplementation implements StaffInterface {
 	StaffRepository staffRepo;
 
 	@Override
-	public Staff getStaffByName(String username) {
-		return  staffRepo.getByName(username);
+	public Staff getStaffByUsername(String username) {
+		return  staffRepo.getByUsername(username);
 	}
 }

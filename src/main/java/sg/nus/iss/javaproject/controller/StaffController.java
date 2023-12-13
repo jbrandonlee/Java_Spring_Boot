@@ -14,7 +14,7 @@ import sg.nus.iss.javaproject.service.StaffImplementation;
 import sg.nus.iss.javaproject.service.StaffInterface;
 
 @Controller
-public class StaffContorller {
+public class StaffController {
 	@Autowired
 	private StaffInterface sService;
 	
@@ -36,10 +36,17 @@ public class StaffContorller {
 	@PostMapping("/login")
 	public String login(@RequestParam("username")String username,@RequestParam("password")String password,
 						HttpSession sessionobj,Model model) {
-		Staff staff=sService.getStaffByName(username);
-		if(staff!=null&&staff.getPassword().equals(password)) {
-			sessionobj.setAttribute("staff",staff);
-			return "redirect:/home";
+		Staff staff=sService.getStaffByUsername(username);
+		
+		if(staff!=null) {
+			String accountPassword=staff.getAccount().getPassword();
+			if(accountPassword.equals(password)) {
+				sessionobj.setAttribute("staff",staff);
+				return "redirect:/home";
+			}
+			else {
+				return "login";
+			}
 		}
 		else {
 			return "login";
@@ -49,6 +56,6 @@ public class StaffContorller {
 	@GetMapping("/logout")
 	public String logout(HttpSession sessionoBj) {
 		sessionoBj.invalidate();
-		return "redirect:/login";
+		return "redirect:/";
 	}
 }

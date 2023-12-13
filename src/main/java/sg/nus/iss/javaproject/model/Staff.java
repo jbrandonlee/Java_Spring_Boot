@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Staff implements Serializable {
@@ -23,17 +24,19 @@ public class Staff implements Serializable {
 	private String employeeEmail;
 	private LocalDate employeeJoinDate;
 	private int managedBy;
-	private String password;
 	
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
+		
+	@OneToOne
+	private Account account;
 	
 	@OneToMany(mappedBy="staff")
 	private List<LeaveEntitlement> leaveEntitlement;
 	
 	@OneToMany(mappedBy="staff")
 	private List<LeaveApplication> leaveApplication;
-	
+
 	@OneToMany(mappedBy="staff")
 	private List<OverTimeWork> overTimeWork;
 	
@@ -101,14 +104,6 @@ public class Staff implements Serializable {
 		this.managedBy = managedBy;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public UserRole getUserRole() {
 		return userRole;
 	}
@@ -142,12 +137,20 @@ public class Staff implements Serializable {
 		this.overTimeWork = overTimeWork;
 	}
 
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
 	@Override
 	public String toString() {
 		return "Staff [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeDesignation="
 				+ employeeDesignation + ", employeeDeptId=" + employeeDeptId + ", employeeEmail=" + employeeEmail
-				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", password=" + password
-				+ ", userRole=" + userRole +  ", leaveEntitlement=" + leaveEntitlement
-				+ ", leaveApplication=" + leaveApplication + ", overTimeWork=" + overTimeWork + "]";
+				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", userRole=" + userRole
+				+ ", account=" + account + ", leaveEntitlement=" + leaveEntitlement + ", leaveApplication="
+				+ leaveApplication + ", overTimeWork=" + overTimeWork + "]";
 	}
 }
