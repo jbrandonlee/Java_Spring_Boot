@@ -6,7 +6,7 @@ target/
 
 ### STS ###
 .apt_generated
-.project
+.factorypath
 .settings
 .springBeans
 .sts4-cache
