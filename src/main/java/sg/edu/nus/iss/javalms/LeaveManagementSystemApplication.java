@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.javaca;
+package sg.edu.nus.iss.javalms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
