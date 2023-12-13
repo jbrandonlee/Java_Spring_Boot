@@ -3,6 +3,8 @@ package sg.nus.iss.javaproject.model;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,13 +15,18 @@ public class LeaveApplication {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int leaveId;
+	@Enumerated(EnumType.STRING)
 	private LeaveType leaveType;
 	private LocalDate leaveStartDate;
 	private LocalDate leaveEndDate;
 	private String leaveDetails;
 	private String leavePointOfContact;
 	private String leavePhoneNumber;
+	@Enumerated(EnumType.STRING)
 	private ApprovalStatus leaveApprovalStatus;
+	
+	@ManyToOne
+	private Staff staff;
 	
 	public LeaveApplication(LeaveType leaveType, LocalDate leaveStartDate, LocalDate leaveEndDate,
 			ApprovalStatus leaveApprovalStatus) {
@@ -30,8 +37,6 @@ public class LeaveApplication {
 		this.leaveApprovalStatus = leaveApprovalStatus;
 	}
 
-	@ManyToOne
-	private Staff staff;
 
 	public int getLeaveId() {
 		return leaveId;

@@ -8,8 +8,6 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class OverTimeWork {
-
-
 	@Id
 	private LocalDate overtimeDate;
 	private LocalDate overtimeStartTime;
@@ -18,6 +16,7 @@ public class OverTimeWork {
 	
 	@ManyToOne
 	private Staff staff;
+	
 	public OverTimeWork(LocalDate overtimeDate, LocalDate overtimeStartTime, LocalDate overtimeEndTime,
 			String compensationEntitlement) {
 		super();
@@ -26,6 +25,7 @@ public class OverTimeWork {
 		this.overtimeEndTime = overtimeEndTime;
 		this.compensationEntitlement = compensationEntitlement;
 	}
+	
 	public LocalDate getOvertimeDate() {
 		return overtimeDate;
 	}

@@ -1,17 +1,19 @@
 package sg.nus.iss.javaproject.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
-public class Staff {
+public class Staff implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int employeeId;
@@ -21,13 +23,13 @@ public class Staff {
 	private String employeeEmail;
 	private LocalDate employeeJoinDate;
 	private int managedBy;
-	private String password;	
+	private String password;
+	
+	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
-	private List<Staff> manages;
-
 	
 	@OneToMany(mappedBy="staff")
-	private LeaveEntitlement leaveEntitlement;
+	private List<LeaveEntitlement> leaveEntitlement;
 	
 	@OneToMany(mappedBy="staff")
 	private List<LeaveApplication> leaveApplication;
@@ -35,8 +37,8 @@ public class Staff {
 	@OneToMany(mappedBy="staff")
 	private List<OverTimeWork> overTimeWork;
 	
-	
-
+	public Staff() {}
+		
 	public Staff(String employeeName, String employeeDesignation) {
 		super();
 		this.employeeName = employeeName;
@@ -115,19 +117,12 @@ public class Staff {
 		this.userRole = userRole;
 	}
 
-	public List<Staff> getManages() {
-		return manages;
-	}
 
-	public void setManages(List<Staff> manages) {
-		this.manages = manages;
-	}
-
-	public LeaveEntitlement getLeaveEntitlement() {
+	public List<LeaveEntitlement> getLeaveEntitlement() {
 		return leaveEntitlement;
 	}
 
-	public void setLeaveEntitlement(LeaveEntitlement leaveEntitlement) {
+	public void setLeaveEntitlement(List<LeaveEntitlement> leaveEntitlement) {
 		this.leaveEntitlement = leaveEntitlement;
 	}
 
@@ -152,7 +147,7 @@ public class Staff {
 		return "Staff [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeDesignation="
 				+ employeeDesignation + ", employeeDeptId=" + employeeDeptId + ", employeeEmail=" + employeeEmail
 				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", password=" + password
-				+ ", userRole=" + userRole + ", manages=" + manages + ", leaveEntitlement=" + leaveEntitlement
+				+ ", userRole=" + userRole +  ", leaveEntitlement=" + leaveEntitlement
 				+ ", leaveApplication=" + leaveApplication + ", overTimeWork=" + overTimeWork + "]";
 	}
 }
