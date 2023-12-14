@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.javalms;
+package sg.edu.nus.iss.lms;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
