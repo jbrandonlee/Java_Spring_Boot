@@ -3,6 +3,8 @@ package sg.nus.iss.javaproject.model;
 import java.io.Serializable;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +16,9 @@ public class Account implements Serializable{
 	private String username;
 	
 	private String password;
+	
+	@Enumerated(EnumType.STRING)
+	private UserRole userRole;
 	
 	@OneToOne(mappedBy="account")
 	private Staff staff;
@@ -48,8 +53,15 @@ public class Account implements Serializable{
 		this.staff = staff;
 	}
 
+	public UserRole getUserRole() {
+		return userRole;
+	}
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
+	}
+	
 	@Override
 	public String toString() {
-		return "Account [username=" + username + ", password=" + password + ", staff=" + staff + "]";
+		return "Account [username=" + username + ", password=" + password + ", staff=" + staff +",userRole="+userRole+ "]";
 	} 
 }

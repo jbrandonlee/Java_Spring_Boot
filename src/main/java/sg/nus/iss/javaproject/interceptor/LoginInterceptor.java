@@ -19,12 +19,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 							 throws IOException {
 		HttpSession sessionOBJ=request.getSession();
 		Staff staff=(Staff)sessionOBJ.getAttribute("staff");
-		String username=staff.getAccount().getUsername();
-		if(username!=null) {
+		if(staff!=null) {
 			return true;
 		}
 		else {
-			response.sendRedirect("/login");
+			response.sendRedirect("/");
 			return false;
 		}
 	}

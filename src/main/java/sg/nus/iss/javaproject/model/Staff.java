@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,10 +22,7 @@ public class Staff implements Serializable {
 	private String employeeEmail;
 	private LocalDate employeeJoinDate;
 	private int managedBy;
-	
-	@Enumerated(EnumType.STRING)
-	private UserRole userRole;
-		
+			
 	@OneToOne
 	private Account account;
 	
@@ -104,15 +99,6 @@ public class Staff implements Serializable {
 		this.managedBy = managedBy;
 	}
 
-	public UserRole getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
-	}
-
-
 	public List<LeaveEntitlement> getLeaveEntitlement() {
 		return leaveEntitlement;
 	}
@@ -149,8 +135,8 @@ public class Staff implements Serializable {
 	public String toString() {
 		return "Staff [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeDesignation="
 				+ employeeDesignation + ", employeeDeptId=" + employeeDeptId + ", employeeEmail=" + employeeEmail
-				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", userRole=" + userRole
-				+ ", account=" + account + ", leaveEntitlement=" + leaveEntitlement + ", leaveApplication="
-				+ leaveApplication + ", overTimeWork=" + overTimeWork + "]";
+				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", account=" + account
+				+ ", leaveEntitlement=" + leaveEntitlement + ", leaveApplication=" + leaveApplication
+				+ ", overTimeWork=" + overTimeWork + "]";
 	}
 }
