@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class LeaveApplication {
@@ -16,27 +17,30 @@ public class LeaveApplication {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int leaveId;
 	@Enumerated(EnumType.STRING)
+	@NotBlank
 	private LeaveType leaveType;
 	private LocalDate leaveStartDate;
 	private LocalDate leaveEndDate;
-	private String leaveDetails;
-	private String leavePointOfContact;
+	private String leaveReasons;
+	private String workDissemination;
 	private String leavePhoneNumber;
 	@Enumerated(EnumType.STRING)
 	private ApprovalStatus leaveApprovalStatus;
-	
+
 	@ManyToOne
 	private Staff staff;
 	
-	public LeaveApplication(LeaveType leaveType, LocalDate leaveStartDate, LocalDate leaveEndDate,
-			ApprovalStatus leaveApprovalStatus) {
+	public LeaveApplication() {}
+	
+	public LeaveApplication(@NotBlank LeaveType leaveType, LocalDate leaveStartDate, LocalDate leaveEndDate,
+			String leaveReasons, String workDissemination) {
 		super();
 		this.leaveType = leaveType;
 		this.leaveStartDate = leaveStartDate;
 		this.leaveEndDate = leaveEndDate;
-		this.leaveApprovalStatus = leaveApprovalStatus;
+		this.leaveReasons = leaveReasons;
+		this.workDissemination = workDissemination;
 	}
-
 
 	public int getLeaveId() {
 		return leaveId;
@@ -70,20 +74,20 @@ public class LeaveApplication {
 		this.leaveEndDate = leaveEndDate;
 	}
 
-	public String getLeaveDetails() {
-		return leaveDetails;
+	public String getLeaveReasons() {
+		return leaveReasons;
 	}
 
-	public void setLeaveDetails(String leaveDetails) {
-		this.leaveDetails = leaveDetails;
+	public void setLeaveReasons(String leaveReasons) {
+		this.leaveReasons = leaveReasons;
 	}
 
-	public String getLeavePointOfContact() {
-		return leavePointOfContact;
+	public String getWorkDissemination() {
+		return workDissemination;
 	}
 
-	public void setLeavePointOfContact(String leavePointOfContact) {
-		this.leavePointOfContact = leavePointOfContact;
+	public void setWorkDissemination(String workDissemination) {
+		this.workDissemination = workDissemination;
 	}
 
 	public String getLeavePhoneNumber() {
@@ -113,8 +117,9 @@ public class LeaveApplication {
 	@Override
 	public String toString() {
 		return "LeaveApplication [leaveId=" + leaveId + ", leaveType=" + leaveType + ", leaveStartDate="
-				+ leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", leaveDetails=" + leaveDetails
-				+ ", leavePointOfContact=" + leavePointOfContact + ", leavePhoneNumber=" + leavePhoneNumber
+				+ leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", leaveReasons=" + leaveReasons
+				+ ", workDissemination=" + workDissemination + ", leavePhoneNumber=" + leavePhoneNumber
 				+ ", leaveApprovalStatus=" + leaveApprovalStatus + ", staff=" + staff + "]";
-	}
+	};
+	
 }

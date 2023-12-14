@@ -17,9 +17,6 @@ public class Account implements Serializable{
 	
 	private String password;
 	
-	@Enumerated(EnumType.STRING)
-	private UserRole userRole;
-	
 	@OneToOne(mappedBy="account")
 	private Staff staff;
 	
@@ -52,16 +49,9 @@ public class Account implements Serializable{
 	public void setStaff(Staff staff) {
 		this.staff = staff;
 	}
-
-	public UserRole getUserRole() {
-		return userRole;
-	}
-	public void setUserRole(UserRole userRole) {
-		this.userRole = userRole;
-	}
 	
 	@Override
 	public String toString() {
-		return "Account [username=" + username + ", password=" + password + ", staff=" + staff +",userRole="+userRole+ "]";
+		return "Account [username=" + username + ", password=" + password + ", staff=" + staff +  "]";
 	} 
 }

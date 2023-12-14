@@ -1,0 +1,50 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Apply A Leave</title>
+</head>
+
+<body>
+	<form method="post" th:action="@{/leave/apply}" th:object="${leave}">
+		<table>
+			<tbody>
+				<tr>
+					<td><label for="leaveType">Leave Type:</label></td>
+					<td><input type="text" id="leaveType" name="leaveType" th:field="*{leaveType}" /></td>
+					<span th:if="${#fields.hasErrors('leaveType')}"th:errors="*{leaveType}">
+				</tr>
+				<tr>
+					<td><label for="leaveStartDate">Leave Start Date:</label></td>
+					<td><input type="text" id="leaveStartDate" name="leaveStartDate" th:field="*{leaveStartDate}" /></td>
+					<span th:if="${#fields.hasErrors('leaveStartDate')}"th:errors="*{leaveStartDate}">
+				</tr>
+				<tr>
+					<td><label for="leaveEndDate">Leave End Date:</label></td>
+					<td><input type="text" id="leaveEndDate" name="leaveEndDate" th:field="*{leaveEndDate}" /></td>
+					<span th:if="${#fields.hasErrors('leaveEndDate')}"th:errors="*{leaveEndDate}">
+				</tr>
+				<tr>
+					<td><label for="leaveReasons">Leave Reasons:</label></td>
+					<td><input type="text" id="leaveReasons" name="leaveReasons" th:field="*{leaveReasons}" /></td>
+					<span th:if="${#fields.hasErrors('leaveReasons')}"th:errors="*{leaveReasons}">
+				</tr>
+				<tr>
+					<td><label for="workDissemination">Work Dissemination:</label></td>
+					<td><input type="text" id="workDissemination" name="workDissemination" th:field="*{workDissemination}" /></td>
+					<span th:if="${#fields.hasErrors('workDissemination')}"th:errors="*{workDissemination}">
+				</tr>
+				<tr>
+					<td><label for="leavePhoneNumber">Leave PhoneNumber:</label></td>
+					<td><input type="text" id="leavePhoneNumber" name="leavePhoneNumber" th:field="*{leavePhoneNumber}" /></td>
+					<span th:if="${#fields.hasErrors('leavePhoneNumber')}"th:errors="*{leavePhoneNumber}">
+				</tr>
+				<tr>
+					<td ><button type="submit">Apply</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+
+</html>

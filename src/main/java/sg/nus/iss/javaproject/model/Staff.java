@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -27,13 +28,13 @@ public class Staff implements Serializable {
 	private Account account;
 	
 	@OneToMany(mappedBy="staff")
-	private List<LeaveEntitlement> leaveEntitlement;
-	
-	@OneToMany(mappedBy="staff")
 	private List<LeaveApplication> leaveApplication;
 
 	@OneToMany(mappedBy="staff")
 	private List<OverTimeWork> overTimeWork;
+	
+	@ManyToMany
+	private List<StaffRole> staffRole;
 	
 	public Staff() {}
 		
@@ -98,15 +99,7 @@ public class Staff implements Serializable {
 	public void setManagedBy(int managedBy) {
 		this.managedBy = managedBy;
 	}
-
-	public List<LeaveEntitlement> getLeaveEntitlement() {
-		return leaveEntitlement;
-	}
-
-	public void setLeaveEntitlement(List<LeaveEntitlement> leaveEntitlement) {
-		this.leaveEntitlement = leaveEntitlement;
-	}
-
+	
 	public List<LeaveApplication> getLeaveApplication() {
 		return leaveApplication;
 	}
@@ -136,7 +129,7 @@ public class Staff implements Serializable {
 		return "Staff [employeeId=" + employeeId + ", employeeName=" + employeeName + ", employeeDesignation="
 				+ employeeDesignation + ", employeeDeptId=" + employeeDeptId + ", employeeEmail=" + employeeEmail
 				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", account=" + account
-				+ ", leaveEntitlement=" + leaveEntitlement + ", leaveApplication=" + leaveApplication
+				+", leaveApplication=" + leaveApplication
 				+ ", overTimeWork=" + overTimeWork + "]";
 	}
 }
