@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class LeaveApplication {
@@ -17,13 +18,19 @@ public class LeaveApplication {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int leaveId;
 	@Enumerated(EnumType.STRING)
-	@NotBlank
+	@NotNull(message="leaveType can not be empty")
 	private LeaveType leaveType;
+	@NotNull(message="leaveStartDate can not be empty")
 	private LocalDate leaveStartDate;
+	@NotNull(message="leaveEndDate can not be empty")
 	private LocalDate leaveEndDate;
+	@NotBlank(message="leaveReasons can not be empty")
 	private String leaveReasons;
+	@NotBlank(message="workDissemination can not be empty")
 	private String workDissemination;
 	private String leavePhoneNumber;
+	@NotBlank(message="destination can not be empty")
+	private String destination;
 	@Enumerated(EnumType.STRING)
 	private ApprovalStatus leaveApprovalStatus;
 
@@ -72,6 +79,14 @@ public class LeaveApplication {
 
 	public void setLeaveEndDate(LocalDate leaveEndDate) {
 		this.leaveEndDate = leaveEndDate;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 
 	public String getLeaveReasons() {

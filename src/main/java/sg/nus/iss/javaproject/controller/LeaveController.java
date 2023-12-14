@@ -35,6 +35,9 @@ public class LeaveController {
 	
 	@PostMapping("/apply")
 	public String submitLeave(@Valid @ModelAttribute("leave")LeaveApplication leaveApplication ,BindingResult bindingResult,HttpSession session) {
+		if(bindingResult.hasErrors()) {
+			return "apply";
+		}
 		leaveApplication.setLeaveApprovalStatus(ApprovalStatus.applied);
 		return "leaveStatus";
 	}

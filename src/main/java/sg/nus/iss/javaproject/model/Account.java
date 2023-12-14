@@ -3,18 +3,16 @@ package sg.nus.iss.javaproject.model;
 import java.io.Serializable;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Account implements Serializable{
 	@Id
+	@NotBlank(message = "error.user.name.empty")
 	private String username;
-	
+	@NotBlank(message = "error.user.password.empty")
 	private String password;
 	
 	@OneToOne(mappedBy="account")

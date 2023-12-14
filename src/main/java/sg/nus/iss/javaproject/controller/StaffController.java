@@ -3,12 +3,15 @@ package sg.nus.iss.javaproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import sg.nus.iss.javaproject.model.Account;
 import sg.nus.iss.javaproject.model.Staff;
 import sg.nus.iss.javaproject.service.StaffImplementation;
 import sg.nus.iss.javaproject.service.StaffInterface;
@@ -30,25 +33,31 @@ public class StaffController {
 	
 	@RequestMapping("/")
 	public String viewLogin(Model model) {
+		model.addAttribute("account",new Account());
 		return "login";
 	}
 	
 	@PostMapping("/login")
-	public String login(@RequestParam("username")String username,@RequestParam("password")String password,
-						HttpSession sessionobj,Model model) {
-		Staff staff=sService.getStaffByUsername(username);
-		
-		if(staff!=null) {
-			String accountPassword=staff.getAccount().getPassword();
-			if(accountPassword.equals(password)) {
-				sessionobj.setAttribute("staff",staff);
-				return "redirect:/home";
-			}
-			else {
-				return "login";
-			}
+	public String login(@Valid @ModelAttribute("account") Account account,
+						BindingResult bindingResult,HttpSession sessionobj,Model model) {
+		if(bindingResult.hasErrors()) {
+			return "login";
 		}
 		else {
+			String username=account.getUsername();
+			String password=account.getPassword();
+			Staff staff=sService.getStaffByUsername(username); 
+			if(staff!=null) {
+				String accountPassword=staff.getAccount().getPassword();
+				if(accountPassword.equals(password)) {
+					sessionobj.setAttribute("staff",staff);
+					return "redirect:/home";
+				}
+				else {
+					model.addAttribute("loginMessage", "Incorrect username/password");
+				    return "login";
+				}
+			}
 			return "login";
 		}
 	}

@@ -12,32 +12,37 @@
 				<tr>
 					<td><label for="leaveType">Leave Type:</label></td>
 					<td><input type="text" id="leaveType" name="leaveType" th:field="*{leaveType}" /></td>
-					<span th:if="${#fields.hasErrors('leaveType')}"th:errors="*{leaveType}">
+					<td><span th:if="${#fields.hasErrors('leaveType')}"th:errors="*{leaveType}"></span></td>
 				</tr>
 				<tr>
 					<td><label for="leaveStartDate">Leave Start Date:</label></td>
 					<td><input type="text" id="leaveStartDate" name="leaveStartDate" th:field="*{leaveStartDate}" /></td>
-					<span th:if="${#fields.hasErrors('leaveStartDate')}"th:errors="*{leaveStartDate}">
+					<td><span th:if="${#fields.hasErrors('leaveStartDate')}"th:errors="*{leaveStartDate}"></td>
 				</tr>
 				<tr>
 					<td><label for="leaveEndDate">Leave End Date:</label></td>
 					<td><input type="text" id="leaveEndDate" name="leaveEndDate" th:field="*{leaveEndDate}" /></td>
-					<span th:if="${#fields.hasErrors('leaveEndDate')}"th:errors="*{leaveEndDate}">
+					<td><span th:if="${#fields.hasErrors('leaveEndDate')}"th:errors="*{leaveEndDate}"></td>
+				</tr>
+				<tr>
+					<td><label for="destination">Destination:</label></td>
+					<td><input type="text" id="destination" name="destination" th:field="*{destination}" /></td>
+					<td><span th:if="${#fields.hasErrors('destination')}"th:errors="*{destination}"></td>
 				</tr>
 				<tr>
 					<td><label for="leaveReasons">Leave Reasons:</label></td>
 					<td><input type="text" id="leaveReasons" name="leaveReasons" th:field="*{leaveReasons}" /></td>
-					<span th:if="${#fields.hasErrors('leaveReasons')}"th:errors="*{leaveReasons}">
+					<td><span th:if="${#fields.hasErrors('leaveReasons')}"th:errors="*{leaveReasons}"></td>
 				</tr>
 				<tr>
 					<td><label for="workDissemination">Work Dissemination:</label></td>
 					<td><input type="text" id="workDissemination" name="workDissemination" th:field="*{workDissemination}" /></td>
-					<span th:if="${#fields.hasErrors('workDissemination')}"th:errors="*{workDissemination}">
+					<td><span th:if="${#fields.hasErrors('workDissemination')}"th:errors="*{workDissemination}"></td>
 				</tr>
 				<tr>
 					<td><label for="leavePhoneNumber">Leave PhoneNumber:</label></td>
 					<td><input type="text" id="leavePhoneNumber" name="leavePhoneNumber" th:field="*{leavePhoneNumber}" /></td>
-					<span th:if="${#fields.hasErrors('leavePhoneNumber')}"th:errors="*{leavePhoneNumber}">
+					<td><span th:if="${#fields.hasErrors('leavePhoneNumber')}"th:errors="*{leavePhoneNumber}"></td>
 				</tr>
 				<tr>
 					<td ><button type="submit">Apply</button></td>
