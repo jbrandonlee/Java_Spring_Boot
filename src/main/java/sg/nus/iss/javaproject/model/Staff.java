@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +24,7 @@ public class Staff implements Serializable {
 	private String employeeEmail;
 	private LocalDate employeeJoinDate;
 	private int managedBy;
+	private String position;
 			
 	@OneToOne
 	private Account account;
@@ -106,6 +108,14 @@ public class Staff implements Serializable {
 
 	public void setLeaveApplication(List<LeaveApplication> leaveApplication) {
 		this.leaveApplication = leaveApplication;
+	}
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
 	}
 
 	public List<OverTimeWork> getOverTimeWork() {

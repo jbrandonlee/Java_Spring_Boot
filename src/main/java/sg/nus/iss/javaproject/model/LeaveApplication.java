@@ -2,6 +2,8 @@ package sg.nus.iss.javaproject.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,16 +23,22 @@ public class LeaveApplication {
 	@NotNull(message="leaveType can not be empty")
 	private LeaveType leaveType;
 	@NotNull(message="leaveStartDate can not be empty")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate leaveStartDate;
 	@NotNull(message="leaveEndDate can not be empty")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate leaveEndDate;
 	@NotBlank(message="leaveReasons can not be empty")
 	private String leaveReasons;
 	@NotBlank(message="workDissemination can not be empty")
 	private String workDissemination;
+	
 	private String leavePhoneNumber;
+	
 	@NotBlank(message="destination can not be empty")
 	private String destination;
+	
+	private long leaveDays;
 	@Enumerated(EnumType.STRING)
 	private ApprovalStatus leaveApprovalStatus;
 
@@ -95,6 +103,14 @@ public class LeaveApplication {
 
 	public void setLeaveReasons(String leaveReasons) {
 		this.leaveReasons = leaveReasons;
+	}
+
+	public long getLeaveDays() {
+		return leaveDays;
+	}
+
+	public void setLeaveDays(long leaveDays) {
+		this.leaveDays = leaveDays;
 	}
 
 	public String getWorkDissemination() {

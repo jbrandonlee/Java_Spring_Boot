@@ -3,7 +3,44 @@
 	<head>
 		<title>Leave Status</title>
 	</head>
-	<body>
-		Test First
-	</body>
+<body>
+<br/> 
+
+<h2 style="text-align: center;">Leave Apply List</h2>
+<h3 style="text-align: center;" th:text="${name}"></h3>
+<h3 style="text-align: center;" th:if="${#lists.isEmpty(allApplications)}">No Applys.</h3>
+
+<table th:if="${not #lists.isEmpty(allApplications)}" style="width:50%; margin-left: auto; margin-right: auto;">
+ <tr>
+ 	<th>LeaveType</th>
+ 	<th>LeaveStartDate</th>
+ 	<th>LeaveEndDate</th>
+ 	<th>Status</th> 
+ </tr>
+ <tr th:each="oneapplication:${allApplications}">
+ 	<td th:text="${oneapplication.leaveType}">LeaveType</td>
+ 	<td th:text="${oneapplication.leaveStartDate}">LeaveStartDate</td>
+ 	<td th:text="${oneapplication.leaveEndDate}">LeaveEndDate</td>
+ 	<td th:text="${oneapplication.leaveApprovalStatus}">Status</td>
+ 	<td th:if="${#strings.equals(oneapplication.leaveApprovalStatus, 'applied') or #strings.equals(oneapplication.leaveApprovalStatus, 'updated')}">
+		 <a href="editLeave.html"th:href="@{/leave/edit/{leaveId}(leaveId=${oneapplication.leaveId})}">Edit</a>
+	</td>
+	<td th:if="${#strings.equals(oneapplication.leaveApprovalStatus, 'applied') or #strings.equals(oneapplication.leaveApprovalStatus, 'updated')}">
+		<a href="deleteLeave.html"th:href="@{/leave/delete/}+${oneapplication.leaveId}">Delete</a>
+	</td> 
+	<td th:if="${#strings.equals(oneapplication.leaveApprovalStatus, 'approved')}">
+		<a href="deleteLeave.html"th:href="@{/leave/cancel/}+${oneapplication.leaveId}">Cancel</a>
+	</td> 
+ </tr>
+</table>
+
+<table style="width:50%; margin-left: auto; margin-right: auto; border:white;">
+<tr>
+</tr>
+<tr> 
+<td style="text-align:center;font-weight: bold"><a th:href="@{/leave/apply}">Apply New Application</a></td> 
+</tr>
+</table>
+</body>
+</div>
 </html>
