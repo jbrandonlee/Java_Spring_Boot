@@ -61,11 +61,10 @@ public class LeaveController {
 		LeaveApplication leaveApplication=new LeaveApplication();
 		Staff staff=(Staff)session.getAttribute("staff");
 		switch(staff.getPosition()){
-			case "administrative":leaveApplication.setLeaveDays(14);
-			case "professional":leaveApplication.setLeaveDays(18);
+			case "administrative":leaveApplication.setLeaveDays(14);break;
+			case "professional":leaveApplication.setLeaveDays(18);break;
 		}
 		model.addAttribute("leave",leaveApplication);
-		
 		return "apply";
 	}
 	
