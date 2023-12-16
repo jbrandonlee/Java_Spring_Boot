@@ -27,13 +27,13 @@ public class HomeController {
 	@PostMapping(value = "/authenticate")
 	public String handleLogin(@Valid @ModelAttribute("account") Account accForm, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			return "login";
+			return "redirect:/login";
 		}
 		
 		Account acc = accountService.authenticate(accForm.getUsername(), accForm.getPassword());
 		if (acc == null) {
 			model.addAttribute("errorLogin", "Invalid Username or Password. Please try again.");
-			return "login";
+			return "redirect:/login";
 		}
 		
 		return "redirect:/staff/leave/overview";
