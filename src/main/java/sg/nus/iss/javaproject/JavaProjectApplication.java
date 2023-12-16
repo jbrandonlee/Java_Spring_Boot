@@ -17,12 +17,12 @@ public class JavaProjectApplication {
 		SpringApplication.run(JavaProjectApplication.class, args);
 	}
 	
-	/*
-	 * @Bean public CommandLineRunner commandLineRun(AccountRepository
-	 * accountRepo,StaffRepository staffRepo) { return args -> {
-	 * System.out.println("Create some staff"); Staff staff=new
-	 * Staff("NoMan","designation"); Account account=new Account("Noman","noMan");
-	 * staff.setAccount(account); accountRepo.save(account); staffRepo.save(staff);
-	 * }; }
-	 */
+	 /*@Bean 
+	  public CommandLineRunner commandLineRun(AccountRepository
+	  accountRepo,StaffRepository staffRepo) { return args -> {
+	  System.out.println("Create some staff"); Staff staff=new
+	  Staff("NoMan","designation"); Account account=new Account("Noman","noMan");
+	  staff.setAccount(account); accountRepo.save(account); staffRepo.save(staff);
+	  }; }*/
+	 
 }

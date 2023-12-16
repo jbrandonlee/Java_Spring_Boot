@@ -1,5 +1,5 @@
 package sg.nus.iss.javaproject.model;
 
 public enum ApprovalStatus {
-	APPLIED, APPROVED, CANCELLED, DELETED, UPDATED, REJECTED
+	applied, approved, cancelled, deleted, updated, rejected
 }

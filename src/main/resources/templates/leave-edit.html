@@ -1,68 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout.html :: html_head"/>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
 <body>
-  <div th:replace="fragments/layout.html :: menu"/>
-  <div th:replace="fragments/layout.html :: header"/> 
-    <h3>Edit Leave Application Page</h3>
-  <form action="#" th:action="@{/employee/leaveApplication/edit/}+${leaveApplication.leaveId}"
-    th:object="${leaveApplication}" method="post">
-    <table>
-      <tbody>
-        <tr>
-          <td><input type="hidden" th:field="*{leaveId}" /> <input
-            type="hidden" th:field="*{employeeId}" /> <input type="hidden"
-            th:field="*{LeaveApprovalStatus}" /> <span th:text="#{fieldLabel.leaveType}"></span></td>
-          <td><input type="text" th:field="*{leaveType}" size="40" /></td>
-          <td th:if="${#fields.hasErrors('leaveType')}"
-            th:errors="*{leaveType}"></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.employeeId}"></span></td>
-          <td><input type="text" th:field="*{employeeId}" size="40" /></td>
-          <td th:if="${#fields.hasErrors('employeeId')}"
-            th:errors="*{employeeId}"></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.startDate}"></span></td>
-          <td><input type="date" th:field="*{fromDate}" size="40" /></td>
-          <td th:if="${#fields.hasErrors('fromDate')}"
-            th:errors="*{fromDate}"></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.endDate}"></span></td>
-          <td><input type="date" th:field="*{toDate}" size="40" /></td>
-          <td th:if="${#fields.hasErrors('toDate')}" th:errors="*{toDate}"></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.leaveReasons}"></span></td>
-          <td><input type="text" th:field="*{leaveReasons}" size="20" /></td>
-          <td><span th:text="#{fieldLabel.leaveReasons}"></span></td>
-          <td><input type="checkbox" th:field="*{leaveReasons}" /></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.workDissemination}"></span></td>
-          <td colspan="3"><textarea th:field="*{workDissemination}"
-              th:rows="${workDissemination}" cols="40"></textarea></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.leavePhoneNumber}"></span></td>
-          <td colspan="3"><textarea th:field="*{leavePhoneNumber}"
-              th:rows="${leavePhoneNumber}" cols="40"></textarea></td>
-        </tr>
-        <tr>
-          <td><span th:text="#{fieldLabel.ApprovalStatus}"></span></td>
-          <td><input type="text" th:field="*{ApprovalStatus}" size="20"
-            disabled="disabled" /></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <input type="submit" value="Update" class="blcass" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </form>
+<div class="container my-2 border">
+<form action="#" th:action="@{/leave/edit}" th:object="${leaveApplication}" method="post">
+    <input name="leaveId" type="hidden" th:value="*{leaveId}">
+    <input name="staff.employeeId" type="hidden" th:value="*{staff.employeeId}">
+    <div class="form-group row">
+        <label class="col-sm-2 control-label">begin date</label>
+        <div class="col-sm-10">
+            <input th:value="${#dates.format(leaveApplication.leaveStartDate,'yyyy-MM-dd HH')}" class="form-control" name="leaveStartDate"/>
+            <span th:if="${#fields.hasErrors('leaveStartDate')}"th:errors="*{leaveStartDate}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label  class="col-sm-2 control-label">end date</label>
+        <div class="col-sm-10">
+            <input class="form-control" name="leaveEndDate"  th:value="${#dates.format(leaveApplication.leaveEndDate,'yyyy-MM-dd HH')}">
+            <span th:if="${#fields.hasErrors('leaveEndDate')}"th:errors="*{leaveEndDate}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label  class="col-sm-2 control-label">work dissemination</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="workDissemination" th:value="*{workDissemination}"/>
+            <span th:if="${#fields.hasErrors('workDissemination')}"th:errors="*{workDissemination}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label  class="col-sm-2 control-label">destination</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="destination" th:field="*{destination}" />
+            <span th:if="${#fields.hasErrors('destination')}"th:errors="*{destination}"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <label  class="col-sm-2 control-label">leave type</label>
+        <div class="col-sm-10">
+            <select class="form-control" name="leaveType" th:value="*{leaveType}">
+                <option th:value="annual">annual</option>
+                <option th:value="medical">medical</option>
+                <option th:value="compensation">compensation</option>
+            </select>
+            <span th:if="${#fields.hasErrors('leaveType')}"th:errors="*{leaveType}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label  class="col-sm-2 control-label">leaveReasons</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" row=3 id="leaveReasons" th:field="*{leaveReasons}">
+            </textarea>
+            <span th:if="${#fields.hasErrors('leaveReasons')}"th:errors="*{leaveReasons}">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-offset-2 col-sm-10  text-right">
+            <button type="submit" class="btn btn-primary">edit</button>
+        </div>
+    </div>
+</form>
+</div>
 </body>
 </html>

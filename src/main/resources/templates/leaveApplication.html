@@ -1,26 +1,111 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Product List</title>
+    <meta charset="UTF-8">
+    <title>Leave Management System</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
+
 <body>
-<br/>
-<h2 style="text-align: center;">Search Result</h2>
-<h3 style="text-align: center;" th:if="${#lists.isEmpty(leaveApplications)}">No Results.</h3>
-<table th:if="${not #lists.isEmpty(leaveApplications)}" style="width:50%; margin-left: auto; margin-right: auto;">
-  <tr th:each="leave:${leaveApplications}">
-    <td th:text="${leave.leaveAplId}">Id</td>
-	<td th:text="${leave.leaveType}">Type</td>
-	 <td th:text="${leave.leaveStartDate}">StartDate </td>
-	  <td th:text="${leave.leaveEndDate}">EndDate </td>
-	 <td th:text="${leave.leaveType}">Type</td>
-	 <td th:text="${leave.leaveReasons}">Type</td>
-    <td><a th:text="${leave.leavePhoneNumber}">Phone</a></td>
-	<td th:text="${leave.destination}">Destination</td>
-    <td th:text="${leave.leaveApprovalStatus}">Status</td>
-    <td th:text="${leave.comment}">Comment</td>
-</tr>
-</table>
-</body>
+
+<div class="container my-2 border">
+    <h1 class="text-center">Leave Application</h1>
+
+
+    <!--  th:href url-->
+    <a th:href="@{/leave/toApply}" class="btn btn-dark btn-sm mb-3"> Add </a>
+
+    <table class="table  text-center">
+        <thead>
+        <tr>
+            <th>
+                leaveId
+            </th>
+            <th>
+                leaveType
+            </th>
+            <th>
+                leaveStartDate
+            </th>
+            <th>
+                leaveEndDate
+            </th>
+            <th>
+                leaveReasons
+            </th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!--    th:each iterate the elements-->
+        <tr th:each="leaveApplication : ${leaveApplications}">
+            <td th:text="${leaveApplication.leaveId}"></td>
+            <td th:text="${leaveApplication.leaveType}"></td>
+            <td th:text="${leaveApplication.leaveStartDate}"></td>
+            <td th:text="${leaveApplication.leaveEndDate}"></td>
+            <td th:text="${leaveApplication.leaveReasons}"></td>
+
+            
+            <td>
+                <a th:href="@{/leave/edit/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Update</a>
+                <a th:href="@{/leave/cancel/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Cancel</a>
+                <a th:href="@{/leave/delete/{id}(id=${leaveApplication.leaveId})}" class="btn btn-danger"   onclick="return confirm('Confirm delete?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--   th:if true-->
+    <div th:if="${totalPages > 1}">
+
+        <div class="row col-sm-10">
+            <!--            &lt;!&ndash;How many records in total&ndash;&gt;-->
+            <div class="col-sm-3">
+                Total Rows: [[${totalItems}]]
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage > 1}"
+                   th:href="@{'/leave/page/1'}">First</a>
+                <span th:unless="${currentPage > 1}">First</span>
+            </div>
+            <div class="col-sm-1">
+                <a th:if="${currentPage > 1}"
+                   th:href="@{'/leave/page/' + ${currentPage - 1}}">Previous</a>
+                <span th:unless="${currentPage > 1}">Previous</span>
+            </div>
+
+            <div class="col-sm-5">
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${currentPage != i}"
+                       th:href="@{'/leave/page/' + ${i}}">[[${i}]]</a>
+                    <span th:unless="${currentPage != i}">[[${i}]]</span>
+                </span>
+            </div>
+
+            <!--            &lt;!&ndash;Next&ndash;&gt;-->
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{'/leave/page/' + ${currentPage + 1}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+
+            <!--            &lt;!&ndash;Last&ndash;&gt;-->
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{'/leave/page/' + ${totalPages}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+
+        </div>
+    </div>
+
 </div>
+
+</body>
 </html>
+

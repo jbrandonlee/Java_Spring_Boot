@@ -1,151 +1,127 @@
 package sg.nus.iss.javaproject.model;
 
-import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 public class LeaveApplication {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int leaveId;
-	@Enumerated(EnumType.STRING)
-	@NotNull(message="leaveType can not be empty")
-	private LeaveType leaveType;
-	@NotNull(message="leaveStartDate can not be empty")
-	private LocalDate leaveStartDate;
-	@NotNull(message="leaveEndDate can not be empty")
-	private LocalDate leaveEndDate;
-	@NotBlank(message="leaveReasons can not be empty")
-	private String leaveReasons;
-	@NotBlank(message="workDissemination can not be empty")
-	private String workDissemination;
-	private String leavePhoneNumber;
-	@NotBlank(message="destination can not be empty")
-	private String destination;
-	@Enumerated(EnumType.STRING)
-	private ApprovalStatus leaveApprovalStatus;
-    private String comment; 
-	
-	@ManyToOne
-	private Staff staff;
-	
-	public LeaveApplication() {}
-	
-	public LeaveApplication(@NotBlank LeaveType leaveType, LocalDate leaveStartDate, LocalDate leaveEndDate,
-			String leaveReasons, String workDissemination) {
-		super();
-		this.leaveType = leaveType;
-		this.leaveStartDate = leaveStartDate;
-		this.leaveEndDate = leaveEndDate;
-		this.leaveReasons = leaveReasons;
-		this.workDissemination = workDissemination;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int leaveId;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "leaveType can not be empty")
+    private LeaveType leaveType;
+    @NotNull(message = "leaveStartDate can not be empty")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date leaveStartDate;
+    @NotNull(message = "leaveEndDate can not be empty")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date leaveEndDate;
+    @NotBlank(message = "leaveReasons can not be empty")
+    private String leaveReasons;
+    @NotBlank(message = "workDissemination can not be empty")
+    private String workDissemination;
+    @NotBlank(message = "destination can not be empty")
+    private String destination;
+    @Enumerated(EnumType.STRING)
+    private ApprovalStatus leaveApprovalStatus;
+    @ManyToOne
+    @JoinColumn(name="staff_employee_id")
+    private Staff staff;
+    public LeaveApplication() {
+    }
 
-	public int getLeaveId() {
-		return leaveId;
-	}
+    public LeaveApplication(@NotBlank LeaveType leaveType, Date leaveStartDate, Date leaveEndDate,
+        String leaveReasons, String workDissemination) {
+        super();
+        this.leaveType = leaveType;
+        this.leaveStartDate = leaveStartDate;
+        this.leaveEndDate = leaveEndDate;
+        this.leaveReasons = leaveReasons;
+        this.workDissemination = workDissemination;
+    }
 
-	public void setLeaveId(int leaveId) {
-		this.leaveId = leaveId;
-	}
+    public int getLeaveId() {
+        return leaveId;
+    }
 
-	public LeaveType getLeaveType() {
-		return leaveType;
-	}
+    public void setLeaveId(int leaveId) {
+        this.leaveId = leaveId;
+    }
 
-	public void setLeaveType(LeaveType leaveType) {
-		this.leaveType = leaveType;
-	}
+    public LeaveType getLeaveType() {
+        return leaveType;
+    }
 
-	public LocalDate getLeaveStartDate() {
-		return leaveStartDate;
-	}
+    public void setLeaveType(LeaveType leaveType) {
+        this.leaveType = leaveType;
+    }
 
-	public void setLeaveStartDate(LocalDate leaveStartDate) {
-		this.leaveStartDate = leaveStartDate;
-	}
+    public Date getLeaveStartDate() {
+        return leaveStartDate;
+    }
 
-	public LocalDate getLeaveEndDate() {
-		return leaveEndDate;
-	}
+    public void setLeaveStartDate(Date leaveStartDate) {
+        this.leaveStartDate = leaveStartDate;
+    }
 
-	public void setLeaveEndDate(LocalDate leaveEndDate) {
-		this.leaveEndDate = leaveEndDate;
-	}
+    public Date getLeaveEndDate() {
+        return leaveEndDate;
+    }
 
-	public String getDestination() {
-		return destination;
-	}
+    public void setLeaveEndDate(Date leaveEndDate) {
+        this.leaveEndDate = leaveEndDate;
+    }
 
-	public void setDestination(String destination) {
-		this.destination = destination;
-	}
+    public String getDestination() {
+        return destination;
+    }
 
-	public String getLeaveReasons() {
-		return leaveReasons;
-	}
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
 
-	public void setLeaveReasons(String leaveReasons) {
-		this.leaveReasons = leaveReasons;
-	}
+    public String getLeaveReasons() {
+        return leaveReasons;
+    }
 
-	public String getWorkDissemination() {
-		return workDissemination;
-	}
+    public void setLeaveReasons(String leaveReasons) {
+        this.leaveReasons = leaveReasons;
+    }
 
-	public void setWorkDissemination(String workDissemination) {
-		this.workDissemination = workDissemination;
-	}
+    public String getWorkDissemination() {
+        return workDissemination;
+    }
 
-	public String getLeavePhoneNumber() {
-		return leavePhoneNumber;
-	}
+    public void setWorkDissemination(String workDissemination) {
+        this.workDissemination = workDissemination;
+    }
 
-	public void setLeavePhoneNumber(String leavePhoneNumber) {
-		this.leavePhoneNumber = leavePhoneNumber;
-	}
 
-	public ApprovalStatus getLeaveApprovalStatus() {
-		return leaveApprovalStatus;
-	}
+    public ApprovalStatus getLeaveApprovalStatus() {
+        return leaveApprovalStatus;
+    }
 
-	public void setLeaveApprovalStatus(ApprovalStatus leaveApprovalStatus) {
-		this.leaveApprovalStatus = leaveApprovalStatus;
-	}
+    public void setLeaveApprovalStatus(ApprovalStatus leaveApprovalStatus) {
+        this.leaveApprovalStatus = leaveApprovalStatus;
+    }
 
-	public Staff getStaff() {
-		return staff;
-	}
+    public Staff getStaff() {
+        return staff;
+    }
 
-	public void setStaff(Staff staff) {
-		this.staff = staff;
-	}
-	
-	private String getComment() {
-		return comment;
-	}
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
 
-	private void setComment(String comment) {
-		this.comment = comment;
-	};
-	
 
-	@Override
-	public String toString() {
-		return "LeaveApplication [leaveId=" + leaveId + ", leaveType=" + leaveType + ", leaveStartDate="
-				+ leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", leaveReasons=" + leaveReasons
-				+ ", workDissemination=" + workDissemination + ", leavePhoneNumber=" + leavePhoneNumber
-				+ ", leaveApprovalStatus=" + leaveApprovalStatus + ", staff=" + staff + "]";
-	}
-
-	
+    @Override
+    public String toString() {
+        return "LeaveApplication{" + "leaveId=" + leaveId + ", leaveType=" + leaveType + ", leaveStartDate=" + leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", leaveReasons='" + leaveReasons + '\'' + ", workDissemination='" + workDissemination + '\'' + ", destination='" + destination + '\'' + ", leaveApprovalStatus=" + leaveApprovalStatus + ", staff=" + staff + '}';
+    }
 }
