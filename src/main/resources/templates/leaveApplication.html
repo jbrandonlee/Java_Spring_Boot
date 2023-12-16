@@ -7,22 +7,19 @@
 <br/>
 <h2 style="text-align: center;">Search Result</h2>
 <h3 style="text-align: center;" th:if="${#lists.isEmpty(leaveApplications)}">No Results.</h3>
-<table th:if="${not #lists.isEmpty(products)}" style="width:50%; margin-left: auto; margin-right: auto;">
-    <tr>
-        <th>Id</th>
-/>
-   © NUS All Rights Reserved Page 22 of 30
-Workshop Instructions – Spring MVC
-           <th>Name</th>
-        <th>Category</th>
-        <th>Description</th>
+<table th:if="${not #lists.isEmpty(leaveApplications)}" style="width:50%; margin-left: auto; margin-right: auto;">
+  <tr th:each="leave:${leaveApplications}">
+    <td th:text="${leave.leaveAplId}">Id</td>
+	<td th:text="${leave.leaveType}">Type</td>
+	 <td th:text="${leave.leaveStartDate}">StartDate </td>
+	  <td th:text="${leave.leaveEndDate}">EndDate </td>
+	 <td th:text="${leave.leaveType}">Type</td>
+	 <td th:text="${leave.leaveReasons}">Type</td>
+    <td><a th:text="${leave.leavePhoneNumber}">Phone</a></td>
+	<td th:text="${leave.destination}">Destination</td>
+    <td th:text="${leave.leaveApprovalStatus}">Status</td>
+    <td th:text="${leave.comment}">Comment</td>
 </tr>
-<tr th:each="application:${leaveApplications}">
-<td th:text="${leaveApplications.id}">Id</td>
-<td><a th:text="${leaveApplications.name}">Name</a></td>
-<td th:text="${leaveApplications.category}">Category</td>
-<td th:text="${leaveApplications.description}">Description</td>
-    </tr>
 </table>
 </body>
 </div>
