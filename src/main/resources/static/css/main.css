@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+html, body {
+	height: 100%;
+	background-color: #fcfcfd;
+}
+
+.logo-font {
+	font-family: 'Lato', sans-serif;
+	font-weight: 900;
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.offcanvas {
+	max-width: 350px !important;
+}
+
+.offcanvas-footer {
+    padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+}
+
+.offcanvas-subheader {
+	padding: 0 var(--bs-offcanvas-padding-x);
+}
+
+.offcanvas-image-container {
+	aspect-ratio : 1 / 1;
+	width: 33%;
+	border-radius: 50%;
+	background-color: white;
+	overflow: hidden;
+}
+
+.offcanvas-profile-image {
+	width: 100%;
+}
+
+main {
+	padding: 3rem 20% !important;
+}
+
+/* Login Page */
+#body-login form div {
+    padding: .2em 0;
+}
+
+#body-login form button, #body-login #errorMsg {
+    margin-top: 1em;
+}
+
+#body-login #buttonContainer {
+    display: flex;
+    justify-content: end;
+}
