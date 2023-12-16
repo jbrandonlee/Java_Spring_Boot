@@ -1,14 +1,18 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
@@ -53,7 +57,9 @@ public class StaffLeaveController {
 	// RETRIEVE LIST
 	// Do not retrieve 'LeaveStatus.DELETED'
 	@GetMapping(value = { "/leave/history"})
-	public String staffLeaveHistory(Model model) {
+	public String staffLeaveHistory(Model model, HttpSession sessionObj) {
+		List<Leave> leaveHistory = leaveService.findEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
+		model.addAttribute("leaveHistory", leaveHistory);
 		return "leave-history";
 	}
 	
@@ -61,7 +67,9 @@ public class StaffLeaveController {
 	// Button for EDIT & RESET
 	// PlainText Fields
 	@GetMapping(value = { "/leave/details/{id}"})
-	public String staffLeaveDetail(Model model) {
+	public String staffLeaveDetail(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
+		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		model.addAttribute("leave", leave);
 		return "leave-details";
 	}
 	
@@ -69,10 +77,11 @@ public class StaffLeaveController {
 	// Update LeaveStatus -> UPDATED or DELETED or CANCELLED (if APPROVED)
 	// Show LeaveStatus at Top
 	@GetMapping(value = { "/leave/edit/{id}"})
-	public String staffLeaveEditForm(Model model) {
+	public String staffLeaveEditForm(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
+		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		model.addAttribute("leave", leave);
 		return "leave-edit";
 	}
-
 	
 	@PostMapping(value = { "/leave/edit/{id}"})
 	public String staffEditLeave(Model model) {

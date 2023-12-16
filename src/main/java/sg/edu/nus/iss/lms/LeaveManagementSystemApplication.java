@@ -12,6 +12,7 @@ import sg.edu.nus.iss.lms.model.Department;
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
 import sg.edu.nus.iss.lms.model.Leave.DaySection;
+import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
 import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.repository.AccountRepository;
 import sg.edu.nus.iss.lms.repository.DepartmentRepository;
@@ -45,9 +46,9 @@ public class LeaveManagementSystemApplication {
 			// Create Employee Account with Leaves
 			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", finance));
 			accRepo.save(new Account("brandon", "password1", brandonBoss));
-			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 21), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Holiday", "", ""));
-			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "", ""));
-			leaveRepo.save(new Leave(brandonBoss, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Break", "", ""));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 21), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Holiday", "", "", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "", "", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonBoss, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Break", "", "", LeaveStatus.REJECTED));
 			
 			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", finance));
 			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", finance));

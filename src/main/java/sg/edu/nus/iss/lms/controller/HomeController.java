@@ -8,15 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Account;
+import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.service.AccountService;
+import sg.edu.nus.iss.lms.service.EmployeeService;
 
 @Controller
 public class HomeController {
 	
 	@Autowired
-	private AccountService accountService;
+	private AccountService accService;
+
+	@Autowired
+	private EmployeeService empService;
 	
 	@GetMapping(value = { "/", "/login", "/home" })
 	public String login(Model model) {
@@ -25,16 +31,19 @@ public class HomeController {
 	}
 	
 	@PostMapping(value = "/authenticate")
-	public String handleLogin(@Valid @ModelAttribute("account") Account accForm, BindingResult bindingResult, Model model) {
+	public String handleLogin(@Valid @ModelAttribute("account") Account accForm, BindingResult bindingResult, Model model, HttpSession sessionObj) {
 		if (bindingResult.hasErrors()) {
 			return "redirect:/login";
 		}
 		
-		Account acc = accountService.authenticate(accForm.getUsername(), accForm.getPassword());
+		Account acc = accService.authenticate(accForm.getUsername(), accForm.getPassword());
 		if (acc == null) {
 			model.addAttribute("errorLogin", "Invalid Username or Password. Please try again.");
 			return "redirect:/login";
 		}
+		
+		Employee emp = empService.findEmployeeByAccount(acc);
+		sessionObj.setAttribute("employee", emp);
 		
 		return "redirect:/staff/leave/overview";
 	}

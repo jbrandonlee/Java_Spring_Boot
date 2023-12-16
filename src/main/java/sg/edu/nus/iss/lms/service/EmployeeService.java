@@ -1,5 +1,8 @@
 package sg.edu.nus.iss.lms.service;
 
-public interface EmployeeService {
+import sg.edu.nus.iss.lms.model.Account;
+import sg.edu.nus.iss.lms.model.Employee;
 
+public interface EmployeeService {
+	public Employee findEmployeeByAccount(Account account);
 }

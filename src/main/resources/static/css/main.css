@@ -11,6 +11,7 @@ html, body {
 	color: rgba(255, 255, 255, 0.9);
 }
 
+/* Off Canvas Menu */
 .offcanvas {
 	max-width: 350px !important;
 }
@@ -51,4 +52,9 @@ main {
 #body-login #buttonContainer {
     display: flex;
     justify-content: end;
+}
+
+/* Forms */
+label {
+	font-weight: 350;
 }

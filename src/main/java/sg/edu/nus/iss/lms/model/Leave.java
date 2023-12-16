@@ -47,7 +47,8 @@ public class Leave {
 	@Enumerated(EnumType.STRING)
 	private LeaveStatus status;
 	
-	public Leave(Employee employee, LeaveType leaveType, LocalDate startDate, DaySection startDaySection, LocalDate endDate, DaySection endDaySection, String reason, String dissemination, String contact) {
+	// TestData Constructor
+	public Leave(Employee employee, LeaveType leaveType, LocalDate startDate, DaySection startDaySection, LocalDate endDate, DaySection endDaySection, String reason, String dissemination, String contact, LeaveStatus status) {
 		this.employee = employee;
 		this.leaveType = leaveType;
 		this.startDate = startDate;
@@ -57,6 +58,7 @@ public class Leave {
 		this.reason = reason;
 		this.dissemination = dissemination;
 		this.contact = contact;
+		this.status = status;
 	}
 	
 	public enum DaySection {
