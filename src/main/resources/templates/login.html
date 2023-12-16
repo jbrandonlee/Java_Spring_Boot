@@ -29,7 +29,7 @@
 				</div>
 			</form>
 			<div class="row">
-				<div th:if="${errorLogin != null}" th:text="${errorLogin}" class="alert alert-warning"></div>
+				<div th:if="${errorMsg != null}" th:text="${errorMsg}" class="alert alert-warning"></div>
 				<div th:each="err : ${#fields.errors('account.*')}" th:text="${err}" class="alert alert-warning"></div>
 			</div>
 		</div>

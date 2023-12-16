@@ -3,30 +3,14 @@
 <head th:replace="~{fragments/layout.html :: html_head}" />
 
 <body>
-	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" />
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
 	<main>
 		<h1 class="display-5">Apply for Leave</h1>
-		<div class="pt-4">
-			<table width="100%" style="background-color: aliceblue;">
-				<tr>
-					<th>Current Leave Balance</th>
-				</tr>
-				<tr>
-					<td>Annual</td>
-					<td>Medical</td>
-					<td>Compensation</td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td>2</td>
-					<td>3</td>
-				</tr>
-			</table>
-		</div>
+		<div th:replace="~{fragments/layout.html :: leave_entitlement}" />
 		<form class="row g-4 pt-4" action="#" th:action="@{'/staff/leave/apply'}" th:object="${leave}" method="post">
 			<div class="form-group col-12">
 				<label for="leaveType" class="form-label">Leave Type</label>
-				<select class="form-select" name="leaveType">
+				<select class="form-select" name="leaveTypeString">
 					<option th:each="type : ${leaveTypes}" th:value="${type}" th:text="${type}"></option>
 				</select>
 			</div>
@@ -62,7 +46,10 @@
     			<label for="contact" class="form-label">Personal Contact Details (if Overseas)</label>
     			<textarea class="form-control" name="contact" placeholder="State contact details (e.g. overseas phone number, overseas address)"></textarea>
   			</div>
-  			<button class="btn btn-primary" type="submit">Submit Form</button>
+  			<div class="d-flex flex-row-reverse">
+				<button class="btn btn-primary ms-3" type="submit">Submit</button>
+				<span><a class="btn btn-outline-dark ms-3 text-decoration-none" th:href="@{~/staff/leave/overview}">Back to Overview</a></span>
+			</div>
 		</form>
 	</main>
 </body>

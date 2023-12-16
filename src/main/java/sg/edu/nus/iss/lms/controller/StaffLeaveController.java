@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
+import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.service.LeaveService;
 import sg.edu.nus.iss.lms.service.LeaveTypeService;
 
@@ -44,10 +45,11 @@ public class StaffLeaveController {
 	}
 	
 	@PostMapping(value = { "/leave/apply"})
-	public String staffApplyLeave(@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model) {
-		// Add Backend Validation
-		// Get Employee from Session
-		leaveForm.setEmployee(new Employee());
+	public String staffApplyLeave(@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model, HttpSession sessionObj) {
+		// Add Backend Validation + Display Thymeleaf Errors
+		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
+		leaveForm.setLeaveType(currLeaveType);
+		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
 		leaveForm.setStatus(LeaveStatus.APPLIED);
 		leaveService.createLeave(leaveForm);
 		
@@ -64,28 +66,79 @@ public class StaffLeaveController {
 	}
 	
 	// RETRIEVE ONE
-	// Button for EDIT & RESET
-	// PlainText Fields
 	@GetMapping(value = { "/leave/details/{id}"})
 	public String staffLeaveDetail(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
 		return "leave-details";
 	}
-	
-	// UPDATE or DELETE
+
+	// UPDATE
 	// Update LeaveStatus -> UPDATED or DELETED or CANCELLED (if APPROVED)
 	// Show LeaveStatus at Top
 	@GetMapping(value = { "/leave/edit/{id}"})
 	public String staffLeaveEditForm(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
+		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		return "leave-edit";
 	}
 	
 	@PostMapping(value = { "/leave/edit/{id}"})
-	public String staffEditLeave(Model model) {
+	public String staffEditLeave(@PathVariable(name="id") Integer leaveId, @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model, HttpSession sessionObj) {
+		// Add Backend Validation + Display Thymeleaf Errors
+		leaveForm.setId(leaveId);
+		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
+		leaveForm.setLeaveType(currLeaveType);
+		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
+		leaveForm.setStatus(LeaveStatus.UPDATED);
+		leaveService.updateLeave(leaveForm);
+		
 		return "redirect:/staff/leave/overview";
 	}
-
+	
+	// CANCEL
+	@PostMapping(value = { "/leave/cancel/{id}"})
+	public String staffCancelLeave(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
+		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		
+		// If Leave does not belong to Employee, or Leave does not exist
+		if (leave == null) {
+			model.addAttribute("errorMsg", "Invalid Action.");
+			return "redirect:/staff/details/" + leaveId;
+		}
+		
+		// If CANCEL is not allowed
+		if (leave.getStatus() != LeaveStatus.APPROVED) {
+			model.addAttribute("errorMsg", "Invalid Action.");
+			return "redirect:/staff/details/" + leaveId;
+		}
+		
+		leave.setStatus(LeaveStatus.CANCELLED);
+		leaveService.updateLeave(leave);
+		return "redirect:/staff/leave/overview";
+	}
+	
+	// DELETE
+	@PostMapping(value = { "/leave/delete/{id}"})
+	public String staffDeleteLeave(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
+		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		
+		// If Leave does not belong to Employee, or Leave does not exist
+		if (leave == null) {
+			model.addAttribute("errorMsg", "Invalid Action.");
+			return "redirect:/staff/details/" + leaveId;
+		}
+		
+		// If DELETE is not allowed
+		if (leave.getStatus() != LeaveStatus.APPLIED || leave.getStatus() != LeaveStatus.UPDATED) {
+			model.addAttribute("errorMsg", "Invalid Action.");
+			return "redirect:/staff/details/" + leaveId;
+		}
+		
+		leave.setStatus(LeaveStatus.DELETED);
+		leaveService.updateLeave(leave);
+		return "redirect:/staff/leave/overview";
+	}
+	
 }

@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class Account {
 	
 	@Id
-	@Size(min=3, max=20, message = "Username must be 3-20 characters")
+	@Size(min=3, max=20, message="Username must be 3-20 characters")
 	private String username;
 	
-	@Size(min=6, message = "Password must be at least 6 characters")	
+	@Size(min=6, message="Password must be at least 6 characters")	
 	private String password;
 	
 	@OneToOne

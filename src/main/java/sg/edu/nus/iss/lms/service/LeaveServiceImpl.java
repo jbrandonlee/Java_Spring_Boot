@@ -18,7 +18,12 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	@Override
 	public Leave createLeave(Leave leave) {
-		return leaveRepo.save(leave);
+		return leaveRepo.saveAndFlush(leave);
+	}
+	
+	@Override
+	public Leave updateLeave(Leave leave) {
+		return leaveRepo.saveAndFlush(leave);
 	}
 	
 	@Override
@@ -30,5 +35,4 @@ public class LeaveServiceImpl implements LeaveService {
 	public Leave findEmployeeLeaveId(Employee employee, Integer leaveId) {
 		return leaveRepo.findEmployeeLeaveByIds(employee.getId(), leaveId);
 	}
-
 }

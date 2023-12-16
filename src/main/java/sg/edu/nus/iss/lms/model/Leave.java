@@ -9,15 +9,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Leave {
 	
 	@Id
@@ -27,8 +29,11 @@ public class Leave {
 	@ManyToOne
 	private Employee employee;
 
-	@OneToOne
+	@ManyToOne
 	private LeaveType leaveType;
+	
+	@Transient
+	private String leaveTypeString;
 	
 	private LocalDate startDate;
 	

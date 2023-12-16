@@ -94,6 +94,26 @@
 			</div>
 		</nav>
 	</div>
+	
+	<div th:fragment="leave_entitlement" id="leave_entitlement">
+		<div class="pt-4">
+			<table width="100%" style="background-color: aliceblue;">
+				<tr>
+					<th>Current Leave Balance</th>
+				</tr>
+				<tr>
+					<td>Annual</td>
+					<td>Medical</td>
+					<td>Compensation</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>2</td>
+					<td>3</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 
 	<div th:fragment="header" id="header">
 		<div th:if="${not #strings.isEmpty(usession)}">

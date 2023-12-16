@@ -10,4 +10,6 @@ import sg.edu.nus.iss.lms.model.LeaveType;
 public interface LeaveTypeRepository extends JpaRepository<LeaveType, Integer> {
 	@Query("Select lt.type from LeaveType lt")
 	public List<String> findLeaveTypeNames();
+	
+	public LeaveType findByType(String type);
 }

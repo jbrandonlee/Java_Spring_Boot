@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/layout.html :: html_head}" />
 
 <body>
-	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" />
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
 	<main>
 		<h1 class="display-5">Leave History</h1>
 		<div class="pt-4">
@@ -35,8 +35,6 @@
 						<td th:text="${leave.status}"></td>
 						<td>
 							<a th:href="@{~/staff/leave/details/}+${leave.id}">View</a>
-							<span class="p-2"></span>
-							<a th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a>
 						</td>
 					</tr>									
 				</table>

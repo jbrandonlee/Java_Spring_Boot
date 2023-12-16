@@ -33,13 +33,13 @@ public class HomeController {
 	@PostMapping(value = "/authenticate")
 	public String handleLogin(@Valid @ModelAttribute("account") Account accForm, BindingResult bindingResult, Model model, HttpSession sessionObj) {
 		if (bindingResult.hasErrors()) {
-			return "redirect:/login";
+			return "login";
 		}
 		
 		Account acc = accService.authenticate(accForm.getUsername(), accForm.getPassword());
 		if (acc == null) {
-			model.addAttribute("errorLogin", "Invalid Username or Password. Please try again.");
-			return "redirect:/login";
+			model.addAttribute("errorMsg", "Invalid Username or Password. Please try again.");
+			return "login";
 		}
 		
 		Employee emp = empService.findEmployeeByAccount(acc);

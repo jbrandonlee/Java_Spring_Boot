@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.repository.LeaveTypeRepository;
 
 @Service
@@ -16,5 +17,9 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 	
 	public List<String> getTypeNames() {
 		return leaveTypeRepo.findLeaveTypeNames();
+	}
+	
+	public LeaveType findByType(String type) {
+		return leaveTypeRepo.findByType(type);
 	}
 }

@@ -46,9 +46,10 @@ public class LeaveManagementSystemApplication {
 			// Create Employee Account with Leaves
 			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", finance));
 			accRepo.save(new Account("brandon", "password1", brandonBoss));
-			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 21), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Holiday", "", "", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "", "", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonBoss, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Break", "", "", LeaveStatus.REJECTED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 21), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonBoss, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Break", "person3", "contact3", LeaveStatus.REJECTED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Holiday", "person4", "contact4", LeaveStatus.APPROVED));
 			
 			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", finance));
 			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", finance));

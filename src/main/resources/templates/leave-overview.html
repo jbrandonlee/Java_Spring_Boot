@@ -6,6 +6,10 @@
 	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" />
 	<main>
 		<h1 class="display-5">Leave Overview</h1>
+		<div th:replace="~{fragments/layout.html :: leave_entitlement}" />
+		<div class="pt-4">
+			<a th:href="@{~/staff/leave/apply}">Apply Leave</a>
+		</div>
 		<div class="pt-4">
 			<a th:href="@{~/staff/leave/history}">View Leave History</a>
 		</div>
