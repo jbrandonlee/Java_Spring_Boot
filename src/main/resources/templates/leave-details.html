@@ -9,7 +9,7 @@
 		<form class="row g-4 pt-4">
 			<div class="form-group col-12">
 				<label for="leaveStatus" class="form-label">Leave Status</label>
-				<input type="text" name="leaveType" class="form-control text-primary fw-bold" th:value="${leave.status}" disabled>
+				<input type="text" name="leaveType" class="form-control text-primary fw-semibold" th:value="${leave.status}" disabled>
 			</div>
 			<div class="form-group col-12">
 				<label for="leaveType" class="form-label">Leave Type</label>
@@ -44,13 +44,13 @@
     			<textarea name="contact" class="form-control" th:text="${leave.contact}" disabled></textarea>
   			</div>
   			<div class="d-flex flex-row-reverse">
-				<span th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}" >
-					<a class="btn btn-dark ms-3 text-decoration-none" th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a></span>
-				<span th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}">
-					<a class="btn btn-danger ms-3 text-decoration-none" th:href="@{~/staff/leave/delete/}+${leave.id}">Delete Leave</a></span>
-				<span th:if="${#strings.equals(leave.status,'APPROVED')}">
-					<a class="btn btn-danger ms-3 text-decoration-none" th:href="@{~/staff/leave/cancel/}+${leave.id}">Cancel Leave</a></span>
-				<span><a class="btn btn-outline-dark ms-3 text-decoration-none" th:href="@{~/staff/leave/overview}">Back to Overview</a></span>
+				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}" >
+					<a class="btn btn-dark text-decoration-none" th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a></span>
+				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}">
+					<a class="btn btn-danger text-decoration-none" th:href="@{~/staff/leave/delete/}+${leave.id}">Delete Leave</a></span>
+				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPROVED')}">
+					<a class="btn btn-danger text-decoration-none" th:href="@{~/staff/leave/cancel/}+${leave.id}">Cancel Leave</a></span>
+				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/leave/overview}">Back to Overview</a></span>
 			</div>
 		</form>
 	</main>

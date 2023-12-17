@@ -52,10 +52,15 @@ public class LeaveManagementSystemApplication {
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonBoss, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonBoss, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonBoss, compensation, 0));
-			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 21), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 15), DaySection.AM, LocalDate.of(2023, 12, 16), DaySection.PM, "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
 			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonBoss, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Break", "person3", "contact3", LeaveStatus.REJECTED));
 			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Holiday", "person4", "contact4", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 30), DaySection.AM, LocalDate.of(2023, 12, 30), DaySection.AM, "Holiday", "updated1", "updated2", LeaveStatus.UPDATED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 30), DaySection.PM, LocalDate.of(2023, 12, 30), DaySection.PM, "Holiday", "cancelled1", "cancelled2", LeaveStatus.CANCELLED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2023, 12, 31), DaySection.AM, LocalDate.of(2023, 12, 31), DaySection.PM, "Holiday", "delete1", "delete2", LeaveStatus.DELETED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2024, 1, 30), DaySection.PM, LocalDate.of(2024, 1, 30), DaySection.PM, "Holiday", "2024-1", "2024-2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonBoss, annual, LocalDate.of(2024, 2, 10), DaySection.PM, LocalDate.of(2024, 2, 10), DaySection.PM, "Holiday", "2024-1", "2024-2", LeaveStatus.APPLIED));
 			
 			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", finance));
 			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", finance));

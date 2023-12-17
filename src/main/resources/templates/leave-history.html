@@ -5,23 +5,27 @@
 <body>
 	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
 	<main>
-		<h1 class="display-5">Leave History</h1>
+		<h1 class="display-5">Leave History
+			<span th:if="${showAll}"> (All)</span>
+			<span th:unless="${showAll}"> (Current Year)</span>
+		</h1>
 		<div class="pt-4">
-			<a th:href="@{~/staff/leave/overview}">Back to Overview</a>
-			
+					
 			<div th:if="${#lists.isEmpty(leaveHistory)}">
-				<p>You have not taken any leaves.</p>
+				<p class="text-center">You have not taken any leaves.</p>
 			</div>
 			
 			<div th:if="${not #lists.isEmpty(leaveHistory)}">
-				<table>
-					<tr>
-						<th>Leave Type</th>
-						<th>Start Date</th>
-						<th>End Date</th>
-						<th>Status</th>
-						<th>Actions</th>
-					</tr>
+				<table class="table table-sm table-bordered border-light" width="100%">
+					<thead class="table-light border-light-subtle">
+						<tr>
+							<td>Leave Type</td>
+							<td>Start Date</td>
+							<td>End Date</td>
+							<td>Status</td>
+							<td>Actions</td>
+						</tr>
+					</thead>
 					<tr th:each="leave : ${leaveHistory}">
 						<td th:text="${leave.leaveType.type}"></td>
 						<td>
@@ -32,12 +36,19 @@
 							<span th:text="${leave.endDate}"></span>
 							<span th:text="${leave.endDaySection}"></span>
 						</td>
-						<td th:text="${leave.status}"></td>
+						<td class="fw-normal" th:text="${leave.status}"
+							th:classappend="${ (leave.status.toString() == 'APPLIED' || leave.status.toString() == 'UPDATED') ? 'text-primary' : 
+											   (leave.status.toString() == 'APPROVED') ? 'text-success' :
+											   (leave.status.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
 						<td>
-							<a th:href="@{~/staff/leave/details/}+${leave.id}">View</a>
+							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/staff/leave/details/}+${leave.id}">View</a></span>
 						</td>
 					</tr>									
 				</table>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3" th:unless="${showAll}"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/leave/history/all}">View All</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-outline-dark text-decoration-none" th:href="@{~/staff/leave/overview}">Back to Overview</a></span>
 			</div>
 		</div>
 	</main>

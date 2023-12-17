@@ -39,6 +39,7 @@ public class StaffLeaveController {
 	@GetMapping(value = { "/leave/overview"})
 	public String staffHome(Model model, HttpSession sessionObj) {
 		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
+		model.addAttribute("leaveUpcoming", leaveService.findEmployeeLeavesUpcoming((Employee) sessionObj.getAttribute("employee")));
 		return "leave-overview";
 	}
 	
@@ -63,11 +64,21 @@ public class StaffLeaveController {
 	}
 	
 	// RETRIEVE LIST
-	// Do not retrieve 'LeaveStatus.DELETED'
+	// SHOW CURR YEAR, NOT 'LeaveStatus.DELETED' OR 'LeaveStatus.CANCELLED'
 	@GetMapping(value = { "/leave/history"})
 	public String staffLeaveHistory(Model model, HttpSession sessionObj) {
-		List<Leave> leaveHistory = leaveService.findEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
+		List<Leave> leaveHistory = leaveService.findEmployeeLeavesCurrYear((Employee) sessionObj.getAttribute("employee"));
 		model.addAttribute("leaveHistory", leaveHistory);
+		model.addAttribute("showAll", false);
+		return "leave-history";
+	}
+	
+	// SHOW ALL
+	@GetMapping(value = { "/leave/history/all"})
+	public String staffLeaveHistoryAll(Model model, HttpSession sessionObj) {
+		List<Leave> leaveHistory = leaveService.findAllEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
+		model.addAttribute("leaveHistory", leaveHistory);
+		model.addAttribute("showAll", true);
 		return "leave-history";
 	}
 	

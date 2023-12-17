@@ -27,12 +27,22 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 	
 	@Override
-	public List<Leave> findEmployeeLeaves(Employee employee) {
+	public List<Leave> findAllEmployeeLeaves(Employee employee) {
 		return leaveRepo.findAllLeaveByEmployeeId(employee.getId());
 	}
+
+	@Override
+	public List<Leave> findEmployeeLeavesCurrYear(Employee employee) {
+		return leaveRepo.findCurrYearLeaveByEmployeeId(employee.getId());
+	};
+	
+	@Override
+	public List<Leave> findEmployeeLeavesUpcoming(Employee employee) {
+		return leaveRepo.findUpcomingLeaveByEmployeeId(employee.getId());
+	};
 	
 	@Override
 	public Leave findEmployeeLeaveId(Employee employee, Integer leaveId) {
-		return leaveRepo.findEmployeeLeaveByIds(employee.getId(), leaveId);
+		return leaveRepo.findEmployeeLeaveById(employee.getId(), leaveId);
 	}
 }

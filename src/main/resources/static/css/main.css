@@ -58,3 +58,20 @@ main {
 label {
 	font-weight: 350;
 }
+
+table {
+	table-layout: fixed;
+	font-weight: 350;
+	text-align: center;
+}
+
+table thead {
+	font-weight: 400;
+}
+
+table .btn {
+	--bs-btn-padding-y: .25rem;
+	--bs-btn-padding-x: .5rem;
+	--bs-btn-font-size: .75rem;
+}
+
