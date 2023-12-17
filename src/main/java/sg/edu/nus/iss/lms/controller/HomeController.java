@@ -52,4 +52,9 @@ public class HomeController {
 	public String logout(Model model) {
 		return "redirect:/login";
 	}
+	
+	@GetMapping(value = "/calendar")
+	public String calendar(Model model) {
+		return "calendar";
+	}
 }
