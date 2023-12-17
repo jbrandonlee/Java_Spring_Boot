@@ -18,6 +18,7 @@ import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
 import sg.edu.nus.iss.lms.model.LeaveType;
+import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
 import sg.edu.nus.iss.lms.service.LeaveService;
 import sg.edu.nus.iss.lms.service.LeaveTypeService;
 
@@ -31,16 +32,21 @@ public class StaffLeaveController {
 	
 	@Autowired
 	LeaveTypeService leaveTypeService;
+	
+	@Autowired
+	LeaveEntitlementService leaveEntitlementService;
 
 	@GetMapping(value = { "/leave/overview"})
-	public String staffHome(Model model) {
+	public String staffHome(Model model, HttpSession sessionObj) {
+		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		return "leave-overview";
 	}
 	
 	// CREATE
 	@GetMapping(value = { "/leave/apply"})
-	public String staffLeaveApplicationForm(Model model) {
+	public String staffLeaveApplicationForm(Model model, HttpSession sessionObj) {
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		return "leave-apply";
 	}
 	
@@ -81,6 +87,7 @@ public class StaffLeaveController {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		return "leave-edit";
 	}
 	

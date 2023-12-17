@@ -35,11 +35,15 @@ public class Employee {
 	@OneToMany(mappedBy="employee")
 	private List<Leave> leaves;
 	
+	@OneToMany(mappedBy="employee")
+	private List<LeaveEntitlement> leaveEntitlements;
+	
 	public Employee(String name, String jobDesignation, Department department) {
 		this.name = name;
 		this.jobDesignation = jobDesignation;
 		this.managerId = null;
 		this.department = department;
 		this.leaves = new ArrayList<Leave>();
+		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();
 	}
 }

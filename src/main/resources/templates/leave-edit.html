@@ -9,7 +9,7 @@
 		<div th:if="${errorMsg != null}" class="row">
 			<div th:text="${errorMsg}" class="alert alert-warning"></div>
 		</div>
-		<div th:replace="~{fragments/layout.html :: leave_entitlement}" />
+		<div th:replace="~{fragments/layout.html :: leave_balance}" />
 		<form class="row g-4 pt-4" action="#" th:action="@{'/staff/leave/edit/'}+${leave.id}" th:object="${leave}" method="post">
 			<div class="form-group col-12">
 				<label for="leaveType" class="form-label">Leave Type</label>

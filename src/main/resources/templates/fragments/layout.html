@@ -95,22 +95,68 @@
 		</nav>
 	</div>
 	
+	<div th:fragment="leave_entitlement_alt" id="leave_entitlement_alt">
+		<div class="pt-4">
+			<h5>Current Leave Balance</h5>
+			<table class="table table-sm table-bordered border-light" width="100%">
+				<thead class="table-light border-light-subtle">
+					<tr>
+						<th></th>
+						<th>Leave Balance</th>
+						<th>Leave Entitlement</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="leaveEntitlement : ${leaveEntitlement}">
+						<th class="table-light border-light-subtle" th:text="${leaveEntitlement.leaveType.type}"></th>
+						<td class="text-primary" th:text="${leaveEntitlement.leaveBalance}"></td>
+						<td class="text-secondary" th:text="${leaveEntitlement.entitlement}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
 	<div th:fragment="leave_entitlement" id="leave_entitlement">
 		<div class="pt-4">
-			<table width="100%" style="background-color: aliceblue;">
-				<tr>
-					<th>Current Leave Balance</th>
-				</tr>
-				<tr>
-					<td>Annual</td>
-					<td>Medical</td>
-					<td>Compensation</td>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td>2</td>
-					<td>3</td>
-				</tr>
+			<h5>Current Leave Balance</h5>
+			<table class="table table-sm table-bordered border-light" width="100%">
+				<thead class="table-light border-light-subtle">
+					<tr>
+						<th></th>
+						<th th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveType.type}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th class="table-light border-light-subtle">Leave Balance</th>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveBalance}"></td>
+					</tr>
+					<tr>
+						<th class="table-light border-light-subtle">Leave Entitlement</th>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.entitlement}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div th:fragment="leave_balance" id="leave_balance">
+		<div class="pt-4">
+			<h5>Current Leave Balance</h5>
+			<table class="table table-sm table-bordered border-light" width="100%">
+				<thead class="table-light border-light-subtle">
+					<tr>
+						<th></th>
+						<th th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveType.type}"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th class="table-light border-light-subtle">Leave Balance</th>
+						<td th:each="leaveEntitlement : ${leaveEntitlement}" th:text="${leaveEntitlement.leaveBalance}"></td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
 	</div>
