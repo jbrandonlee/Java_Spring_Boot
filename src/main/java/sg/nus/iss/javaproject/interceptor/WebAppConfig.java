@@ -12,6 +12,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(loginInterceptor)
-				.addPathPatterns("/home","/leave/*");
+				.addPathPatterns("/home","/leave/*","/leave");
 }
 }

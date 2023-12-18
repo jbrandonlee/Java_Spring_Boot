@@ -23,7 +23,7 @@
  	<td th:text="${oneapplication.leaveEndDate}">LeaveEndDate</td>
  	<td th:text="${oneapplication.leaveApprovalStatus}">Status</td>
  	<td th:if="${#strings.equals(oneapplication.leaveApprovalStatus, 'applied') or #strings.equals(oneapplication.leaveApprovalStatus, 'updated')}">
-		 <a href="editLeave.html"th:href="@{/leave/edit/{leaveId}(leaveId=${oneapplication.leaveId})}">Edit</a>
+		 <a href="editLeave.html"th:href="@{/leave/edit/}+${oneapplication.leaveId}">Edit</a>
 	</td>
 	<td th:if="${#strings.equals(oneapplication.leaveApprovalStatus, 'applied') or #strings.equals(oneapplication.leaveApprovalStatus, 'updated')}">
 		<a href="deleteLeave.html"th:href="@{/leave/delete/}+${oneapplication.leaveId}">Delete</a>

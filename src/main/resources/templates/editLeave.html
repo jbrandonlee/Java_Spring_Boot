@@ -23,6 +23,8 @@
 				</tr>
 				<tr>
 					<th>LeaveType</th>
+					<input type="hidden" th:field="*{leaveDays}" th:value="${leave.leaveDays}" />
+					<input type="hidden" th:field="*{leaveId}" th:value="*{leaveId}"readonly>
 					<td><input type="text" th:field="*{leaveType}" th:value="*{leaveType}"></td>
 					<td th:if="${#fields.hasErrors('leaveType')}"th:errors="*{leaveType}"></td>
 				</tr>
