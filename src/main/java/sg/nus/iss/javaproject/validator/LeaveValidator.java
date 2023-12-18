@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -13,9 +14,19 @@ import org.springframework.validation.Validator;
 
 import sg.nus.iss.javaproject.model.LeaveApplication;
 import sg.nus.iss.javaproject.model.LeaveType;
+import sg.nus.iss.javaproject.service.HolidayImplementation;
+import sg.nus.iss.javaproject.service.HolidayInterface;
 
 @Component
 public class LeaveValidator implements Validator{
+	@Autowired
+	private HolidayInterface hService;
+	
+	@Autowired
+	public void setHolidayService(HolidayImplementation hImpl) {
+		this.hService=hImpl;
+	}
+	
 	@Override
 	public boolean supports(Class<?> clazz) {
 		return LeaveApplication.class.isAssignableFrom(clazz);
@@ -94,8 +105,7 @@ public class LeaveValidator implements Validator{
 	}
 	
 	private boolean isPublicHoliday(LocalDate time) {
-		List<LocalDate> publicHolidays = new ArrayList<>();
-		publicHolidays.add(LocalDate.of(2023, 1, 1));
+		List<LocalDate> publicHolidays = hService.getAllHoliday();
 		return publicHolidays.contains(time);
 	}
 }
