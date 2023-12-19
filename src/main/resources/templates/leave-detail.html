@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+<h2 class="text-center"> My Leave Application Detail</h2>
+<div class="container my-2 border">
+    <form action="#" th:action="@{/leave/edit}" th:object="${leaveApplication}" method="post">
+        <input name="leaveId" type="hidden" th:value="*{leaveId}">
+        <input name="staff.employeeId" type="hidden" th:value="*{staff.employeeId}">
+        <div class="form-group row">
+            <label class="col-sm-2 control-label">Start Date</label>
+            <div class="col-sm-10">
+                <p th:text="${#dates.format(leaveApplication.leaveStartDate,'yyyy-MM-dd')}" class="form-control"
+                   name="leaveStartDate"></p>
+                <span th:if="${#fields.hasErrors('leaveStartDate')}" th:errors="*{leaveStartDate}" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 control-label">End Date</label>
+            <div class="col-sm-10">
+                <p class="form-control" name="leaveEndDate"
+                       th:text="${#dates.format(leaveApplication.leaveEndDate,'yyyy-MM-dd')}" />
+                <span th:if="${#fields.hasErrors('leaveEndDate')}" th:errors="*{leaveEndDate}"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 control-label">Work Dissemination</label>
+            <div class="col-sm-10">
+                <p  class="form-control" name="workDissemination" th:text="*{workDissemination}"/>
+                <span th:if="${#fields.hasErrors('workDissemination')}" th:errors="*{workDissemination}" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 control-label">Destination</label>
+            <div class="col-sm-10">
+                <p class="form-control" id="destination" th:text="*{destination}"/>
+                <span th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}"></span>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label class="col-sm-2 control-label">Leave Type</label>
+            <div class="col-sm-10">
+                <p class="form-control" name="leaveType" th:text="*{leaveType}"/>
+
+                <span th:if="${#fields.hasErrors('leaveType')}" th:errors="*{leaveType}" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 control-label">Leave Reason</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" row=3 id="leaveReasons" th:text="*{leaveReasons}">
+                </textarea>
+                <span th:if="${#fields.hasErrors('leaveReasons')}" th:errors="*{leaveReasons}" />
+            </div>
+        </div>
+   
+        <div class="form-group row">
+            <div class="col-sm-offset-2 col-sm-10  text-right">
+                <a th:href="@{/leave/edit/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Edit</a>
+                <a th:href="@{/leave/delete/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Cancel</a>
+                <a th:href="@{/leave/delete/{id}(id=${leaveApplication.leaveId})}" class="btn btn-danger"
+                   onclick="return confirm('Confirm delete？')">Delete</a>
+
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

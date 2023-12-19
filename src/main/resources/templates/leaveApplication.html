@@ -14,90 +14,104 @@
     <h1 class="text-center">Leave Application</h1>
 
 
-    <!--  th:href url-->
     <a th:href="@{/leave/toApply}" class="btn btn-dark btn-sm mb-3"> Add </a>
 
     <table class="table  text-center">
         <thead>
         <tr>
-            <th>
-                leaveId
+			<th>
+               Index
             </th>
             <th>
-                leaveType
+                LeaveId
             </th>
             <th>
-                leaveStartDate
+                LeaveType
             </th>
             <th>
-                leaveEndDate
+               StartDate
             </th>
             <th>
-                leaveReasons
+                EndDate
             </th>
+            <th>
+               Status
+            </th>
+           
+            
             <th>Actions</th>
         </tr>
         </thead>
 
         <tbody>
-        <!--    th:each iterate the elements-->
-        <tr th:each="leaveApplication : ${leaveApplications}">
+      
+    
+   <tr th:each="leaveApplication,status : ${leaveApplications}">
+                <td th:text="${status.count}">1</td>
             <td th:text="${leaveApplication.leaveId}"></td>
             <td th:text="${leaveApplication.leaveType}"></td>
             <td th:text="${leaveApplication.leaveStartDate}"></td>
             <td th:text="${leaveApplication.leaveEndDate}"></td>
-            <td th:text="${leaveApplication.leaveReasons}"></td>
+            <td th:text="${leaveApplication.leaveApprovalStatus}"></td>
 
-            
             <td>
-                <a th:href="@{/leave/edit/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Update</a>
-                <a th:href="@{/leave/cancel/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Cancel</a>
-                <a th:href="@{/leave/delete/{id}(id=${leaveApplication.leaveId})}" class="btn btn-danger"   onclick="return confirm('Confirm delete?')">Delete</a>
+<!--                <div th:switch="${leaveApplication.leaveApprovalStatus}">-->
+                    <a th:href="@{/leave/detail/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Detail</a>
+<!--                    <a th:href="@{/leave/edit/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Edit</a>-->
+<!--                    <a th:href="@{/leave/delete/{id}(id=${leaveApplication.leaveId})}" class="btn btn-primary ">Cancel</a>-->
+<!--                    <a th:href="@{/leave/delete/{id}(id=${leaveApplication.leaveId})}" class="btn btn-danger"   onclick="return confirm('Confirm delete？')">Delete</a>-->
+<!--                </div>-->
             </td>
         </tr>
         </tbody>
     </table>
 
-    <!--   th:if true-->
-    <div th:if="${totalPages > 1}">
+  
 
         <div class="row col-sm-10">
-            <!--            &lt;!&ndash;How many records in total&ndash;&gt;-->
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 Total Rows: [[${totalItems}]]
             </div>
-
+            <div class="col-sm-2">
+                <select name="pageSize" th:value="${pageSize}" onchange="self.location.href=options[selectedIndex].value">
+    <option th:selected="${pageSize}==5"  th:value="5">5 Rows/Page</option>
+    <option th:selected="${pageSize}==10" th:value="10">10 Rows/Page</option>
+    <option th:selected="${pageSize}==20" th:value="20">20 Rows/Page</option>
+    <option th:selected="${pageSize}==25" th:value="25">25 Rows/Page</option>
+    <option th:selected="${pageSize}==50" th:value="50">50 Rows/Page</option>
+       </select>
+            </div>
             <div class="col-sm-1">
                 <a th:if="${currentPage > 1}"
-                   th:href="@{'/leave/page/1'}">First</a>
+                   th:href="@{'/leave/page/1/'+${pageSize}}">First</a>
                 <span th:unless="${currentPage > 1}">First</span>
             </div>
             <div class="col-sm-1">
                 <a th:if="${currentPage > 1}"
-                   th:href="@{'/leave/page/' + ${currentPage - 1}}">Previous</a>
+                   th:href="@{'/leave/page/' + ${currentPage - 1}+ '/' + ${pageSize}}">Previous</a>
                 <span th:unless="${currentPage > 1}">Previous</span>
             </div>
 
-            <div class="col-sm-5">
+            <div class="col-sm-3">
                 <span th:each="i: ${#numbers.sequence(1, totalPages)}">
                     <a th:if="${currentPage != i}"
-                       th:href="@{'/leave/page/' + ${i}}">[[${i}]]</a>
+                       th:href="@{'/leave/page/' + ${i}+'/'+${pageSize}}">[[${i}]]</a>
                     <span th:unless="${currentPage != i}">[[${i}]]</span>
                 </span>
             </div>
 
-            <!--            &lt;!&ndash;Next&ndash;&gt;-->
+        
 
             <div class="col-sm-1">
                 <a th:if="${currentPage < totalPages}"
-                   th:href="@{'/leave/page/' + ${currentPage + 1}}">Next</a>
+                   th:href="@{'/leave/page/'+ ${currentPage + 1} +'/' + ${pageSize}}">Next</a>
                 <span th:unless="${currentPage < totalPages}">Next</span>
             </div>
 
-            <!--            &lt;!&ndash;Last&ndash;&gt;-->
+          
             <div class="col-sm-1">
                 <a th:if="${currentPage < totalPages}"
-                   th:href="@{'/leave/page/' + ${totalPages}}">Last</a>
+                   th:href="@{'/leave/page/'+ ${totalPages}+'/'+${pageSize}}">Last</a>
                 <span th:unless="${currentPage < totalPages}">Last</span>
             </div>
 
@@ -108,4 +122,3 @@
 
 </body>
 </html>
-

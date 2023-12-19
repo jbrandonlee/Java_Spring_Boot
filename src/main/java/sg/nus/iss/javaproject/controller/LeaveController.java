@@ -48,7 +48,7 @@ public class LeaveController {
 
         leaveApplication.setLeaveApprovalStatus(ApprovalStatus.applied);
         lService.applyLeaveApplication(leaveApplication);
-        return  "redirct:/leave/page/1";
+        return  "redirect:/leave/page/1/10";
     }
 
     @GetMapping("/list")
@@ -57,6 +57,12 @@ public class LeaveController {
         return "leaveApplication";
     }
 
+   @GetMapping("/detail/{id}")
+     public String toDetailLeaveApplication(@PathVariable Integer id, Model model) {
+    LeaveApplication leaveApplication = lService.findLeaveApplicaiton(id);
+    model.addAttribute("leaveApplication", leaveApplication);
+    return "leave-detail";
+}
     @RequestMapping(value = "/history")
       public String employeeLeaveHistory(HttpSession session, Model model) {
              Staff staff = (Staff) session.getAttribute("staff");
@@ -68,6 +74,7 @@ public class LeaveController {
 
              return "leaveApplication";
            }
+    
     @GetMapping("/edit/{id}")
     public String toEditLeaveApplication(@PathVariable Integer id, Model model) {
         LeaveApplication leaveApplication = lService.findLeaveApplicaiton(id);
@@ -75,14 +82,8 @@ public class LeaveController {
 
         return "leave-edit";
     }
-
-    @PostMapping("/delete/{id}")
-    public String deleteLeaveApplication(@PathVariable Integer id, Model model) {
-        LeaveApplication leaveApplication = lService.findLeaveApplicaiton(id);
-        leaveApplication.setLeaveApprovalStatus(ApprovalStatus.deleted);
-        return  "redirct:/leave/page/1";
-    }
-   @PostMapping("/edit")
+    
+    @PostMapping("/edit")
     public String editLeaveApplication(@ModelAttribute @Valid LeaveApplication leaveApplication, BindingResult result,
          HttpSession session) throws LeaveApplicationNotFound {
         if (result.hasErrors()) {
@@ -93,39 +94,46 @@ public class LeaveController {
        leaveApplication.setLeaveApprovalStatus(ApprovalStatus.updated);
         lService.editLeaveApplication(leaveApplication);
 
-       return "redirect:/leave/page/1";
+       return "redirect:/leave/page/1/10";
     }
-
-    @RequestMapping(value = "/cancel/{id}")
-    public String cancelApplication(@PathVariable Integer id) {
+    
+    @GetMapping("/delete/{id}")
+    public String deleteLeaveApplication(@PathVariable Integer id, Model model) {
         LeaveApplication leaveApplication = lService.findLeaveApplicaiton(id);
+        if (leaveApplication.getLeaveApprovalStatus() == ApprovalStatus.approved) {
+            leaveApplication.setLeaveApprovalStatus(ApprovalStatus.cancelled);
+            String message = "LeaveApplication" + leaveApplication.getLeaveId() + " was successfully canceled.";
+            System.out.println(message);
+            lService.editLeaveApplication(leaveApplication);
+        } else {
+            lService.removeLeaveApplication(leaveApplication);
+        }
 
-        leaveApplication.setLeaveApprovalStatus(ApprovalStatus.cancelled);
-        lService.editLeaveApplication(leaveApplication);
-
-        String message = "LeaveApplication" + leaveApplication.getLeaveId() + " was successfully canceled.";
+        String message = "LeaveApplication" + leaveApplication.getLeaveId() + " was successfully deleted.";
         System.out.println(message);
 
-        return "redirect:/leave/page/1";
+        return "redirect:/leave/page/1/10";
     }
+   
 
-    @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable (value = "pageNo") int pageNo, Model model, HttpSession session) {
-        Staff staff = (Staff) session.getAttribute("staff");
-        if(staff==null){
-            return "login";
+    @GetMapping("/page/{pageNo}/{pageSize}")
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
+        @PathVariable(value = "pageSize") int pageSize, Model model, HttpSession session) {
+        Staff staff = (Staff)session.getAttribute("staff");
+        if (staff == null) {
+            return "redirect:/";
         }
-        //Here we check the role of the user
-
-        Page<LeaveApplication> page = lService.findLeaveApplicationPage(pageNo, 8, "leaveId", "asc");
+        
+        Page<LeaveApplication> page = lService.findLeaveApplicationPage(staff.getEmployeeId(),pageNo,pageSize, "leaveId", "asc");
 
         List<LeaveApplication> leaveApplications = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("pageSize", page.getSize());
 
         model.addAttribute("leaveApplications", leaveApplications);
         return "leaveApplication";
     }
-}
+    }

@@ -3,14 +3,15 @@ package sg.nus.iss.javaproject.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
 import sg.nus.iss.javaproject.repository.LeaveApplicationRepository;
 import sg.nus.iss.javaproject.model.LeaveApplication;
+
 
 @Service
 @Transactional
@@ -49,15 +50,16 @@ public class LeaveApplicationService implements ILeaveApplication {
         lRepo.delete(leaveApplication);
     }
 
+  
     @Override
-    public Page<LeaveApplication> findLeaveApplicationPage(int pageNo, int pageSize, String sortField,
+    public Page<LeaveApplication> findLeaveApplicationPage(Integer eid, int pageNo, int pageSize, String sortField,
         String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
-            ? Sort.by(sortField).ascending()
+
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending()
             : Sort.by(sortField).descending();
 
         PageRequest pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return lRepo.findAll(pageable);
+        return lRepo.findLeaveApplByEID(eid, pageable);
     }
 }
 

@@ -12,15 +12,10 @@ import sg.nus.iss.javaproject.model.LeaveApplication;
 
 public interface LeaveApplicationRepository  extends JpaRepository<LeaveApplication,Integer>{
 
-//	@Query("SELECT lp from LeaveApplication lp WHERE lp.staffEmployeeId = :eid")
-//	  List<LeaveApplication> findLeaveApplByEID(@Param("eid") int eid);
-//
+
 	 @Query("SELECT lp from LeaveApplication lp WHERE lp.staff.employeeId = :eid  and year(lp.leaveStartDate)=year(now())")
       List<LeaveApplication> findLeaveApplByEID(@Param("eid") int eid);
-//
-   // @Query("SELECT lp from LeaveApplication lp WHERE lp.staffEmployeeId = :eid AND (lp.leaveApprovalStatus ='APPLIED' OR lp.leaveApprovalStatus ='UPDATED')")
-	  //List<LeaveApplication> findPendingLeaveApplByEID(@Param("eid") int eid);
-//
-//	  @Query(value = "SELECT * FROM leaveApplication WHERE status = ?0", nativeQuery = true)
-//	  List<leaveApplication> findPendingLeaveApplByStatus(String status);
+      
+	  @Query("SELECT lp from LeaveApplication lp WHERE lp.staff.employeeId = :eid")
+	  Page<LeaveApplication> findLeaveApplByEID(@Param("eid") int eid, Pageable pageable);
 }

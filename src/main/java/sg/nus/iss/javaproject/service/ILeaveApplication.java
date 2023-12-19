@@ -17,7 +17,9 @@ public interface ILeaveApplication {
 
     void removeLeaveApplication(LeaveApplication leaveApplication);
 
-    Page<LeaveApplication> findLeaveApplicationPage(int pageNo, int pageSize, String sortField, String sortDirection);
+    Page<LeaveApplication> findLeaveApplicationPage(Integer eid, int pageNo, int pageSize, String sortField, String sortDirection);
+    
+    //Page<LeaveApplication> findLeaveApplByEID(Integer eid, Pageable pageable);
 
 
 }
