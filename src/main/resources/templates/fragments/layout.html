@@ -138,6 +138,44 @@
 		</div>
 	</div>
 
+	<!-- https://getbootstrap.com/docs/5.3/components/pagination/#overview -->
+	<!-- Requires params currUrl, pageSize, currPage --> 
+	<div th:fragment="pagination" id="pagination">
+		<div th:if="${totalPages > 1}" class="pt-4 pb-4">
+			<div class="row col-12">
+				<div class="col-3">
+					Total Entries: [[${totalItems}]]
+				</div>
+				<div class="col-1">
+					<a th:if="${currPage > 1}" th:href="@{'' + ${currUrl} + '?page=1' + '&size=' + ${pageSize}}">First</a>
+					<span th:unless="${currPage  > 1}">First</span>
+				</div>
+				<div class="col-1">
+					<a th:if="${currPage  > 1}"
+						th:href="@{'' + ${currUrl} + '?page=' + ${currPage  - 1} + '&size=' + ${pageSize}}">Previous</a>
+					<span th:unless="${currPage  > 1}">Previous</span>
+				</div>
+				<div class="col-5">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currPage  != i}"
+							th:href="@{'' + ${currUrl} + '?page=' + ${i} + '&size=' + ${pageSize}}">[[${i}]]</a>
+						<span th:unless="${currPage  != i}">[[${i}]]</span>
+					</span>
+				</div>
+				<div class="col-1">
+					<a th:if="${currPage  < totalPages}"
+						th:href="@{'' + ${currUrl} + '?page=' + ${currPage  + 1} + '&size=' + ${pageSize}}">Next</a>
+					<span th:unless="${currPage  < totalPages}">Next</span>
+				</div>
+				<div class="col-1">
+					<a th:if="${currPage  < totalPages}"
+						th:href="@{'' + ${currUrl} + '?page=' + ${totalPages} + '&size=' + ${pageSize}}">Last</a>
+					<span th:unless="${currPage  < totalPages}">Last</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div th:fragment="header" id="header">
 		<div th:if="${not #strings.isEmpty(usession)}">
 			<h2><em th:utext="'Hello ' + ${session.usession.user.name}"></em></h2>

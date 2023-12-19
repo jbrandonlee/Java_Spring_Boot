@@ -1,8 +1,10 @@
 package sg.edu.nus.iss.lms.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
@@ -66,9 +70,28 @@ public class StaffLeaveController {
 	// RETRIEVE LIST
 	// SHOW CURR YEAR, NOT 'LeaveStatus.DELETED' OR 'LeaveStatus.CANCELLED'
 	@GetMapping(value = { "/leave/history"})
-	public String staffLeaveHistory(Model model, HttpSession sessionObj) {
+	public String staffLeaveHistory(Model model, HttpSession sessionObj, HttpServletRequest request,
+									@RequestParam("page") Optional<Integer> page, 
+									@RequestParam("size") Optional<Integer> size) {
+		int currPage = page.orElse(1);
+		int pageSize = size.orElse(5);
+		
 		List<Leave> leaveHistory = leaveService.findEmployeeLeavesCurrYear((Employee) sessionObj.getAttribute("employee"));
-		model.addAttribute("leaveHistory", leaveHistory);
+		
+		// Clamp PageNumber between 1 to MaxPage
+		int maxPage = (int) Math.ceil(leaveHistory.size() / (double) pageSize);
+		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
+		getPageNum = getPageNum - 1;	// Convert 1-Index to 0-Index
+		
+		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
+		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
+
+		model.addAttribute("currUrl", request.getRequestURI().toString());
+        model.addAttribute("currPage", currPage);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", leaveHistoryPage.getTotalPages());
+        model.addAttribute("totalItems", leaveHistoryPage.getTotalElements());
+		model.addAttribute("leaveHistory", leaveHistoryPaged);
 		model.addAttribute("showAll", false);
 		return "leave-history";
 	}
@@ -91,8 +114,6 @@ public class StaffLeaveController {
 	}
 
 	// UPDATE
-	// Update LeaveStatus -> UPDATED or DELETED or CANCELLED (if APPROVED)
-	// Show LeaveStatus at Top
 	@GetMapping(value = { "/leave/edit/{id}"})
 	public String staffLeaveEditForm(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
