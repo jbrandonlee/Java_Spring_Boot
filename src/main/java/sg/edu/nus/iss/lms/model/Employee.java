@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.lms.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class Employee {
 	
 	private String jobDesignation;
 	
+	private LocalDate joinDate;
+	
 	private Integer managerId;
 	
 	@ManyToOne
@@ -41,12 +44,14 @@ public class Employee {
 	@OneToMany(mappedBy="employee")
 	private List<Overtime> overtimes;
 	
-	public Employee(String name, String jobDesignation, Department department) {
+	public Employee(String name, String jobDesignation, Department department, Integer managerId) {
 		this.name = name;
 		this.jobDesignation = jobDesignation;
-		this.managerId = null;
+		this.joinDate = LocalDate.of(2020, 1, 1);
+		this.managerId = managerId;
 		this.department = department;
 		this.leaves = new ArrayList<Leave>();
 		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();
+		this.overtimes = new ArrayList<Overtime>();
 	}
 }

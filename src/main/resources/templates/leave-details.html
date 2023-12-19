@@ -43,6 +43,10 @@
     			<label for="contact" class="form-label">Personal Contact Details</label>
     			<textarea name="contact" class="form-control" th:text="${leave.contact}" disabled></textarea>
   			</div>
+  			<div class="form-group col-12" th:if="${#strings.equals(leave.status,'APPROVED') or #strings.equals(leave.status,'REJECTED')}")>
+    			<label for="contact" class="form-label">Manager Comment</label>
+    			<textarea name="contact" class="form-control" th:text="${leave.managerComment}" disabled></textarea>
+  			</div>
   			<div class="d-flex flex-row-reverse">
 				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}" >
 					<a class="btn btn-dark text-decoration-none" th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a></span>

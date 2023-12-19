@@ -23,4 +23,8 @@ public class OvertimeServiceImpl implements OvertimeService {
 	public Overtime findEmployeeOvertimeId(Employee employee, Integer leaveId) {
 		return overtimeRepo.findEmployeeOvertimeById(employee.getId(), leaveId);
 	}
+	
+	public List<Overtime> findAllSubordinatePendingOvertimes(Employee manager) {
+		return overtimeRepo.findAllSubordinatePendingOvertimes(manager.getId());
+	}
 }

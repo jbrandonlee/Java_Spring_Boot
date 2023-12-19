@@ -16,4 +16,9 @@ public interface OvertimeRepository extends JpaRepository<Overtime, Integer> {
 	// Find All Employee Leaves
 	@Query("SELECT o FROM Employee e JOIN e.overtimes o WHERE e.id=:employeeId")
 	public List<Overtime> findAllOvertimeByEmployeeId(@Param("employeeId")Integer employeeId);
+	
+	// -- Manager --
+	// Find all Subordinate's Leaves Pending Approve/Reject
+	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND o.status IN ('APPLIED', 'UPDATED')")
+	List<Overtime> findAllSubordinatePendingOvertimes(@Param("managerId") Integer managerId);
 }

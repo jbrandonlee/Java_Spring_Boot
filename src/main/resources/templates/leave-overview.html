@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/layout.html :: html_head}" />
 
 <body>
-	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" />
+	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
 	<main>
 		<h1 class="display-5">Leave Overview</h1>
 		<div>
@@ -15,7 +15,7 @@
 		<div class="pt-4"><hr></div>
 		<div>
 			<div class="pt-4">
-				<h5>Upcoming Leaves <span th:if="${#lists.size(leaveUpcoming) > 5}">(Nearest 5)</span></h5>
+				<h5>Upcoming Leaves <span th:if="${#lists.size(leaveUpcoming) > 5}">(First 5)</span></h5>
 				<div th:if="${#lists.isEmpty(leaveUpcoming)}">
 					<p class="text-center">You do not have any upcoming leaves.</p>
 				</div>
@@ -58,7 +58,7 @@
 		<div class="pt-4"><hr></div>
 		<div>
 			<div class="pt-4">
-				<h5>Overtime Claims<span th:if="${#lists.size(overtimeClaims) > 5}">(Nearest 5)</span></h5>
+				<h5>Overtime Claims<span th:if="${#lists.size(overtimeClaims) > 5}">(First 5)</span></h5>
 				<div th:if="${#lists.isEmpty(overtimeClaims)}">
 					<p class="text-center">You do not have any overtime claims.</p>
 				</div>
@@ -68,7 +68,7 @@
 							<tr>
 								<td>Start Time</td>
 								<td>End Time</td>
-								<td>Hours</td>
+								<td>Duration</td>
 								<td>Eligible Claim</td>
 								<td>Status</td>
 								<td>Actions</td>
@@ -82,7 +82,7 @@
 								<span th:text="${#temporals.format(overtime.endTime, 'yyyy-MM-dd HH:mm')}"></span>
 							</td>
 							<td>
-								<span th:text="${overtime.getDuration()}"></span>
+								<span th:text="${overtime.getDuration() + ' hours'}"></span>
 							</td>
 							<td>
 								<span th:text="${overtime.getClaimableCompensation() + ' days'}"></span>

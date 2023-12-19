@@ -20,6 +20,7 @@ public class LeaveServiceImpl implements LeaveService {
 	@Autowired
 	LeaveRepository leaveRepo;
 	
+	// -- Employee --
 	@Override
 	public Leave createLeave(Leave leave) {
 		return leaveRepo.saveAndFlush(leave);
@@ -63,4 +64,21 @@ public class LeaveServiceImpl implements LeaveService {
         List<Leave> pageContent = listLeaves.subList(start, end);
         return new PageImpl<>(pageContent, pageRequest, listLeaves.size());
     }
+    
+    // -- Manager --
+    public List<Leave> findAllSubordinatePendingLeaves(Employee manager) {
+		return leaveRepo.findAllSubordinatePendingLeaves(manager.getId());
+	}
+	
+    public List<Leave> findSubordinateLeaveHistoryInDuration(Employee manager, Leave leave) {
+		return leaveRepo.findSubordinateLeaveHistoryInDuration(manager.getId(), leave.getStartDate(), leave.getEndDate());
+	}
+	
+    public List<Leave> findSubordinateApprovedLeaveHistory(Employee manager, Employee employee) {
+		return leaveRepo.findSubordinateApprovedLeaveHistory(manager.getId(), employee.getId());
+	}
+	
+    public List<Leave> findSubordinateLeaveById(Employee employee, Employee manager, Integer leaveId) {
+		return leaveRepo.findSubordinateLeaveById(employee.getId(), manager.getId(), leaveId);
+	}
 }

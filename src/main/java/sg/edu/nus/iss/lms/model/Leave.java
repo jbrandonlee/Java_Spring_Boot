@@ -52,6 +52,8 @@ public class Leave {
 	@Enumerated(EnumType.STRING)
 	private LeaveStatus status;
 	
+	private String managerComment;
+	
 	// TestData Constructor
 	public Leave(Employee employee, LeaveType leaveType, LocalDate startDate, DaySection startDaySection, LocalDate endDate, DaySection endDaySection, String reason, String dissemination, String contact, LeaveStatus status) {
 		this.employee = employee;
