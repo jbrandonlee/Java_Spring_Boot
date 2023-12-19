@@ -28,7 +28,7 @@ import sg.edu.nus.iss.lms.service.LeaveTypeService;
 
 
 @Controller
-@RequestMapping(value = "/staff")
+@RequestMapping(value = "/staff/leave")
 public class StaffLeaveController {
 	
 	@Autowired
@@ -40,7 +40,7 @@ public class StaffLeaveController {
 	@Autowired
 	LeaveEntitlementService leaveEntitlementService;
 
-	@GetMapping(value = { "/leave/overview"})
+	@GetMapping(value = { "/overview"})
 	public String staffHome(Model model, HttpSession sessionObj) {
 		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		model.addAttribute("leaveUpcoming", leaveService.findEmployeeLeavesUpcoming((Employee) sessionObj.getAttribute("employee")));
@@ -48,14 +48,14 @@ public class StaffLeaveController {
 	}
 	
 	// CREATE
-	@GetMapping(value = { "/leave/apply"})
+	@GetMapping(value = { "/apply"})
 	public String staffLeaveApplicationForm(Model model, HttpSession sessionObj) {
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		return "leave-apply";
 	}
 	
-	@PostMapping(value = { "/leave/apply"})
+	@PostMapping(value = { "/apply"})
 	public String staffApplyLeave(@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model, HttpSession sessionObj) {
 		// Add Backend Validation + Display Thymeleaf Errors
 		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
@@ -69,7 +69,7 @@ public class StaffLeaveController {
 	
 	// RETRIEVE LIST
 	// SHOW CURR YEAR, NOT 'LeaveStatus.DELETED' OR 'LeaveStatus.CANCELLED'
-	@GetMapping(value = { "/leave/history"})
+	@GetMapping(value = { "/history"})
 	public String staffLeaveHistory(Model model, HttpSession sessionObj, HttpServletRequest request,
 									@RequestParam("page") Optional<Integer> page, 
 									@RequestParam("size") Optional<Integer> size) {
@@ -97,7 +97,7 @@ public class StaffLeaveController {
 	}
 	
 	// SHOW ALL
-	@GetMapping(value = { "/leave/history/all"})
+	@GetMapping(value = { "/history/all"})
 	public String staffLeaveHistoryAll(Model model, HttpSession sessionObj) {
 		List<Leave> leaveHistory = leaveService.findAllEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
 		model.addAttribute("leaveHistory", leaveHistory);
@@ -106,7 +106,7 @@ public class StaffLeaveController {
 	}
 	
 	// RETRIEVE ONE
-	@GetMapping(value = { "/leave/details/{id}"})
+	@GetMapping(value = { "/details/{id}"})
 	public String staffLeaveDetail(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
@@ -114,7 +114,7 @@ public class StaffLeaveController {
 	}
 
 	// UPDATE
-	@GetMapping(value = { "/leave/edit/{id}"})
+	@GetMapping(value = { "/edit/{id}"})
 	public String staffLeaveEditForm(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
@@ -123,7 +123,7 @@ public class StaffLeaveController {
 		return "leave-edit";
 	}
 	
-	@PostMapping(value = { "/leave/edit/{id}"})
+	@PostMapping(value = { "/edit/{id}"})
 	public String staffEditLeave(@PathVariable(name="id") Integer leaveId, @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model, HttpSession sessionObj) {
 		// Add Backend Validation + Display Thymeleaf Errors
 		leaveForm.setId(leaveId);
@@ -137,7 +137,7 @@ public class StaffLeaveController {
 	}
 	
 	// CANCEL
-	@PostMapping(value = { "/leave/cancel/{id}"})
+	@PostMapping(value = { "/cancel/{id}"})
 	public String staffCancelLeave(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		
@@ -159,7 +159,7 @@ public class StaffLeaveController {
 	}
 	
 	// DELETE
-	@PostMapping(value = { "/leave/delete/{id}"})
+	@PostMapping(value = { "/delete/{id}"})
 	public String staffDeleteLeave(@PathVariable(name="id") Integer leaveId, Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		
@@ -179,5 +179,4 @@ public class StaffLeaveController {
 		leaveService.updateLeave(leave);
 		return "redirect:/staff/leave/overview";
 	}
-	
 }
