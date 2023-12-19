@@ -17,11 +17,6 @@ public class LeaveValidator implements Validator{
 	
 	@Override
 	public void validate(Object obj,Errors errors) {
-		LeaveApplication leaveApplication=(LeaveApplication)obj;
-		String destination=leaveApplication.getDestination();
-		if(!destination.equalsIgnoreCase("Singapore")) {
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "leavePhoneNumber",
-				"error.leavePhoneNumber", "Phone Number is required.");
-		}
+
 	}
 }

@@ -8,7 +8,7 @@ import sg.edu.nus.iss.lms.model.ApprovalStatus;
 import sg.edu.nus.iss.lms.model.LeaveApplication;
 
 public interface LeaveApplicationRepository extends JpaRepository<LeaveApplication, Integer> {
-	@Query("SELECT l from LeaveApplication l WHERE l.staff.managedBy = :managedBy AND l.leaveApprovalStatus = :status")
+	@Query("SELECT l from LeaveApplication l WHERE l.staff.managedBy = :managedBy AND l.leaveApprovalStatus = :status ORDER BY l.staff.employeeId ASC")
 	List<LeaveApplication> findPendingLeaves(@Param("managedBy")int managedBy, @Param("status")ApprovalStatus leaveApprovalStatus);
 	
 	@Query("SELECT l from LeaveApplication l WHERE l.staff.managedBy = :managedBy AND l.leaveApprovalStatus != :status")

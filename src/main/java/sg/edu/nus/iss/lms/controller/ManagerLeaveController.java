@@ -1,11 +1,16 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.ApprovalStatus;
 import sg.edu.nus.iss.lms.model.LeaveApplication;
 import sg.edu.nus.iss.lms.model.Staff;
@@ -44,36 +50,25 @@ public class ManagerLeaveController {
 
 		List<LeaveApplication> pendingLeaves = lService.findPendingLeaves(staff.getEmployeeId(),
 				ApprovalStatus.applied);
+		
+		Map<String, List<LeaveApplication>> pendingLeavesByEmployee = new HashMap<>();
 
-		model.addAttribute("pendingLeaves", pendingLeaves);
+		for (LeaveApplication leaveApp : pendingLeaves) {
+		    String employeeName = leaveApp.getStaff().getEmployeeName();
+
+		    if (!pendingLeavesByEmployee.containsKey(employeeName)) {
+		        pendingLeavesByEmployee.put(employeeName, new ArrayList<>());
+		    }
+
+		    pendingLeavesByEmployee.get(employeeName).add(leaveApp);
+		}
+
+		model.addAttribute("pendingLeaves", pendingLeavesByEmployee);
 
 		return "pendingLeaves";
 
 	}
 	
-	@RequestMapping(value = "/pending/details/edit/{id}")
-    public String editProductForm(@PathVariable("id") Integer id, ModelMap model) {
-    	
-        model.addAttribute("leaveApplication", lService.findByLeaveId(id));        
-        return "editLeave";
-    }
-	
-	@PostMapping("/pending/update")
-	public String updateLeaveStatus(@ModelAttribute("leaveApplication") LeaveApplication leaveApplication,
-	                                @RequestParam("leaveApprovalStatus") String leaveApprovalStatus) {
-	
-	    if ("approved".equalsIgnoreCase(leaveApprovalStatus.trim())) {
-	        leaveApplication.setLeaveApprovalStatus(ApprovalStatus.approved);
-	    } else {
-	        leaveApplication.setLeaveApprovalStatus(ApprovalStatus.rejected);
-	    }
-
-	    lService.updateManagerComment(leaveApplication);
-
-	    return "redirect:/manager/pending";
-	}
-
-
 	@GetMapping("/history")
 	public String listLeavesHistory(HttpSession session, Model model) {
 
@@ -81,11 +76,57 @@ public class ManagerLeaveController {
 
 		List<LeaveApplication> leavesHistory = lService.findLeavesHistory(staff.getEmployeeId(),
 				ApprovalStatus.applied);
+		
+		Map<String, List<LeaveApplication>> leavesHistoryByEmployee = new HashMap<>();
 
-		model.addAttribute("leavesHistory", leavesHistory);
+		for (LeaveApplication leaveApp : leavesHistory) {
+		    String employeeName = leaveApp.getStaff().getEmployeeName();
+
+		    if (!leavesHistoryByEmployee.containsKey(employeeName)) {
+		    	leavesHistoryByEmployee.put(employeeName, new ArrayList<>());
+		    }
+
+		    leavesHistoryByEmployee.get(employeeName).add(leaveApp);
+		}
+		
+		model.addAttribute("leavesHistory", leavesHistoryByEmployee);
 
 		return "leavesHistory";
 
+	}
+	
+	@RequestMapping("/pending/details/{id}")
+    public String editProductForm(@PathVariable("id") int id, Model model) {
+    	
+		LeaveApplication leaveApplication = lService.findByLeaveId(id);
+
+        model.addAttribute("leaveApplication", leaveApplication); 
+        return "editLeave";
+    }
+	
+	@PostMapping("/pending/update")
+	public String updateLeaveStatus(@ModelAttribute("leaveApplication") @Valid LeaveApplication leaveApplication, BindingResult bindingResult, @RequestParam("leaveApprovalStatus") String leaveApprovalStatus) {
+		
+		
+		if (bindingResult.hasErrors()) {
+			 System.out.println(leaveApplication);
+			 return "editLeave";
+		}
+		
+	    if ("approved".equalsIgnoreCase(leaveApprovalStatus.trim())) {
+	    	
+	    	leaveApplication.setLeaveApprovalStatus(ApprovalStatus.approved);
+	    	
+	    } else {
+	    	
+	        leaveApplication.setLeaveApprovalStatus(ApprovalStatus.rejected);
+	    }
+	    
+	    System.out.println(leaveApplication);
+	
+	    lService.save(leaveApplication);  
+
+	    return "redirect:/manager/pending";
 	}
 
 }

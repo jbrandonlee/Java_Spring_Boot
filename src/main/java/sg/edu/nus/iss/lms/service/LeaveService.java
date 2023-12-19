@@ -27,10 +27,6 @@ public interface LeaveService {
 	
 	void save(LeaveApplication leaveApplication);
 	
-	LeaveApplication findByLeaveId(Integer id);
-
-	void updateLeaveStatus(LeaveApplication leaveApplication);
-
-	void updateManagerComment(LeaveApplication leaveApplication);
+	LeaveApplication findByLeaveId(int id);
 
 }

@@ -13,7 +13,7 @@ import sg.edu.nus.iss.lms.model.LeaveApplication;
 import sg.edu.nus.iss.lms.repository.LeaveApplicationRepository;
 
 @Service
-@Transactional(readOnly=true)
+@Transactional
 public class LeaveServiceImpl implements LeaveService{
 	
 	@Autowired
@@ -76,27 +76,9 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	@Override
-	public LeaveApplication findByLeaveId(Integer id) {
+	public LeaveApplication findByLeaveId(int id) {
 		
 		return leaveRepo.findById(id).get();
-	}
-
-	@Override
-	public void updateLeaveStatus(LeaveApplication leaveApplication) {
-		
-		leaveRepo.save(leaveApplication);
-	}
-
-	@Override
-	public void updateManagerComment(LeaveApplication leaveApplication) {
-		
-		LeaveApplication existingLeave = leaveRepo.findById(leaveApplication.getLeaveId()).orElse(null);
-
-        if (existingLeave != null) {
-            existingLeave.setManagerComment(leaveApplication.getManagerComment());
-            leaveRepo.save(existingLeave);
-        }
-		
 	}
 
 }

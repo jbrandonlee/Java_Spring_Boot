@@ -1,44 +1,51 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Leaves</title>
+	<title>Leaves History</title>
 </head>
+
 <body>
-    <h2>Leaves History</h2>
+	<h2>Leaves History</h2>
 
-    <!-- Check if there are pending leaves -->
-    <th:block th:if="${#lists.isEmpty(leavesHistory)}">
-        <p>There are no records history.</p>
-    </th:block>
+	<th:block th:each="entry : ${leavesHistory}">
+		<th:block th:with="employeeName=${entry.key}, leaves=${entry.value}">
+			<h3 th:text="${employeeName}+'\'s Leaves History'"></h3>
 
-    <table border="1" th:if="${not #lists.isEmpty(leavesHistory)}">
-        <thead>
-            <tr>
-                <th>Leave ID</th>
-                <th>Employee Name</th>
-                <th>Leave Type</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Duration</th>
-                <th>Reason</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Iterate over the list of pending leaves -->
-            <tr th:each="leave : ${leavesHistory}">
-                <td th:text="${leave.leaveId}"></td>
-                <td th:text="${leave.staff.employeeName}"></td>
-                <td th:text="${leave.leaveType}"></td>
-	            <td th:text="${#temporals.format(leave.leaveStartDate, 'yyyy-MM-dd HH:mm')}"></td>
-	            <td th:text="${#temporals.format(leave.leaveEndDate, 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${leave.calculateDaysDiff()}"></td>
-                <td th:text="${leave.leaveReasons}"></td>
-                <td th:text="${leave.leaveApprovalStatus}"></td>
-            </tr>
-        </tbody>
-    </table>
+			<th:block th:if="${#lists.isEmpty(leaves)}">
+				<p>There are no records history.</p>
+			</th:block>
+
+			<th:block th:if="${not #lists.isEmpty(leaves)}">
+				<table border="1">
+					<thead>
+						<tr>
+							<th>Leave ID</th>
+							<th>Leave Type</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>Duration</th>
+							<th>Reason</th>
+							<th>Status</th>
+							<th>Comment</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="leave : ${leaves}">
+							<td th:text="${leave.leaveId}"></td>
+							<td th:text="${leave.leaveType}"></td>
+							<td th:text="${#temporals.format(leave.leaveStartDate, 'yyyy-MM-dd HH:mm')}"></td>
+							<td th:text="${#temporals.format(leave.leaveEndDate, 'yyyy-MM-dd HH:mm')}"></td>
+							<td th:text="${leave.calculateDaysDiff()}"></td>
+							<td th:text="${leave.leaveReasons}"></td>
+							<td th:text="${leave.leaveApprovalStatus}"></td>
+							<td th:text="${leave.managerComment}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</th:block>
+		</th:block>
+	</th:block>
 </body>
+
 </html>

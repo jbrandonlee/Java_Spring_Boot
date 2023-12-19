@@ -47,7 +47,8 @@ public class Account implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Account [username=" + username + ", password=" + password + ", staff=" + staff +  "]";
-	} 
+	    return "Account [username=" + username + ", password=****" 
+	        + ", staff=" + (staff != null ? staff.getEmployeeId() : "null") + "]";
+	}
 }
 

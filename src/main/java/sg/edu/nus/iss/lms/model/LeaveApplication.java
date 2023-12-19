@@ -1,7 +1,8 @@
 package sg.edu.nus.iss.lms.model;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Period;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -19,11 +20,11 @@ public class LeaveApplication {
     
     @NotNull(message = "leaveStartDate can not be empty")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime leaveStartDate;
+    private LocalDate leaveStartDate;
     
     @NotNull(message = "leaveEndDate can not be empty")
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    private LocalDateTime leaveEndDate;
+    private LocalDate leaveEndDate;
     
     @NotBlank(message = "leaveReasons can not be empty")
     private String leaveReasons;
@@ -33,6 +34,8 @@ public class LeaveApplication {
     
     @NotBlank(message = "destination can not be empty")
     private String destination;
+    
+    private String leavePhoneNumber;
     
     @Column(name = "managerComment")
     private String managerComment;
@@ -47,7 +50,7 @@ public class LeaveApplication {
     public LeaveApplication() {
     }
 
-    public LeaveApplication(@NotBlank LeaveType leaveType, LocalDateTime leaveStartDate, LocalDateTime leaveEndDate,
+    public LeaveApplication(LeaveType leaveType, LocalDate leaveStartDate, LocalDate leaveEndDate,
         String leaveReasons, String workDissemination) {
         super();
         this.leaveType = leaveType;
@@ -73,19 +76,19 @@ public class LeaveApplication {
         this.leaveType = leaveType;
     }
 
-    public LocalDateTime getLeaveStartDate() {
+    public LocalDate getLeaveStartDate() {
         return leaveStartDate;
     }
 
-    public void setLeaveStartDate(LocalDateTime leaveStartDate) {
+    public void setLeaveStartDate(LocalDate leaveStartDate) {
         this.leaveStartDate = leaveStartDate;
     }
 
-    public LocalDateTime getLeaveEndDate() {
+    public LocalDate getLeaveEndDate() {
         return leaveEndDate;
     }
 
-    public void setLeaveEndDate(LocalDateTime leaveEndDate) {
+    public void setLeaveEndDate(LocalDate leaveEndDate) {
         this.leaveEndDate = leaveEndDate;
     }
 
@@ -130,14 +133,10 @@ public class LeaveApplication {
         this.staff = staff;
     }
 
-    @Override
-    public String toString() {
-        return "LeaveApplication{" + "leaveId=" + leaveId + ", leaveType=" + leaveType + ", leaveStartDate=" + leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", leaveReasons='" + leaveReasons + '\'' + ", workDissemination='" + workDissemination + '\'' + ", destination='" + destination + '\'' + ", leaveApprovalStatus=" + leaveApprovalStatus + ", staff=" + staff + '}';
-    }
-    
+
     public long calculateDaysDiff() {
-    	Duration duration = Duration.between(leaveStartDate, leaveEndDate);
-    	return duration.toDays();
+    	Period period = Period.between(leaveStartDate, leaveEndDate);
+    	return period.getDays();
     }
 
 	public String getManagerComment() {
@@ -147,4 +146,22 @@ public class LeaveApplication {
 	public void setManagerComment(String managerComment) {
 		this.managerComment = managerComment;
 	}
+
+	public String getLeavePhoneNumber() {
+		return leavePhoneNumber;
+	}
+
+	public void setLeavePhoneNumber(String leavePhoneNumber) {
+		this.leavePhoneNumber = leavePhoneNumber;
+	}
+
+	@Override
+	public String toString() {
+	    return "LeaveApplication [leaveId=" + leaveId + ", leaveType=" + leaveType + ", leaveStartDate="
+	            + leaveStartDate + ", leaveEndDate=" + leaveEndDate + ", leaveReasons=" + leaveReasons
+	            + ", workDissemination=" + workDissemination + ", destination=" + destination + ", leavePhoneNumber="
+	            + leavePhoneNumber + ", managerComment=" + managerComment + ", leaveApprovalStatus="
+	            + leaveApprovalStatus + ", staff=" + (staff != null ? staff.getEmployeeId() : "null") + "]";
+	}
+
 }

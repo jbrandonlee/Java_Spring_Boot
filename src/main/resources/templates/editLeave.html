@@ -2,40 +2,51 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Edit Leave Application</title>
 </head>
 
 <body>
 	<h2>Edit Leave Application</h2>
 
-	<form th:action="@{/manager/pending/update}" th:object="${leaveApplication}" method="post">
-	
-		<p>Leave ID: <span th:text="${leaveApplication.leaveId}"></span></p>
-		<p>Employee Name: <span th:text="${leaveApplication.staff.employeeName}"></span></p>
-		<p>Leave Type: <span th:text="${leaveApplication.leaveType}"></span></p>
-		<p>Start Date: <span th:text="${#temporals.format(leaveApplication.leaveStartDate, 'yyyy-MM-dd HH:mm')}"></span></p>
-		<p>End Date: <span th:text="${#temporals.format(leaveApplication.leaveEndDate, 'yyyy-MM-dd HH:mm')}"></span></p>
-		<p>Duration: <span th:text="${leaveApplication.calculateDaysDiff()}"></span></p>
-		<p>Reason: <span th:text="${leaveApplication.leaveReasons}"></span></p>
-		<p>Status: <span th:text="${leaveApplication.leaveApprovalStatus}"></span></p>
+	<p>Leave ID: <span th:text="${leaveApplication.leaveId}"></span></p>
+	<p>Employee Name: <span th:text="${leaveApplication.staff.employeeName}"></span></p>
+	<p>Leave Type: <span th:text="${leaveApplication.leaveType}"></span></p>
+	<p>Start Date: <span th:text="${leaveApplication.leaveStartDate}"></span></p>
+	<p>End Date: <span th:text="${leaveApplication.leaveEndDate}"></span></p>
+	<p>Duration: <span th:text="${leaveApplication.calculateDaysDiff()}"></span></p>
+	<p>Reason: <span th:text="${leaveApplication.leaveReasons}"></span></p>
+	<p>Work Dissemination: <span th:text="${leaveApplication.workDissemination}"></span></p>
+	<p>Destination: <span th:text="${leaveApplication.destination}"></span></p>
+	<p>Contact Number: <span th:text="${leaveApplication.leavePhoneNumber}"></span></p>
+	<p>Status: <span th:text="${leaveApplication.leaveApprovalStatus}"></span></p>
 
+	<form action="#" th:action="@{/manager/pending/update}" th:object="${leaveApplication}" method="post">
+		
 		<label>
-			<input type="radio" th:field="*{leaveApprovalStatus}" th:value="'approved'"/> Approve
+			<input type="radio" th:field="*{leaveApprovalStatus}" th:value="'approved'" /> Approve
 		</label>
 		<label>
-			<input type="radio" th:field="*{leaveApprovalStatus}" th:value="'rejected'"/> Reject
+			<input type="radio" th:field="*{leaveApprovalStatus}" th:value="'rejected'" /> Reject
 		</label>
-
+		
 		<div>
 			<label for="managerComment">Manager Comment:</label>
 			<textarea id="managerComment" name="managerComment" th:field="*{managerComment}"></textarea>
 		</div>
-
+		
 		<input type="hidden" th:field="*{leaveId}" />
+		<input type="hidden" th:field="*{staff.employeeName}" />
+		<input type="hidden" th:field="*{leaveType}" />
+		<input type="hidden" th:field="*{leaveStartDate}" />
+		<input type="hidden" th:field="*{leaveEndDate}" />
+		<input type="hidden" th:field="*{leaveReasons}" />
+		<input type="hidden" th:field="*{workDissemination}" />
+		<input type="hidden" th:field="*{destination}" />
+		<input type="hidden" th:field="*{leavePhoneNumber}" />
+		<input type="hidden" th:field="*{staff}" />
 
 		<button type="submit">Update Status</button>
+		
 	</form>
 </body>
 
