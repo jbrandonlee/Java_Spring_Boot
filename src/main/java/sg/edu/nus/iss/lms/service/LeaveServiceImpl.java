@@ -22,6 +22,11 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	// -- Employee --
 	@Override
+	public Leave findLeaveById(Integer id) {
+		return leaveRepo.findById(id).orElse(null);
+	}
+	
+	@Override
 	public Leave createLeave(Leave leave) {
 		return leaveRepo.saveAndFlush(leave);
 	}
@@ -70,12 +75,12 @@ public class LeaveServiceImpl implements LeaveService {
 		return leaveRepo.findAllSubordinatePendingLeaves(manager.getId());
 	}
 	
-    public List<Leave> findSubordinateLeaveHistoryInDuration(Employee manager, Leave leave) {
-		return leaveRepo.findSubordinateLeaveHistoryInDuration(manager.getId(), leave.getStartDate(), leave.getEndDate());
+    public List<Leave> findAllSubordinateLeaveHistoryInDuration(Employee manager, Leave leave) {
+		return leaveRepo.findAllSubordinateLeaveHistoryInDuration(manager.getId(), leave.getStartDate(), leave.getEndDate());
 	}
 	
-    public List<Leave> findSubordinateApprovedLeaveHistory(Employee manager, Employee employee) {
-		return leaveRepo.findSubordinateApprovedLeaveHistory(manager.getId(), employee.getId());
+    public List<Leave> findSubordinateLeaveHistory(Employee manager, Integer subordinateId) {
+		return leaveRepo.findSubordinateLeaveHistory(manager.getId(), subordinateId);
 	}
 	
     public List<Leave> findSubordinateLeaveById(Employee employee, Employee manager, Integer leaveId) {

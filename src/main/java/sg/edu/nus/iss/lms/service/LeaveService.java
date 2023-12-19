@@ -9,6 +9,7 @@ import sg.edu.nus.iss.lms.model.Leave;
 
 public interface LeaveService {
 	// -- Employee --
+	public Leave findLeaveById(Integer Id);
 	public Leave createLeave(Leave leave);
 	public Leave updateLeave(Leave leave);
 	public List<Leave> findAllEmployeeLeaves(Employee employee);
@@ -19,7 +20,7 @@ public interface LeaveService {
 	
 	// -- Manager --
 	List<Leave> findAllSubordinatePendingLeaves(Employee manager);
-	List<Leave> findSubordinateLeaveHistoryInDuration(Employee manager, Leave leave);
-	List<Leave> findSubordinateApprovedLeaveHistory(Employee manager, Employee employee);
+	List<Leave> findAllSubordinateLeaveHistoryInDuration(Employee manager, Leave leave);
+	List<Leave> findSubordinateLeaveHistory(Employee manager, Integer subordinateId);
 	List<Leave> findSubordinateLeaveById(Employee employee, Employee manager, Integer leaveId);
 }

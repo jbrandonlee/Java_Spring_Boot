@@ -15,6 +15,11 @@ import sg.edu.nus.iss.lms.repository.EmployeeRepository;
 public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeRepository employeeRepo;
+
+	@Override
+	public Employee findEmployeeById(Integer id) {
+		return employeeRepo.findById(id).orElse(null);
+	}
 	
 	@Override
 	public Employee findEmployeeByAccount(Account account) {

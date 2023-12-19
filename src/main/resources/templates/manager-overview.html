@@ -35,16 +35,14 @@
 								<span th:text="${leave.endDaySection}"></span>
 							</td>
 							<td>
-								<span><a class="btn btn-sm btn-primary" th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}">View</a></span>
-								<span><a class="btn btn-sm btn-outline-success" th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}+${'/approve'}">Approve</a></span>
-								<span><a class="btn btn-sm btn-outline-danger" th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}+${'/reject'}">Reject</a></span>
+								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}">View</a></span>
 							</td>
 						</tr>									
 					</table>
 				</div>
 			</div>
 			<div class="d-flex flex-row-reverse">
-				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/manager/leave/pending}">View Pending Leaves</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/manager/leave/pending}">View All Pending Leaves</a></span>
 				<span class="ms-3"><a class="btn btn-sm btn-outline-dark text-decoration-none" th:href="@{~/manager/staff}">View Subordinate List</a></span>
 			</div>
 		</div>
@@ -82,16 +80,14 @@
 								<span th:text="${overtime.getClaimableCompensation() + ' days'}"></span>
 							</td>
 							<td>
-								<span><a class="btn btn-sm btn-primary" th:href="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}">View</a></span>
-								<span><a class="btn btn-sm btn-outline-success" th:href="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}+${'/approve'}">Approve</a></span>
-								<span><a class="btn btn-sm btn-outline-danger" th:href="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}+${'/reject'}">Reject</a></span>
+								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}">View</a></span>
 							</td>
 						</tr>									
 					</table>
 				</div>
 			</div>
 			<div class="d-flex flex-row-reverse">
-				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/overtime/pending}">View Pending Overtime Claims</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/overtime/pending}">View All Pending Overtime Claims</a></span>
 				<span class="ms-3"><a class="btn btn-sm btn-outline-dark text-decoration-none" th:href="@{~/manager/staff}">View Subordinate List</a></span>
 			</div>
 		</div>
