@@ -25,6 +25,7 @@ import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
 import sg.edu.nus.iss.lms.service.LeaveService;
 import sg.edu.nus.iss.lms.service.LeaveTypeService;
+import sg.edu.nus.iss.lms.service.OvertimeService;
 
 
 @Controller
@@ -39,11 +40,15 @@ public class StaffLeaveController {
 	
 	@Autowired
 	LeaveEntitlementService leaveEntitlementService;
+	
+	@Autowired
+	OvertimeService overtimeService;
 
 	@GetMapping(value = { "/overview"})
 	public String staffHome(Model model, HttpSession sessionObj) {
 		model.addAttribute("leaveEntitlement", leaveEntitlementService.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		model.addAttribute("leaveUpcoming", leaveService.findEmployeeLeavesUpcoming((Employee) sessionObj.getAttribute("employee")));
+		model.addAttribute("overtimeClaims", overtimeService.findAllEmployeeOvertime((Employee) sessionObj.getAttribute("employee")));
 		return "leave-overview";
 	}
 	

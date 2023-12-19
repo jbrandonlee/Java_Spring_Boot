@@ -38,6 +38,9 @@ public class Employee {
 	@OneToMany(mappedBy="employee")
 	private List<LeaveEntitlement> leaveEntitlements;
 	
+	@OneToMany(mappedBy="employee")
+	private List<Overtime> overtimes;
+	
 	public Employee(String name, String jobDesignation, Department department) {
 		this.name = name;
 		this.jobDesignation = jobDesignation;

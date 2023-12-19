@@ -1,6 +1,8 @@
 package sg.edu.nus.iss.lms;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,12 +17,15 @@ import sg.edu.nus.iss.lms.model.Leave.DaySection;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
 import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
+import sg.edu.nus.iss.lms.model.Overtime;
+import sg.edu.nus.iss.lms.model.Overtime.ClaimStatus;
 import sg.edu.nus.iss.lms.repository.AccountRepository;
 import sg.edu.nus.iss.lms.repository.DepartmentRepository;
 import sg.edu.nus.iss.lms.repository.EmployeeRepository;
 import sg.edu.nus.iss.lms.repository.LeaveEntitlementRepository;
 import sg.edu.nus.iss.lms.repository.LeaveRepository;
 import sg.edu.nus.iss.lms.repository.LeaveTypeRepository;
+import sg.edu.nus.iss.lms.repository.OvertimeRepository;
 
 @SpringBootApplication
 public class LeaveManagementSystemApplication {
@@ -35,6 +40,7 @@ public class LeaveManagementSystemApplication {
     						   LeaveRepository leaveRepo,
     						   LeaveTypeRepository leaveTypeRepo,
     						   LeaveEntitlementRepository leaveEntitlementRepo,
+    						   OvertimeRepository overtimeRepo,
     						   DepartmentRepository departmentRepo) {
 		return args -> {
 			// Initialize Departments
@@ -72,6 +78,9 @@ public class LeaveManagementSystemApplication {
 			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			overtimeRepo.save(new Overtime(brandonBoss, LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(18, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(22, 0)), "4hrs OT", ClaimStatus.APPLIED));
+			overtimeRepo.save(new Overtime(brandonBoss, LocalDateTime.of(LocalDate.of(2023, 2, 2), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.REJECTED));
+			overtimeRepo.save(new Overtime(brandonBoss, LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPROVED));
 			
 			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", finance));
 			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", finance));
