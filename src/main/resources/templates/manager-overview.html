@@ -20,6 +20,7 @@
 								<td>Leave Type</td>
 								<td>Start Date</td>
 								<td>End Date</td>
+								<td>Duration</td>
 								<td>Actions</td>
 							</tr>
 						</thead>
@@ -34,6 +35,7 @@
 								<span th:text="${leave.endDate}"></span>
 								<span th:text="${leave.endDaySection}"></span>
 							</td>
+							<td th:text="${leave.getDuration() + ' days'}"></td>
 							<td>
 								<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}">View</a></span>
 							</td>

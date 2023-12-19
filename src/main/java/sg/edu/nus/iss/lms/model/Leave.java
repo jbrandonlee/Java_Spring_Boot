@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.lms.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -66,6 +67,12 @@ public class Leave {
 		this.dissemination = dissemination;
 		this.contact = contact;
 		this.status = status;
+	}
+
+	public double getDuration() {
+		double halfDay = (startDaySection == endDaySection) ? 0.5 : 1.0;
+		long fullDays = startDate.until(endDate, ChronoUnit.DAYS);
+		return fullDays + halfDay;
 	}
 	
 	public enum DaySection {
