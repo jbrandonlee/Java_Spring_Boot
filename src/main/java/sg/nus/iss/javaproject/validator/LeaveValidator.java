@@ -3,7 +3,6 @@ package sg.nus.iss.javaproject.validator;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,9 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import sg.nus.iss.javaproject.model.LeaveApplication;
+import sg.nus.iss.javaproject.model.LeaveEntitlement;
 import sg.nus.iss.javaproject.model.LeaveType;
+import sg.nus.iss.javaproject.model.Staff;
 import sg.nus.iss.javaproject.service.HolidayImplementation;
 import sg.nus.iss.javaproject.service.HolidayInterface;
 
@@ -49,14 +50,13 @@ public class LeaveValidator implements Validator{
 		LocalDate leaveEndDate=leaveApplication.getLeaveEndDate();		
 		LeaveType leaveType=leaveApplication.getLeaveType();
 		long leaveDays=leaveApplication.getLeaveDays();
+		long days=ChronoUnit.DAYS.between(leaveStartDate,leaveEndDate);
 		
 		if(leaveEndDate!=null&&leaveStartDate!=null) {
 			if(leaveEndDate.isBefore(leaveStartDate)) {
 				errors.rejectValue("leaveEndDate", "error.leaveEndDate","leaveEndDate can not be earlier than leaveStartDate");
 			}
 			else if(leaveType!=null) {
-				long days=ChronoUnit.DAYS.between(leaveStartDate,leaveEndDate);
-				
 				//Configure the medical
 				if(leaveType==LeaveType.medical) {
 					if(days>60) {
@@ -85,6 +85,27 @@ public class LeaveValidator implements Validator{
 				}
 			}
 		}
+		
+		//Configure the leave balance
+		Staff staff=leaveApplication.getStaff();
+		List<LeaveEntitlement> leaveEntitlements=staff.getLeaveEntitlement();
+		switch(leaveType) {
+		case annual:int balance1=findLeaveBalance(leaveEntitlements,LeaveType.annual);
+			if(days>balance1) {
+				errors.rejectValue("leaveEndDate","error.leaveEndDate","Sorry,you can only have "+balance1+" days left");
+			}
+			break;
+		case medical:int balance2=findLeaveBalance(leaveEntitlements,LeaveType.medical);
+			if(days>balance2) {
+				errors.rejectValue("leaveEndDate","error.leaveEndDate","Sorry,you can only have "+balance2+" days left");
+			}
+			break;
+		case compensation:int balance3=findLeaveBalance(leaveEntitlements,LeaveType.compensation);
+			if(days>balance3) {
+				errors.rejectValue("leaveEndDate","error.leaveEndDate","Sorry,you can only have "+balance3+" days left");
+			}
+			break;
+		}
 	}
 	
 	private boolean isWeekDay(LocalDate time) {
@@ -107,6 +128,15 @@ public class LeaveValidator implements Validator{
 	private boolean isPublicHoliday(LocalDate time) {
 		List<LocalDate> publicHolidays = hService.getAllHoliday();
 		return publicHolidays.contains(time);
+	}
+	
+	private int findLeaveBalance(List<LeaveEntitlement> leaveEntitlements,LeaveType leaveType) {
+		for(LeaveEntitlement le:leaveEntitlements) {
+			if(le.getLeaveType()==leaveType) {
+				return le.getLeaveBalance();
+			}
+		}
+		return 0;
 	}
 }
 //LeaveType leaveType=leaveApplication.getLeaveType();

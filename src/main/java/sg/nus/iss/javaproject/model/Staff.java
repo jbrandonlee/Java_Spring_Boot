@@ -31,7 +31,10 @@ public class Staff implements Serializable {
 	
 	@OneToMany(mappedBy="staff")
 	private List<LeaveApplication> leaveApplication;
-
+	
+	@OneToMany(mappedBy="staff")
+	private List<LeaveEntitlement> leaveEntitlement;
+	
 	@OneToMany(mappedBy="staff")
 	private List<OverTimeWork> overTimeWork;
 	
@@ -141,5 +144,13 @@ public class Staff implements Serializable {
 				+ ", employeeJoinDate=" + employeeJoinDate + ", managedBy=" + managedBy + ", account=" + account
 				+", leaveApplication=" + leaveApplication
 				+ ", overTimeWork=" + overTimeWork + "]";
+	}
+
+	public List<LeaveEntitlement> getLeaveEntitlement() {
+		return leaveEntitlement;
+	}
+
+	public void setLeaveEntitlement(List<LeaveEntitlement> leaveEntitlement) {
+		this.leaveEntitlement = leaveEntitlement;
 	}
 }
