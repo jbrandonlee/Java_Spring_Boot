@@ -1,5 +1,10 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,8 +46,21 @@ public class ManagerLeaveController {
 	}
 	
 	@GetMapping(value = "/leave/pending")
-	public String pendingLeaves() {
+	public String pendingLeaves(Model model, HttpSession sessionObj) {
 		// Group by Employee (Diaz)
+		List<Leave> leavePending = leaveService.findAllSubordinatePendingLeaves((Employee) sessionObj.getAttribute("employee"));
+		Map<Integer, List<Leave>> leavePendingByEmployee = new HashMap<>();
+		
+		for (Leave leave : leavePending) {
+			Integer employeeId = leave.getEmployee().getId();
+			
+			if(!leavePendingByEmployee.containsKey(employeeId)) {
+				leavePendingByEmployee.put(employeeId, new ArrayList<>());
+			}
+			leavePendingByEmployee.get(employeeId).add(leave);
+		}
+		
+		model.addAttribute("leavePending", leavePendingByEmployee);
 		return "manager-leave-pending";
 	}
 	
@@ -55,7 +73,8 @@ public class ManagerLeaveController {
 	
 	@GetMapping(value = "/staff/{sid}/leave")
 	public String subordinateListHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj) {
-		model.addAttribute("subordinateLeaves",
+		model.addAttribute("subordinateName", employeeService.findEmployeeById(subordinateId).getName());
+		model.addAttribute("leaveHistory",
 				leaveService.findSubordinateLeaveHistory((Employee) sessionObj.getAttribute("employee"), subordinateId));
 		return "subordinate-leave-history";
 	}

@@ -80,6 +80,8 @@ public class LeaveManagementSystemApplication {
 			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff2, annual, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff3, compensation, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.UPDATED));
 			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "boss1", "boss1", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "boss2", "boss2", LeaveStatus.UPDATED));
 			leaveRepo.save(new Leave(brandonManager, annual, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "manager1", "manager1", LeaveStatus.APPLIED));
