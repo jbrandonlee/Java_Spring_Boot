@@ -10,6 +10,7 @@
 			<div th:replace="~{fragments/layout.html :: leave_entitlement}" th:with="leaveEntitlement=${leaveEntitlement}" />
 			<div class="d-flex flex-row-reverse">
 				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/leave/apply}">Apply Leave</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/overtime/apply}">Apply Overtime Claim</a></span>
 			</div>
 		</div>
 		<div class="pt-4"><hr></div>
@@ -73,7 +74,7 @@
 								<td>Duration</td>
 								<td>Eligible Claim</td>
 								<td>Status</td>
-								<td>Actions</td>
+								<td>Action</td>
 							</tr>
 						</thead>
 						<tr th:each="overtime , iStat : ${overtimeClaims}" th:if="${iStat.count <= 5}">

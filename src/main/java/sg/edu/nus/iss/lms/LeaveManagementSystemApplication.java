@@ -17,8 +17,8 @@ import sg.edu.nus.iss.lms.model.Leave.DaySection;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
 import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
-import sg.edu.nus.iss.lms.model.Overtime;
-import sg.edu.nus.iss.lms.model.Overtime.ClaimStatus;
+import sg.edu.nus.iss.lms.model.OvertimeClaim;
+import sg.edu.nus.iss.lms.model.OvertimeClaim.ClaimStatus;
 import sg.edu.nus.iss.lms.repository.AccountRepository;
 import sg.edu.nus.iss.lms.repository.DepartmentRepository;
 import sg.edu.nus.iss.lms.repository.EmployeeRepository;
@@ -87,9 +87,9 @@ public class LeaveManagementSystemApplication {
 			leaveRepo.save(new Leave(brandonManager, annual, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "manager1", "manager1", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonManager, medical, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.AM, "Sick", "manager2", "manager2", LeaveStatus.UPDATED));
 			leaveRepo.save(new Leave(brandonManager, compensation, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.AM, "Sick", "manager3", "manager3", LeaveStatus.APPROVED));
-			overtimeRepo.save(new Overtime(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(18, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(22, 0)), "4hrs OT", ClaimStatus.APPLIED));
-			overtimeRepo.save(new Overtime(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 2), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.REJECTED));
-			overtimeRepo.save(new Overtime(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPROVED));
+			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(18, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(22, 0)), "4hrs OT", ClaimStatus.APPLIED));
+			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 2), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.REJECTED));
+			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPROVED));
 		};
 	}
 }

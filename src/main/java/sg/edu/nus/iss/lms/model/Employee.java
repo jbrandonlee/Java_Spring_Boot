@@ -42,7 +42,7 @@ public class Employee {
 	private List<LeaveEntitlement> leaveEntitlements;
 	
 	@OneToMany(mappedBy="employee")
-	private List<Overtime> overtimes;
+	private List<OvertimeClaim> overtimes;
 	
 	public Employee(String name, String jobDesignation, Department department, Integer managerId) {
 		this.name = name;
@@ -52,6 +52,6 @@ public class Employee {
 		this.department = department;
 		this.leaves = new ArrayList<Leave>();
 		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();
-		this.overtimes = new ArrayList<Overtime>();
+		this.overtimes = new ArrayList<OvertimeClaim>();
 	}
 }

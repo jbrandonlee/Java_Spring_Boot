@@ -36,7 +36,7 @@ public class ManagerLeaveController {
 	@Autowired
 	OvertimeService overtimeService;
 	
-	@GetMapping(value = {"/", "/overview"})
+	@GetMapping(value = {"", "/", "/overview"})
 	public String managerHome(Model model, HttpSession sessionObj) {
 		model.addAttribute("leavePending",
 				leaveService.findAllSubordinatePendingLeaves((Employee) sessionObj.getAttribute("employee")));
@@ -47,7 +47,6 @@ public class ManagerLeaveController {
 	
 	@GetMapping(value = "/leave/pending")
 	public String pendingLeaves(Model model, HttpSession sessionObj) {
-		// Group by Employee (Diaz)
 		List<Leave> leavePending = leaveService.findAllSubordinatePendingLeaves((Employee) sessionObj.getAttribute("employee"));
 		Map<Integer, List<Leave>> leavePendingByEmployee = new HashMap<>();
 		
@@ -80,8 +79,10 @@ public class ManagerLeaveController {
 	}
 
 	@GetMapping(value = "/staff/{sid}/leave/{id}")
-	public String subordinateLeaveDetails(@PathVariable(name = "id") Integer leaveId, Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findLeaveById(leaveId);
+	public String subordinateLeaveDetails(@PathVariable(name = "sid") Integer subordinateId,
+										  @PathVariable(name = "id") Integer leaveId,
+										  Model model, HttpSession sessionObj) {
+		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
 		model.addAttribute("leave", leave);
 		model.addAttribute("subordinateLeaves",
 				leaveService.findAllSubordinateLeaveHistoryInDuration((Employee) sessionObj.getAttribute("employee"), leave));
@@ -89,10 +90,11 @@ public class ManagerLeaveController {
 	}
 	
 	@PostMapping(value = "/staff/{sid}/leave/{id}/approve")
-	public String approveLeave(@PathVariable(name = "id") Integer leaveId,
+	public String approveLeave(@PathVariable(name = "sid") Integer subordinateId,
+							   @PathVariable(name = "id") Integer leaveId,
 							   @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
 							   Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findLeaveById(leaveId);
+		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
 		leave.setManagerComment(leaveForm.getManagerComment());
 		leave.setStatus(LeaveStatus.APPROVED);
 		leaveService.updateLeave(leave);
@@ -100,10 +102,11 @@ public class ManagerLeaveController {
 	}
 	
 	@PostMapping(value = "/staff/{sid}/leave/{id}/reject")
-	public String rejectLeave(@PathVariable(name = "id") Integer leaveId,
-			   @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
-			   Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findLeaveById(leaveId);
+	public String rejectLeave(@PathVariable(name = "sid") Integer subordinateId,
+							  @PathVariable(name = "id") Integer leaveId,
+							  @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
+							  Model model, HttpSession sessionObj) {
+		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
 		leave.setManagerComment(leaveForm.getManagerComment());
 		leave.setStatus(LeaveStatus.REJECTED);
 		leaveService.updateLeave(leave);

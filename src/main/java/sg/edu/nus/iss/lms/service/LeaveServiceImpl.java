@@ -20,12 +20,7 @@ public class LeaveServiceImpl implements LeaveService {
 	@Autowired
 	LeaveRepository leaveRepo;
 	
-	// -- Employee --
-	@Override
-	public Leave findLeaveById(Integer id) {
-		return leaveRepo.findById(id).orElse(null);
-	}
-	
+	// -- Employee --	
 	@Override
 	public Leave createLeave(Leave leave) {
 		return leaveRepo.saveAndFlush(leave);
@@ -83,7 +78,7 @@ public class LeaveServiceImpl implements LeaveService {
 		return leaveRepo.findSubordinateLeaveHistory(manager.getId(), subordinateId);
 	}
 	
-    public List<Leave> findSubordinateLeaveById(Employee employee, Employee manager, Integer leaveId) {
-		return leaveRepo.findSubordinateLeaveById(employee.getId(), manager.getId(), leaveId);
+    public Leave findSubordinateLeaveById(Employee manager, Integer subordinateId, Integer leaveId) {
+		return leaveRepo.findSubordinateLeaveById(manager.getId(), subordinateId, leaveId);
 	}
 }

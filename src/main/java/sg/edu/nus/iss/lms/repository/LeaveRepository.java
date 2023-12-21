@@ -16,36 +16,36 @@ public interface LeaveRepository extends JpaRepository<Leave, Integer> {
 	public Leave findEmployeeLeaveById(@Param("employeeId") Integer employeeId, @Param("leaveId") Integer leaveId);
 
 	// Find All Employee Leaves
-	@Query("SELECT l FROM Employee e JOIN e.leaves l WHERE e.id=:employeeId")
+	@Query("SELECT l FROM Employee e JOIN e.leaves l WHERE e.id=:employeeId ORDER BY l.startDate")
 	public List<Leave> findAllLeaveByEmployeeId(@Param("employeeId") Integer employeeId);
 
 	// Find Employee Non-Cancelled Non-Deleted Leaves in Current Year
-	@Query("SELECT l FROM Employee e JOIN e.leaves l WHERE e.id=:employeeId AND YEAR(l.startDate)=YEAR(NOW()) AND l.status NOT IN ('CANCELLED', 'DELETED')")
+	@Query("SELECT l FROM Employee e JOIN e.leaves l WHERE e.id=:employeeId AND YEAR(l.startDate)=YEAR(NOW()) AND l.status NOT IN ('CANCELLED', 'DELETED') ORDER BY l.startDate")
 	public List<Leave> findCurrYearLeaveByEmployeeId(@Param("employeeId") Integer employeeId);
 
 	// Find Employee Non-Cancelled Non-Deleted Upcoming Leaves
-	@Query("SELECT l FROM Employee e JOIN e.leaves l WHERE e.id=:employeeId AND l.startDate >= NOW() AND l.status NOT IN ('CANCELLED', 'DELETED')")
+	@Query("SELECT l FROM Employee e JOIN e.leaves l WHERE e.id=:employeeId AND l.startDate >= NOW() AND l.status NOT IN ('CANCELLED', 'DELETED') ORDER BY l.startDate")
 	public List<Leave> findUpcomingLeaveByEmployeeId(@Param("employeeId") Integer employeeId);
 
 	// -- Manager --
 	// Find all Subordinate's Leaves Pending Approve/Reject
-	@Query("SELECT l from Employee e JOIN e.leaves l WHERE e.managerId=:managerId AND l.status IN ('APPLIED', 'UPDATED')")
-	List<Leave> findAllSubordinatePendingLeaves(@Param("managerId") Integer managerId);
+	@Query("SELECT l from Employee e JOIN e.leaves l WHERE e.managerId=:managerId AND l.status IN ('APPLIED', 'UPDATED') ORDER BY l.startDate")
+	public List<Leave> findAllSubordinatePendingLeaves(@Param("managerId") Integer managerId);
 
 	// For Manager Approve View
 	// Does not take into account DaySection
-	@Query("SELECT l from Employee e Join e.leaves l WHERE e.managerId=:managerId AND ((l.startDate BETWEEN :startDate AND :endDate) OR (l.endDate BETWEEN :endDate AND :startDate))")
-	List<Leave> findAllSubordinateLeaveHistoryInDuration(@Param("managerId") Integer managerId,
+	@Query("SELECT l from Employee e Join e.leaves l WHERE e.managerId=:managerId AND ((l.startDate BETWEEN :startDate AND :endDate) OR (l.endDate BETWEEN :endDate AND :startDate)) ORDER BY l.startDate")
+	public List<Leave> findAllSubordinateLeaveHistoryInDuration(@Param("managerId") Integer managerId,
 			@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
 	// Find one Subordinate's Leave History (Applied/Updated/Approved)
-	@Query("SELECT l from Employee e JOIN e.leaves l WHERE e.managerId=:managerId AND e.id=:employeeId AND l.status IN ('APPLIED', 'UPDATED', 'APPROVED')")
-	List<Leave> findSubordinateLeaveHistory(@Param("managerId") Integer managerId,
+	@Query("SELECT l from Employee e JOIN e.leaves l WHERE e.managerId=:managerId AND e.id=:employeeId AND l.status IN ('APPLIED', 'UPDATED', 'APPROVED') ORDER BY l.startDate")
+	public List<Leave> findSubordinateLeaveHistory(@Param("managerId") Integer managerId,
 			@Param("employeeId") Integer employeeId);
 
 	// Find one Subordinate's Leave Details
 	@Query("SELECT l from Employee e JOIN e.leaves l WHERE e.managerId=:managerId AND e.id=:employeeId AND l.id=:leaveId")
-	List<Leave> findSubordinateLeaveById(@Param("managerId") Integer managerId,
+	public Leave findSubordinateLeaveById(@Param("managerId") Integer managerId,
 			@Param("employeeId") Integer employeeId, @Param("leaveId") Integer leaveId);
 
 }

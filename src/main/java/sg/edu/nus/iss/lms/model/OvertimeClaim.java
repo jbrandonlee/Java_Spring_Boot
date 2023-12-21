@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Overtime {
+public class OvertimeClaim {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Overtime {
 	@Enumerated(EnumType.STRING)
 	private ClaimStatus status;
 	
-	public Overtime(Employee employee, LocalDateTime startTime, LocalDateTime endTime, String reason, ClaimStatus status) {
+	public OvertimeClaim(Employee employee, LocalDateTime startTime, LocalDateTime endTime, String reason, ClaimStatus status) {
 		this.employee = employee;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -41,7 +41,8 @@ public class Overtime {
 	}
 	
 	public double getDuration() {
-		return Duration.between(startTime, endTime).toMinutes() / 60.0;
+		long halfHoursFloored = Duration.between(startTime, endTime).toMinutes() / 30;
+		return halfHoursFloored / 2.0;
 	}
 	
 	public double getClaimableCompensation() {

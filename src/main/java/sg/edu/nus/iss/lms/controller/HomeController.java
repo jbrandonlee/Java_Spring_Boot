@@ -45,7 +45,7 @@ public class HomeController {
 		Employee emp = empService.findEmployeeByAccount(acc);
 		sessionObj.setAttribute("employee", emp);
 		
-		return "redirect:/staff/leave/overview";
+		return "redirect:/staff/overview";
 	}
 	
 	@GetMapping(value = "/logout")

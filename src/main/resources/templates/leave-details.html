@@ -6,10 +6,10 @@
 	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Staff'"/>
 	<main>
 		<h1 class="display-5">Leave Details</h1>
-		<form class="row g-4 pt-4">
+		<form method="post" class="row g-4 pt-4">
 			<div class="form-group col-12">
 				<label for="leaveStatus" class="form-label">Leave Status</label>
-				<input type="text" name="leaveType" class="form-control text-primary fw-semibold" th:value="${leave.status}" disabled>
+				<input type="text" name="leaveStatus" class="form-control text-primary fw-semibold" th:value="${leave.status}" disabled>
 			</div>
 			<div class="form-group col-12">
 				<label for="leaveType" class="form-label">Leave Type</label>
@@ -50,11 +50,13 @@
   			<div class="d-flex flex-row-reverse">
 				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}" >
 					<a class="btn btn-dark text-decoration-none" th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a></span>
-				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}">
-					<a class="btn btn-danger text-decoration-none" th:href="@{~/staff/leave/delete/}+${leave.id}">Delete Leave</a></span>
-				<span class="ms-3" th:if="${#strings.equals(leave.status,'APPROVED')}">
-					<a class="btn btn-danger text-decoration-none" th:href="@{~/staff/leave/cancel/}+${leave.id}">Cancel Leave</a></span>
-				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/leave/overview}">Back to Overview</a></span>
+				<button class="btn btn-danger ms-3" type="submit"
+					th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}"
+					th:formaction="@{~/staff/leave/delete/}+${leave.id}">Delete Leave</button>
+				<button class="btn btn-danger ms-3" type="submit"
+					th:if="${#strings.equals(leave.status,'APPROVED')}"
+					th:formaction="@{~/staff/leave/cancel/}+${leave.id}">Cancel Leave</button>
+				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
 			</div>
 		</form>
 	</main>
