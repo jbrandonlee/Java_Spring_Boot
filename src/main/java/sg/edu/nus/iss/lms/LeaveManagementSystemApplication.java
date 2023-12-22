@@ -3,6 +3,8 @@ package sg.edu.nus.iss.lms;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +21,7 @@ import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.model.OvertimeClaim;
 import sg.edu.nus.iss.lms.model.OvertimeClaim.ClaimStatus;
+import sg.edu.nus.iss.lms.model.Role;
 import sg.edu.nus.iss.lms.repository.AccountRepository;
 import sg.edu.nus.iss.lms.repository.DepartmentRepository;
 import sg.edu.nus.iss.lms.repository.EmployeeRepository;
@@ -26,6 +29,7 @@ import sg.edu.nus.iss.lms.repository.LeaveEntitlementRepository;
 import sg.edu.nus.iss.lms.repository.LeaveRepository;
 import sg.edu.nus.iss.lms.repository.LeaveTypeRepository;
 import sg.edu.nus.iss.lms.repository.OvertimeRepository;
+import sg.edu.nus.iss.lms.repository.RoleRepository;
 
 @SpringBootApplication
 public class LeaveManagementSystemApplication {
@@ -37,6 +41,7 @@ public class LeaveManagementSystemApplication {
     @Bean
     CommandLineRunner loadData(AccountRepository accRepo,
     						   EmployeeRepository empRepo,
+    						   RoleRepository roleRepo,
     						   LeaveRepository leaveRepo,
     						   LeaveTypeRepository leaveTypeRepo,
     						   LeaveEntitlementRepository leaveEntitlementRepo,
@@ -52,6 +57,15 @@ public class LeaveManagementSystemApplication {
 			LeaveType medical = leaveTypeRepo.save(new LeaveType("Medical"));
 			LeaveType compensation = leaveTypeRepo.save(new LeaveType("Compensation"));
 			
+			// Initialize Roles
+			Role admin = roleRepo.save(new Role("Admin", "System Administrator"));
+			Role staff = roleRepo.save(new Role("Staff", "Staff Member"));
+			Role manager = roleRepo.save(new Role("Manager", "Manager"));
+			
+			List<Role> allRoles = new ArrayList<Role>() {{ add(admin); add(manager); add(staff); }};
+			List<Role> managerRoles = new ArrayList<Role>() {{ add(manager); add(staff); }};
+			List<Role> staffRoles = new ArrayList<Role>() {{ add(staff); }};
+			
 			// Create Employee Account with Entitlement & Leaves
 			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", finance, null));
 			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", finance, 1));
@@ -60,7 +74,7 @@ public class LeaveManagementSystemApplication {
 			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", finance, 2));
 			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", sales, null));
 			
-			accRepo.save(new Account("brandon", "password1", brandonManager));
+			accRepo.save(new Account("brandon", "password1", brandonManager, managerRoles));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, compensation, 0));

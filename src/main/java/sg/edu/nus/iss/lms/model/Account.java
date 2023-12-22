@@ -1,7 +1,12 @@
 package sg.edu.nus.iss.lms.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -24,5 +29,6 @@ public class Account {
 	@OneToOne
 	private Employee employee;
 	
-	// private List<Role> roles;
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	private List<Role> roles;
 }
