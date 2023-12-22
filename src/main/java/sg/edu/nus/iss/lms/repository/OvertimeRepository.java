@@ -33,7 +33,7 @@ public interface OvertimeRepository extends JpaRepository<OvertimeClaim, Integer
 
 	// Find one Subordinate's OvertimeClaim History (Applied/Updated/Approved/Rejected)
 	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND e.id=:employeeId AND o.status IN ('APPLIED', 'UPDATED', 'APPROVED', 'REJECTED') ORDER BY o.startTime")
-	public List<OvertimeClaim> findSubordinateOvertimeHistoy(@Param("managerId") Integer managerId, @Param("employeeId") Integer employeeId);
+	public List<OvertimeClaim> findSubordinateOvertimeHistory(@Param("managerId") Integer managerId, @Param("employeeId") Integer employeeId);
 	
 	// Find one Subordinate's OvertimeClaim Details
 	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND e.id=:employeeId AND o.id=:overtimeId")

@@ -55,7 +55,6 @@ public class Leave {
 	
 	private String managerComment;
 	
-	// TestData Constructor
 	public Leave(Employee employee, LeaveType leaveType, LocalDate startDate, DaySection startDaySection, LocalDate endDate, DaySection endDaySection, String reason, String dissemination, String contact, LeaveStatus status) {
 		this.employee = employee;
 		this.leaveType = leaveType;

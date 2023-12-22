@@ -32,6 +32,8 @@ public class OvertimeClaim {
 	@Enumerated(EnumType.STRING)
 	private ClaimStatus status;
 	
+	private String managerComment;
+	
 	public OvertimeClaim(Employee employee, LocalDateTime startTime, LocalDateTime endTime, String reason, ClaimStatus status) {
 		this.employee = employee;
 		this.startTime = startTime;

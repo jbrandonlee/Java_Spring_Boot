@@ -71,7 +71,7 @@ public class ManagerLeaveController {
 	}
 	
 	@GetMapping(value = "/staff/{sid}/leave")
-	public String subordinateListHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj) {
+	public String subordinateLeaveHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj) {
 		model.addAttribute("subordinateName", employeeService.findEmployeeById(subordinateId).getName());
 		model.addAttribute("leaveHistory",
 				leaveService.findSubordinateLeaveHistory((Employee) sessionObj.getAttribute("employee"), subordinateId));

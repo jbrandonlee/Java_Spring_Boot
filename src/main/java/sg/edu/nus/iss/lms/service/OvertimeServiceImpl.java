@@ -70,7 +70,9 @@ public class OvertimeServiceImpl implements OvertimeService {
 	
 	@Override
     public List<OvertimeClaim> findSubordinateOvertimeHistory(Employee manager, Integer subordinateId) {
-		return overtimeRepo.findSubordinateOvertimeHistoy(manager.getId(), subordinateId);
+		System.out.println(manager.getId());
+		System.out.println(subordinateId);
+		return overtimeRepo.findSubordinateOvertimeHistory(manager.getId(), subordinateId);
 	}
 	
 	@Override
