@@ -69,9 +69,15 @@ public class LeaveManagementSystemApplication {
     						   DepartmentRepository departmentRepo) {
 		return args -> {
 		    
+			// Add Holiday Mock Data from 2022-2024
 		    for (Holiday holiday : getHolidaysFromAPI()) {
-		    	System.out.println(holiday);
-		    	holidayRepo.save(holiday);
+		    	holidayRepo.saveAndFlush(holiday);
+		    	
+		    	Holiday holiday2023 = new Holiday(holiday.getName(), holiday.getDate().plusYears(1), holiday.getObserved().plusYears(1), holiday.isActive());
+		    	holidayRepo.saveAndFlush(holiday2023);
+		    	
+		    	Holiday holiday2024 = new Holiday(holiday.getName(), holiday.getDate().plusYears(2), holiday.getObserved().plusYears(2), holiday.isActive());
+		    	holidayRepo.saveAndFlush(holiday2024);
 		    }
 		    
 			// Initialize Departments

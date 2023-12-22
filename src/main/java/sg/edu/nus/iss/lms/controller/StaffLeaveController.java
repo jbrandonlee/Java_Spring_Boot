@@ -45,6 +45,7 @@ public class StaffLeaveController {
 
 	@GetMapping(value = {"", "/", "/overview"})
 	public String staffHome(Model model, HttpSession sessionObj) {
+		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("leaveEntitlement", leaveEntitlementService
 				.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
 		model.addAttribute("leaveUpcoming",
@@ -95,6 +96,7 @@ public class StaffLeaveController {
 		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
 		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
 
+		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("currUrl", request.getRequestURI().toString());
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("pageSize", pageSize);
@@ -123,6 +125,7 @@ public class StaffLeaveController {
 		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
 		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
 
+		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("currUrl", request.getRequestURI().toString());
 		model.addAttribute("currPage", currPage);
 		model.addAttribute("pageSize", pageSize);

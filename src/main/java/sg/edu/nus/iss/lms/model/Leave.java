@@ -74,7 +74,7 @@ public class Leave {
 		this.status = status;
 	}
 
-	public double getDuration() {
+	public double getCalendarDuration() {
 		double halfDay = (startDaySection == endDaySection) ? 0.5 : 1.0;
 		long fullDays = startDate.until(endDate, ChronoUnit.DAYS);
 		return fullDays + halfDay;

@@ -38,7 +38,7 @@
 							<span th:text="${leave.endDate}"></span>
 							<span th:text="${leave.endDaySection}"></span>
 						</td>
-						<td th:text="${leave.getDuration() + ' days'}"></td>
+						<td th:text="${leaveService.calculateWorkingDaysInLeave(leave)} + ${' days'}"></td>
 						<td class="fw-normal" th:text="${leave.status}"
 							th:classappend="${ (leave.status.toString() == 'APPLIED' || leave.status.toString() == 'UPDATED') ? 'text-primary' : 
 											   (leave.status.toString() == 'APPROVED') ? 'text-success' :

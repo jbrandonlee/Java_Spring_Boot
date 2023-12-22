@@ -42,6 +42,7 @@ public class ManagerLeaveController {
 	
 	@GetMapping(value = {"", "/", "/overview"})
 	public String managerHome(Model model, HttpSession sessionObj) {
+		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("leavePending",
 				leaveService.findAllSubordinatePendingLeaves((Employee) sessionObj.getAttribute("employee")));
 		model.addAttribute("overtimePending",
@@ -63,6 +64,7 @@ public class ManagerLeaveController {
 			leavePendingByEmployee.get(employeeId).add(leave);
 		}
 		
+		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("leavePending", leavePendingByEmployee);
 		return "manager-leave-pending";
 	}
@@ -90,6 +92,7 @@ public class ManagerLeaveController {
 		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
 		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
 
+		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("subordinateName", employeeService.findEmployeeById(subordinateId).getName());
 		model.addAttribute("currUrl", request.getRequestURI().toString());
 		model.addAttribute("currPage", currPage);
