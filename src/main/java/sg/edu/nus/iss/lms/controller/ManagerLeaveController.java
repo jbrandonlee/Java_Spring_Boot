@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
@@ -71,10 +75,28 @@ public class ManagerLeaveController {
 	}
 	
 	@GetMapping(value = "/staff/{sid}/leave")
-	public String subordinateLeaveHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj) {
+	public String subordinateLeaveHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj, HttpServletRequest request,
+			@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+		int currPage = page.orElse(1);
+		int pageSize = size.orElse(10);
+		
+		List<Leave> leaveHistory = leaveService.findSubordinateLeaveHistory((Employee) sessionObj.getAttribute("employee"), subordinateId);
+		
+		// Clamp PageNumber between 1 to MaxPage
+		int maxPage = (int) Math.ceil(leaveHistory.size() / (double) pageSize);
+		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
+		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
+
+		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
+		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
+
 		model.addAttribute("subordinateName", employeeService.findEmployeeById(subordinateId).getName());
-		model.addAttribute("leaveHistory",
-				leaveService.findSubordinateLeaveHistory((Employee) sessionObj.getAttribute("employee"), subordinateId));
+		model.addAttribute("currUrl", request.getRequestURI().toString());
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", leaveHistoryPage.getTotalPages());
+		model.addAttribute("totalItems", leaveHistoryPage.getTotalElements());
+		model.addAttribute("leaveHistory", leaveHistoryPaged);
 		return "subordinate-leave-history";
 	}
 

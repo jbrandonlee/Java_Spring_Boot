@@ -29,8 +29,8 @@
 						<td th:text="${staff.department.name}"></td>
 						<td th:text="${staff.joinDate}"></td>
 						<td>
-							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${staff.id}+${'/leave'}">Leave History</a></span>
-							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${staff.id}+${'/overtime'}">Overtime History</a></span>
+							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${staff.id}+${'/leave'}">Leaves</a></span>
+							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${staff.id}+${'/overtime'}">Overtime Claims</a></span>
 						</td>
 					</tr>									
 				</table>

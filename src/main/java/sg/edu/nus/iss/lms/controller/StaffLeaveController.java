@@ -82,7 +82,7 @@ public class StaffLeaveController {
 	public String staffLeaveHistory(Model model, HttpSession sessionObj, HttpServletRequest request,
 			@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
 		int currPage = page.orElse(1);
-		int pageSize = size.orElse(5);
+		int pageSize = size.orElse(10);
 
 		List<Leave> leaveHistory = leaveService
 				.findEmployeeLeavesCurrYear((Employee) sessionObj.getAttribute("employee"));
@@ -107,10 +107,29 @@ public class StaffLeaveController {
 
 	// SHOW ALL
 	@GetMapping(value = "/leave/history/all")
-	public String staffLeaveHistoryAll(Model model, HttpSession sessionObj) {
-		List<Leave> leaveHistory = leaveService.findAllEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
-		model.addAttribute("leaveHistory", leaveHistory);
-		model.addAttribute("showAll", true);
+	public String staffLeaveHistoryAll(Model model, HttpSession sessionObj, HttpServletRequest request,
+			@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+		int currPage = page.orElse(1);
+		int pageSize = size.orElse(10);
+
+		List<Leave> leaveHistory = leaveService
+				.findAllEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
+
+		// Clamp PageNumber between 1 to MaxPage
+		int maxPage = (int) Math.ceil(leaveHistory.size() / (double) pageSize);
+		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
+		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
+
+		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
+		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
+
+		model.addAttribute("currUrl", request.getRequestURI().toString());
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", leaveHistoryPage.getTotalPages());
+		model.addAttribute("totalItems", leaveHistoryPage.getTotalElements());
+		model.addAttribute("leaveHistory", leaveHistoryPaged);
+		model.addAttribute("showAll", false);
 		return "leave-history";
 	}
 

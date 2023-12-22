@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
@@ -52,10 +56,28 @@ public class ManagerOvertimeController {
 	}
 	
 	@GetMapping(value = "/staff/{sid}/overtime")
-	public String subordinateOvertimeHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj) {
+	public String subordinateOvertimeHistory(@PathVariable(name = "sid") Integer subordinateId, Model model, HttpSession sessionObj, HttpServletRequest request,
+			@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+		int currPage = page.orElse(1);
+		int pageSize = size.orElse(10);
+		
+		List<OvertimeClaim> overtimeHistory = overtimeService.findSubordinateOvertimeHistory((Employee) sessionObj.getAttribute("employee"), subordinateId);
+		
+		// Clamp PageNumber between 1 to MaxPage
+		int maxPage = (int) Math.ceil(overtimeHistory.size() / (double) pageSize);
+		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
+		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
+
+		Page<OvertimeClaim> overtimeHistoryPage = overtimeService.getPaginatedOvertimes(getPageNum, pageSize, overtimeHistory);
+		List<OvertimeClaim> overtimeHistoryPaged = overtimeHistoryPage.getContent();
+
 		model.addAttribute("subordinateName", employeeService.findEmployeeById(subordinateId).getName());
-		model.addAttribute("overtimeHistory",
-				overtimeService.findSubordinateOvertimeHistory((Employee) sessionObj.getAttribute("employee"), subordinateId));
+		model.addAttribute("currUrl", request.getRequestURI().toString());
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", overtimeHistoryPage.getTotalPages());
+		model.addAttribute("totalItems", overtimeHistoryPage.getTotalElements());
+		model.addAttribute("overtimeHistory", overtimeHistoryPaged);
 		return "subordinate-overtime-history";
 	}
 

@@ -7,7 +7,6 @@
 	<main>
 		<h1 class="display-5">Pending Overtime Claims</h1>
 		<div class="pt-4">
-			<div th:replace="~{fragments/layout.html :: pagination}" th:with="currUrl=${currUrl}, pageSize=${pageSize}, currPage=${currPage}"/>
 
 			<div th:if="${overtimePending.isEmpty()}">
 				<p class="text-center">There are no pending overtime claims.</p>

@@ -52,7 +52,7 @@ public class StaffOvertimeController {
 	public String staffOvertimeHistory(Model model, HttpSession sessionObj, HttpServletRequest request,
 			@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
 		int currPage = page.orElse(1);
-		int pageSize = size.orElse(5);
+		int pageSize = size.orElse(10);
 
 		List<OvertimeClaim> overtimeHistory = overtimeService
 				.findCurrYearEmployeeOvertimes((Employee) sessionObj.getAttribute("employee"));
@@ -77,10 +77,29 @@ public class StaffOvertimeController {
 
 	// RETRIEVE ALL
 	@GetMapping(value = "/history/all")
-	public String staffOvertimeHistoryAll(Model model, HttpSession sessionObj) {
-		List<OvertimeClaim> overtimeHistory = overtimeService.findAllEmployeeOvertimes((Employee) sessionObj.getAttribute("employee"));
-		model.addAttribute("overtimeHistory", overtimeHistory);
-		model.addAttribute("showAll", true);
+	public String staffOvertimeHistoryAll(Model model, HttpSession sessionObj, HttpServletRequest request,
+			@RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+		int currPage = page.orElse(1);
+		int pageSize = size.orElse(10);
+
+		List<OvertimeClaim> overtimeHistory = overtimeService
+				.findAllEmployeeOvertimes((Employee) sessionObj.getAttribute("employee"));
+
+		// Clamp PageNumber between 1 to MaxPage
+		int maxPage = (int) Math.ceil(overtimeHistory.size() / (double) pageSize);
+		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
+		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
+
+		Page<OvertimeClaim> overtimeHistoryPage = overtimeService.getPaginatedOvertimes(getPageNum, pageSize, overtimeHistory);
+		List<OvertimeClaim> overtimeHistoryPaged = overtimeHistoryPage.getContent();
+
+		model.addAttribute("currUrl", request.getRequestURI().toString());
+		model.addAttribute("currPage", currPage);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totalPages", overtimeHistoryPage.getTotalPages());
+		model.addAttribute("totalItems", overtimeHistoryPage.getTotalElements());
+		model.addAttribute("overtimeHistory", overtimeHistoryPaged);
+		model.addAttribute("showAll", false);
 		return "overtime-history";
 	}
 

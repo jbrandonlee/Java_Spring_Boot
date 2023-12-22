@@ -33,7 +33,7 @@
 				<div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar"
 					aria-labelledby="offcanvasDarkNavbarLabel">
 					<div class="offcanvas-header">
-						<h5 class="offcanvas-title logo-font" id="offcanvasDarkNavbarLabel">Welcome, User</h5>
+						<h5 class="offcanvas-title logo-font" id="offcanvasDarkNavbarLabel">Welcome, <span th:text="${#ctx.session.employee.name}"></span></h5>
 						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
 							aria-label="Close"></button>
 					</div>
@@ -53,6 +53,7 @@
 										Administrator
 									</a>
 									<ul class="dropdown-menu dropdown-menu-dark">
+										<li><a class="dropdown-item" href="#">Overview</a></li>
 										<li><a class="dropdown-item" href="#">Manage Accounts</a></li>
 										<li><a class="dropdown-item" href="#">Manage Staff</a></li>
 										<li><a class="dropdown-item" href="#">Manage Calendar</a></li>
@@ -66,10 +67,10 @@
 										Manager
 									</a>
 									<ul class="dropdown-menu dropdown-menu-dark">
-										<li><a class="dropdown-item" href="#">Overview</a></li>
-										<li><a class="dropdown-item" href="#">View Subordinate List</a></li>
-										<li><a class="dropdown-item" href="#">View Pending Leaves</a></li>
-										<li><a class="dropdown-item" href="#">View Pending Overtime Claims</a></li>
+										<li><a class="dropdown-item" href="/manager/overview">Overview</a></li>
+										<li><a class="dropdown-item" href="/manager/staff">View Subordinate List</a></li>
+										<li><a class="dropdown-item" href="/manager/leave/pending">View Pending Leaves</a></li>
+										<li><a class="dropdown-item" href="/manager/overtime/pending">View Pending Overtime Claims</a></li>
 									</ul>
 								</li>
 							</div>
@@ -79,8 +80,11 @@
 										Personal
 									</a>
 									<ul class="dropdown-menu dropdown-menu-dark">
-										<li><a class="dropdown-item" href="#">Manage Personal Leaves</a></li>
-										<li><a class="dropdown-item" href="#">Manage Overtime Claims</a></li>
+										<li><a class="dropdown-item" href="/staff/overview">Overview</a></li>
+										<li><a class="dropdown-item" href="/staff/leave/apply">Apply Leave</a></li>
+										<li><a class="dropdown-item" href="/staff/overtime/apply">Apply Overtime Claim</a></li>
+										<li><a class="dropdown-item" href="/staff/leave/history">View Leave History</a></li>
+										<li><a class="dropdown-item" href="/staff/overtime/history">View Overtime History</a></li>
 									</ul>
 								</li>
 							</div>
@@ -142,38 +146,42 @@
 
 	<!-- https://getbootstrap.com/docs/5.3/components/pagination/#overview -->
 	<!-- Requires params currUrl, pageSize, currPage --> 
-	<div th:fragment="pagination" id="pagination">
-		<div th:if="${totalPages > 1}" class="pt-4 pb-4">
-			<div class="row col-12">
-				<div class="col-3">
-					Total Entries: [[${totalItems}]]
-				</div>
-				<div class="col-1">
-					<a th:if="${currPage > 1}" th:href="@{'' + ${currUrl} + '?page=1' + '&size=' + ${pageSize}}">First</a>
-					<span th:unless="${currPage  > 1}">First</span>
-				</div>
-				<div class="col-1">
-					<a th:if="${currPage  > 1}"
-						th:href="@{'' + ${currUrl} + '?page=' + ${currPage  - 1} + '&size=' + ${pageSize}}">Previous</a>
-					<span th:unless="${currPage  > 1}">Previous</span>
-				</div>
-				<div class="col-5">
-					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
-						<a th:if="${currPage  != i}"
+	<div th:fragment="pagination-bar" id="pagination-bar">
+		<div class="row col-12 pt-4 pb-4">
+			<div class="col-8">
+				<ul th:if="${totalPages > 1}" class="pagination pagination-sm mb-0">
+					<li class="page-item" th:classappend="${currPage == 1} ? disabled : ''">
+						<a class="page-link" th:href="@{'' + ${currUrl} + '?page=1' + '&size=' + ${pageSize}}">First</a>
+					</li>
+					<li class="page-item" th:classappend="${currPage <= 1} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${currPage  - 1} + '&size=' + ${pageSize}}">Previous</a>
+					</li>
+					<li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
+						th:classappend="${currPage == i} ? active : ''"
+						th:href="@{'' + ${currUrl} + '?page=' + ${i} + '&size=' + ${pageSize}}">
+						<a class="page-link"
 							th:href="@{'' + ${currUrl} + '?page=' + ${i} + '&size=' + ${pageSize}}">[[${i}]]</a>
-						<span th:unless="${currPage  != i}">[[${i}]]</span>
-					</span>
-				</div>
-				<div class="col-1">
-					<a th:if="${currPage  < totalPages}"
-						th:href="@{'' + ${currUrl} + '?page=' + ${currPage  + 1} + '&size=' + ${pageSize}}">Next</a>
-					<span th:unless="${currPage  < totalPages}">Next</span>
-				</div>
-				<div class="col-1">
-					<a th:if="${currPage  < totalPages}"
-						th:href="@{'' + ${currUrl} + '?page=' + ${totalPages} + '&size=' + ${pageSize}}">Last</a>
-					<span th:unless="${currPage  < totalPages}">Last</span>
-				</div>
+					</li>
+					<li class="page-item" th:classappend="${currPage >= totalPages} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${currPage  + 1} + '&size=' + ${pageSize}}">Next</a>
+					</li>
+					<li class="page-item" th:classappend="${currPage == totalPages} ? disabled : ''">
+						<a class="page-link"
+							th:href="@{'' + ${currUrl} + '?page=' + ${totalPages} + '&size=' + ${pageSize}}">Last</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-2 pe-0 text-end" style="font-size:0.9rem; align-self:center;">Items per Page:</div>
+			<div class="col-2 pe-0">
+				<select class="form-select form-select-sm" name="pageSize" th:value="${pageSize}"
+					onchange="self.location.href=options[selectedIndex].value">
+					<option th:selected="${pageSize}==5" th:value="${currUrl}+'?page=1'+'&size=5'">5</option>
+					<option th:selected="${pageSize}==10" th:value="${currUrl}+'?page=1'+'&size=10'">10</option>
+					<option th:selected="${pageSize}==25" th:value="${currUrl}+'?page=1'+'&size=25'">25</option>
+					<option th:selected="${pageSize}==50" th:value="${currUrl}+'?page=1'+'&size=50'">50</option>
+				</select>
 			</div>
 		</div>
 	</div>

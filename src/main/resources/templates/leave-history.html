@@ -10,8 +10,8 @@
 			<span th:unless="${showAll}"> (Current Year)</span>
 		</h1>
 		<div class="pt-4">
-			<div th:replace="~{fragments/layout.html :: pagination}" th:with="currUrl=${currUrl}, pageSize=${pageSize}, currPage=${currPage}"/>
-
+			<div th:replace="~{fragments/layout.html :: pagination-bar}" th:with="currUrl=${currUrl}, pageSize=${pageSize}, currPage=${currPage}"/>
+			
 			<div th:if="${#lists.isEmpty(leaveHistory)}">
 				<p class="text-center">You have not taken any leaves.</p>
 			</div>
@@ -48,6 +48,9 @@
 						</td>
 					</tr>									
 				</table>
+			</div>
+			<div class="col-12">
+				<p style="font-size:0.9rem; align-self:center;">Total Entries: <span th:text="${totalItems}"></span></p>
 			</div>
 			<div class="d-flex flex-row-reverse">
 				<span class="ms-3" th:unless="${showAll}"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/staff/leave/history/all}">View All</a></span>

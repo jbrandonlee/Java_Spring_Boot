@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 
+html {
+	font-size: 0.9rem;
+}
+
 html, body {
 	height: 100%;
 	background-color: #fcfcfd;
@@ -37,7 +41,7 @@ html, body {
 }
 
 main {
-	padding: 3rem 20% !important;
+	padding: 3rem 16% !important;
 }
 
 #calendar-main {
