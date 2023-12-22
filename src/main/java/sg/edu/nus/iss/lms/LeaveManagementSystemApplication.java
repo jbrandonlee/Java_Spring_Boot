@@ -1,19 +1,26 @@
 package sg.edu.nus.iss.lms;
 
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import sg.edu.nus.iss.lms.model.Account;
 import sg.edu.nus.iss.lms.model.Department;
 import sg.edu.nus.iss.lms.model.Employee;
+import sg.edu.nus.iss.lms.model.Holiday;
 import sg.edu.nus.iss.lms.model.Leave;
 import sg.edu.nus.iss.lms.model.Leave.DaySection;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
@@ -25,6 +32,7 @@ import sg.edu.nus.iss.lms.model.Role;
 import sg.edu.nus.iss.lms.repository.AccountRepository;
 import sg.edu.nus.iss.lms.repository.DepartmentRepository;
 import sg.edu.nus.iss.lms.repository.EmployeeRepository;
+import sg.edu.nus.iss.lms.repository.HolidayRepository;
 import sg.edu.nus.iss.lms.repository.LeaveEntitlementRepository;
 import sg.edu.nus.iss.lms.repository.LeaveRepository;
 import sg.edu.nus.iss.lms.repository.LeaveTypeRepository;
@@ -34,10 +42,22 @@ import sg.edu.nus.iss.lms.repository.RoleRepository;
 @SpringBootApplication
 public class LeaveManagementSystemApplication {
 	
-	public static void main(String[] args) {
+	@Autowired
+	HolidayRepository holidayRepo;
+	
+	public static void main(String[] args) throws IOException {
 		SpringApplication.run(LeaveManagementSystemApplication.class, args);
 	}
-
+	
+	// Reference: https://www.baeldung.com/java-read-json-from-url
+	// Reference: https://stackoverflow.com/questions/71788850/how-to-parse-a-json-array-of-objects-using-jackson
+	public static Holiday[] getHolidaysFromAPI() throws IOException {
+		URL url = new URL("https://holidayapi.com/v1/holidays?pretty&country=SG&year=2022&key=2872decf-d74d-4f8f-997b-822b41f2908a");
+		ObjectMapper mapper = new ObjectMapper();
+	    ObjectNode node = mapper.readValue(url, ObjectNode.class);
+	    return mapper.treeToValue(node.get("holidays"), Holiday[].class);
+	}
+	
     @Bean
     CommandLineRunner loadData(AccountRepository accRepo,
     						   EmployeeRepository empRepo,
@@ -48,6 +68,12 @@ public class LeaveManagementSystemApplication {
     						   OvertimeRepository overtimeRepo,
     						   DepartmentRepository departmentRepo) {
 		return args -> {
+		    
+		    for (Holiday holiday : getHolidaysFromAPI()) {
+		    	System.out.println(holiday);
+		    	holidayRepo.save(holiday);
+		    }
+		    
 			// Initialize Departments
 			Department finance = departmentRepo.save(new Department("Finance"));
 			Department sales = departmentRepo.save(new Department("Sales"));
@@ -58,9 +84,9 @@ public class LeaveManagementSystemApplication {
 			LeaveType compensation = leaveTypeRepo.save(new LeaveType("Compensation"));
 			
 			// Initialize Roles
-			Role admin = roleRepo.save(new Role("Admin", "System Administrator"));
-			Role staff = roleRepo.save(new Role("Staff", "Staff Member"));
-			Role manager = roleRepo.save(new Role("Manager", "Manager"));
+			Role admin = roleRepo.save(new Role("admin", "Admin", "System Administrator"));
+			Role staff = roleRepo.save(new Role("staff", "Staff", "Staff Member"));
+			Role manager = roleRepo.save(new Role("manager", "Manager", "Manager"));
 			
 			List<Role> allRoles = new ArrayList<Role>() {{ add(admin); add(manager); add(staff); }};
 			List<Role> managerRoles = new ArrayList<Role>() {{ add(manager); add(staff); }};
@@ -78,29 +104,29 @@ public class LeaveManagementSystemApplication {
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, compensation, 0));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 15), DaySection.AM, LocalDate.of(2023, 12, 16), DaySection.PM, "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Break", "person3", "contact3", LeaveStatus.REJECTED));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Holiday", "person4", "contact4", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 30), DaySection.AM, LocalDate.of(2023, 12, 30), DaySection.AM, "Holiday", "updated1", "updated2", LeaveStatus.UPDATED));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 30), DaySection.PM, LocalDate.of(2023, 12, 30), DaySection.PM, "Holiday", "cancelled1", "cancelled2", LeaveStatus.CANCELLED));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 31), DaySection.AM, LocalDate.of(2023, 12, 31), DaySection.PM, "Holiday", "delete1", "delete2", LeaveStatus.DELETED));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2024, 1, 30), DaySection.PM, LocalDate.of(2024, 1, 30), DaySection.PM, "Holiday", "2024-1", "2024-2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2024, 2, 10), DaySection.PM, LocalDate.of(2024, 2, 10), DaySection.PM, "Holiday", "2024-1", "2024-2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff2, annual, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonStaff3, compensation, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Sick", "person2", "contact2", LeaveStatus.UPDATED));
-			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "boss1", "boss1", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "boss2", "boss2", LeaveStatus.UPDATED));
-			leaveRepo.save(new Leave(brandonManager, annual, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Sick", "manager1", "manager1", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(brandonManager, medical, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.AM, "Sick", "manager2", "manager2", LeaveStatus.UPDATED));
-			leaveRepo.save(new Leave(brandonManager, compensation, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.AM, "Sick", "manager3", "manager3", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 15), DaySection.AM, LocalDate.of(2023, 12, 16), DaySection.PM, "Local", "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Local", "Break", "person3", "contact3", LeaveStatus.REJECTED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Overseas", "Holiday", "person4", "contact4", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 30), DaySection.AM, LocalDate.of(2023, 12, 30), DaySection.AM, "Local", "Holiday", "updated1", "updated2", LeaveStatus.UPDATED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 30), DaySection.PM, LocalDate.of(2023, 12, 30), DaySection.PM, "Overseas", "Holiday", "cancelled1", "cancelled2", LeaveStatus.CANCELLED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 31), DaySection.AM, LocalDate.of(2023, 12, 31), DaySection.PM, "Local", "Holiday", "delete1", "delete2", LeaveStatus.DELETED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2024, 1, 30), DaySection.PM, LocalDate.of(2024, 1, 30), DaySection.PM, "Overseas", "Holiday", "2024-1", "2024-2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2024, 2, 10), DaySection.PM, LocalDate.of(2024, 2, 10), DaySection.PM, "Local", "Holiday", "2024-1", "2024-2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Local", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Local", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Local", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff2, annual, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.PM, "Local", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonStaff3, compensation, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.UPDATED));
+			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Local", "Sick", "boss1", "boss1", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonBoss, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "boss2", "boss2", LeaveStatus.UPDATED));
+			leaveRepo.save(new Leave(brandonManager, annual, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Local", "Sick", "manager1", "manager1", LeaveStatus.APPLIED));
+			leaveRepo.save(new Leave(brandonManager, medical, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.AM, "Overseas", "Sick", "manager2", "manager2", LeaveStatus.UPDATED));
+			leaveRepo.save(new Leave(brandonManager, compensation, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.AM, "Local", "Sick", "manager3", "manager3", LeaveStatus.APPROVED));
 			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(18, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(22, 0)), "4hrs OT", ClaimStatus.APPLIED));
 			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 2), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.REJECTED));
 			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPROVED));

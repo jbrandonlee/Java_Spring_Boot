@@ -46,6 +46,7 @@ public class Leave {
 	@Enumerated(EnumType.STRING)
 	private DaySection endDaySection;
 	
+	private String destination;
 	private String reason;
 	private String dissemination;
 	private String contact;
@@ -55,13 +56,18 @@ public class Leave {
 	
 	private String managerComment;
 	
-	public Leave(Employee employee, LeaveType leaveType, LocalDate startDate, DaySection startDaySection, LocalDate endDate, DaySection endDaySection, String reason, String dissemination, String contact, LeaveStatus status) {
+	public Leave(Employee employee, LeaveType leaveType,
+			LocalDate startDate, DaySection startDaySection,
+			LocalDate endDate, DaySection endDaySection,
+			String destination, String reason, String dissemination, String contact,
+			LeaveStatus status) {
 		this.employee = employee;
 		this.leaveType = leaveType;
 		this.startDate = startDate;
 		this.startDaySection = startDaySection;
 		this.endDate = endDate;
 		this.endDaySection = endDaySection;
+		this.destination = destination;
 		this.reason = reason;
 		this.dissemination = dissemination;
 		this.contact = contact;

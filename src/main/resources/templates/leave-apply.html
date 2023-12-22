@@ -35,6 +35,13 @@
 				</select>
 			</div>
 			<div class="form-group col-12">
+    			<label for="destination" class="form-label">Destination</label>
+    			<select class="form-select" name="destination">
+					<option th:value="Local" th:text="Local"></option>
+					<option th:value="Overseas" th:text="Overseas"></option>
+				</select>
+  			</div>
+			<div class="form-group col-12">
     			<label for="reason" class="form-label">Reason</label>
     			<textarea class="form-control" name="reason" placeholder="State reasons for taking leave" required></textarea>
   			</div>
