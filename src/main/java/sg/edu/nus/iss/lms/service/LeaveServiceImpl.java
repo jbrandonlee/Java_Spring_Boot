@@ -90,7 +90,13 @@ public class LeaveServiceImpl implements LeaveService {
     }
     
 	@Override
-	public double calculateWorkingDaysInLeave(Leave leave) {
+	public double calculateDeductibleDaysInLeave(Leave leave) {
+		// If Leave Period > 14 days, weekends and public holidays are included
+		if (leave.getCalendarDuration() > 14) {
+			return leave.getCalendarDuration();
+		}
+		
+		// Else, weekends and public holidays are excluded
 		LocalDate startDate = leave.getStartDate();
 		LocalDate endDate = leave.getEndDate();
 		Set<DayOfWeek> weekend = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);

@@ -19,7 +19,8 @@
 			</div>
 			<div class="form-group col-md-4 pe-2">
 				<label for="startDate" class="form-label">Start Date</label>
-				<input type="date" class="form-control" name="startDate" th:value="${leave.startDate}" required/>				
+				<input type="date" class="form-control" name="startDate" th:value="${leave.startDate}" required/>
+				<div class="form-text text-danger ps-1" th:if"${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></div>
 			</div>
 			<div class="form-group col-md-2">
 				<label for="startDaySection" class="form-label">&nbsp;</label>
@@ -30,7 +31,8 @@
 			</div>
 			<div class="form-group col-md-4">
 				<label for="endDate" class="form-label">End Date</label>
-				<input type="date" class="form-control" name="endDate" th:value="${leave.endDate}" required/>				
+				<input type="date" class="form-control" name="endDate" th:value="${leave.endDate}" required/>
+				<div class="form-text text-danger ps-1" th:if"${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></div>
 			</div>
 			<div class="form-group col-md-2">
 				<label for="endDaySection" class="form-label">&nbsp;</label>
@@ -57,6 +59,7 @@
   			<div class="form-group col-12">
     			<label for="contact" class="form-label">Personal Contact Details (if Overseas)</label>
     			<textarea class="form-control" name="contact" placeholder="State contact details (e.g. overseas phone number, overseas address)" th:text="${leave.contact}"></textarea>
+    			<div class="form-text text-danger ps-1" th:if"${#fields.hasErrors('contact')}" th:errors="*{contact}"></div>
   			</div>
   			<div class="d-flex flex-row-reverse">
 				<button class="btn btn-primary ms-3" type="submit">Update</button>

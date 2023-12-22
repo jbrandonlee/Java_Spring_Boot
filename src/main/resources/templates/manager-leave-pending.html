@@ -36,7 +36,7 @@
 									<span th:text="${leave.endDate}"></span>
 									<span th:text="${leave.endDaySection}"></span>
 								</td>
-								<td th:text="${leaveService.calculateWorkingDaysInLeave(leave)} + ${' days'}"></td>
+								<td th:text="${leaveService.calculateDeductibleDaysInLeave(leave)} + ${' days'}"></td>
 								<td>
 									<span><a class="btn btn-sm btn-outline-primary"
 											th:href="@{~/manager/staff/}+${leave.employee.id}+${'/leave/'}+${leave.id}">View</a></span>

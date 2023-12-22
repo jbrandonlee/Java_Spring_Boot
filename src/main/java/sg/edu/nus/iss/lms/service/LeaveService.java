@@ -25,5 +25,5 @@ public interface LeaveService {
 	
 	// -- Utility --
 	public Page<Leave> getPaginatedLeaves(int page, int pageSize, List<Leave> listLeaves);
-	public double calculateWorkingDaysInLeave(Leave leave);
+	public double calculateDeductibleDaysInLeave(Leave leave);
 }

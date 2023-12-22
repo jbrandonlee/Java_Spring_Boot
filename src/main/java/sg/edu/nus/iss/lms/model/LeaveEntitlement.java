@@ -20,15 +20,15 @@ public class LeaveEntitlement {
 	@ManyToOne
 	private LeaveType leaveType;
 	
-	private Integer entitlement;
+	private double entitlement;
 	
-	private Integer leaveBalance;
+	private double leaveBalance;
 	
 	@ManyToOne
 	private Employee employee;
 	
 	// TestData Constructor
-	public LeaveEntitlement(Employee employee, LeaveType leaveType, Integer entitlement) {
+	public LeaveEntitlement(Employee employee, LeaveType leaveType, double entitlement) {
 		this.employee = employee;
 		this.leaveType = leaveType;
 		this.entitlement = entitlement;

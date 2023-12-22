@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +28,7 @@ import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
 import sg.edu.nus.iss.lms.service.LeaveService;
 import sg.edu.nus.iss.lms.service.LeaveTypeService;
 import sg.edu.nus.iss.lms.service.OvertimeService;
+import sg.edu.nus.iss.lms.validator.LeaveValidator;
 
 @Controller
 @RequestMapping(value = "/staff")
@@ -42,6 +45,14 @@ public class StaffLeaveController {
 
 	@Autowired
 	OvertimeService overtimeService;
+	
+	@Autowired
+	LeaveValidator leaveValidator;
+	
+	@InitBinder("leave")
+	private void initLeaveBinder(WebDataBinder binder) {
+		binder.addValidators(leaveValidator);
+	}
 
 	@GetMapping(value = {"", "/", "/overview"})
 	public String staffHome(Model model, HttpSession sessionObj) {
@@ -58,6 +69,7 @@ public class StaffLeaveController {
 	// CREATE
 	@GetMapping(value = "/leave/apply")
 	public String staffLeaveApplicationForm(Model model, HttpSession sessionObj) {
+		model.addAttribute("leave", new Leave());
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		model.addAttribute("leaveEntitlement", leaveEntitlementService
 				.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
@@ -67,7 +79,14 @@ public class StaffLeaveController {
 	@PostMapping(value = "/leave/apply")
 	public String staffApplyLeave(@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
-		// Add Backend Validation + Display Thymeleaf Errors
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+			model.addAttribute("leaveEntitlement", leaveEntitlementService
+					.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
+			return "leave-apply";
+		}
+		
 		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
 		leaveForm.setLeaveType(currLeaveType);
 		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
@@ -159,7 +178,11 @@ public class StaffLeaveController {
 	public String staffEditLeave(@PathVariable(name = "id") Integer leaveId,
 			@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model,
 			HttpSession sessionObj) {
-		// Add Backend Validation + Display Thymeleaf Errors
+		
+		if (bindingResult.hasErrors()) {
+			return "leave-edit";
+		}
+		
 		leaveForm.setId(leaveId);
 		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
 		leaveForm.setLeaveType(currLeaveType);

@@ -69,17 +69,6 @@ public class LeaveManagementSystemApplication {
     						   DepartmentRepository departmentRepo) {
 		return args -> {
 		    
-			// Add Holiday Mock Data from 2022-2024
-		    for (Holiday holiday : getHolidaysFromAPI()) {
-		    	holidayRepo.saveAndFlush(holiday);
-		    	
-		    	Holiday holiday2023 = new Holiday(holiday.getName(), holiday.getDate().plusYears(1), holiday.getObserved().plusYears(1), holiday.isActive());
-		    	holidayRepo.saveAndFlush(holiday2023);
-		    	
-		    	Holiday holiday2024 = new Holiday(holiday.getName(), holiday.getDate().plusYears(2), holiday.getObserved().plusYears(2), holiday.isActive());
-		    	holidayRepo.saveAndFlush(holiday2024);
-		    }
-		    
 			// Initialize Departments
 			Department finance = departmentRepo.save(new Department("Finance"));
 			Department sales = departmentRepo.save(new Department("Sales"));
@@ -106,11 +95,11 @@ public class LeaveManagementSystemApplication {
 			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", finance, 2));
 			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", sales, null));
 			
-			accRepo.save(new Account("brandon", "password1", brandonManager, managerRoles));
+			accRepo.save(new Account("brandon", "password1", brandonStaff, staffRoles));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, compensation, 0));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 15), DaySection.AM, LocalDate.of(2023, 12, 16), DaySection.PM, "Local", "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 25), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Local", "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
 			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonStaff, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Local", "Break", "person3", "contact3", LeaveStatus.REJECTED));
 			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Overseas", "Holiday", "person4", "contact4", LeaveStatus.APPROVED));
@@ -136,6 +125,18 @@ public class LeaveManagementSystemApplication {
 			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(18, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 1), LocalTime.of(22, 0)), "4hrs OT", ClaimStatus.APPLIED));
 			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 2), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.REJECTED));
 			overtimeRepo.save(new OvertimeClaim(brandonStaff, LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 2, 3), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPROVED));
+			
+			// Add Holiday Mock Data from 2022-2024
+			/*
+		    for (Holiday holiday : getHolidaysFromAPI()) {
+		    	holidayRepo.saveAndFlush(holiday);
+		    	
+		    	Holiday holiday2023 = new Holiday(holiday.getName(), holiday.getDate().plusYears(1), holiday.getObserved().plusYears(1), holiday.isActive());
+		    	holidayRepo.saveAndFlush(holiday2023);
+		    	
+		    	Holiday holiday2024 = new Holiday(holiday.getName(), holiday.getDate().plusYears(2), holiday.getObserved().plusYears(2), holiday.isActive());
+		    	holidayRepo.saveAndFlush(holiday2024);
+		    }*/
 		};
 	}
 }

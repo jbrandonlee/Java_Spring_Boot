@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,8 +27,13 @@ public class OvertimeClaim {
 	@ManyToOne
 	private Employee employee;
 	
+	@Past(message="Start Time must be before today.")
 	private LocalDateTime startTime;
+	
+	@Past(message="End Time must be before today.")
 	private LocalDateTime endTime;
+	
+	@NotBlank(message="Reason for overtime claim is required.")
 	private String reason;
 	
 	@Enumerated(EnumType.STRING)

@@ -11,6 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,19 +39,30 @@ public class Leave {
 	@Transient
 	private String leaveTypeString;
 	
+	@NotNull(message = "Start Date must not be empty.")
+	@Future(message = "Start Date must be after today.")
 	private LocalDate startDate;
 	
 	@Enumerated(EnumType.STRING)
+	@NotNull(message = "Start Date AM/PM field must not be empty.")
 	private DaySection startDaySection;
 	
+	@NotNull(message = "End Date must not be empty.")
+	@Future(message = "End Date must be after today.")
 	private LocalDate endDate;
 	
 	@Enumerated(EnumType.STRING)
+	@NotNull(message = "End Date AM/PM field must not be empty.")
 	private DaySection endDaySection;
 	
+	@NotBlank(message = "Destination must not be empty.")
 	private String destination;
+	
+	@NotBlank(message = "Reason must not be empty.")
 	private String reason;
+	
 	private String dissemination;
+	
 	private String contact;
 	
 	@Enumerated(EnumType.STRING)

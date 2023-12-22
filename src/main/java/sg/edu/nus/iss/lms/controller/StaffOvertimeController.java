@@ -8,7 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.OvertimeClaim;
 import sg.edu.nus.iss.lms.model.OvertimeClaim.ClaimStatus;
 import sg.edu.nus.iss.lms.service.OvertimeService;
+import sg.edu.nus.iss.lms.validator.OvertimeValidator;
 
 @Controller
 @RequestMapping(value="/staff/overtime")
@@ -30,16 +33,29 @@ public class StaffOvertimeController {
 	@Autowired
 	OvertimeService overtimeService;
 
+	@Autowired
+	OvertimeValidator overtimeValidator;
+	
+	@InitBinder("overtime")
+	private void initLeaveBinder(WebDataBinder binder) {
+		binder.addValidators(overtimeValidator);
+	}
+	
 	// CREATE
 	@GetMapping(value = "/apply")
 	public String staffOvertimeApplicationForm(Model model, HttpSession sessionObj) {
+		model.addAttribute("overtime", new OvertimeClaim());
 		return "overtime-apply";
 	}
 
 	@PostMapping(value = "/apply")
 	public String staffApplyOvertime(@Valid @ModelAttribute("overtime") OvertimeClaim overtimeForm, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
-		// Add Backend Validation + Display Thymeleaf Errors
+
+		if (bindingResult.hasErrors()) {
+			return "overtime-apply";
+		}
+		
 		overtimeForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
 		overtimeForm.setStatus(ClaimStatus.APPLIED);
 		overtimeService.createOvertime(overtimeForm);
@@ -123,7 +139,11 @@ public class StaffOvertimeController {
 	public String staffEditOvertime(@PathVariable(name = "id") Integer overtimeId,
 			@Valid @ModelAttribute("overtime") OvertimeClaim overtimeForm, BindingResult bindingResult, Model model,
 			HttpSession sessionObj) {
-		// Add Backend Validation + Display Thymeleaf Errors
+		
+		if (bindingResult.hasErrors()) {
+			return "overtime-edit";
+		}
+		
 		overtimeForm.setId(overtimeId);
 		overtimeForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
 		overtimeForm.setStatus(ClaimStatus.UPDATED);
