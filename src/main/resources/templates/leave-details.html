@@ -56,10 +56,12 @@
 					<a class="btn btn-dark text-decoration-none" th:href="@{~/staff/leave/edit/}+${leave.id}">Edit</a></span>
 				<button class="btn btn-danger ms-3" type="submit"
 					th:if="${#strings.equals(leave.status,'APPLIED') or #strings.equals(leave.status,'UPDATED')}"
-					th:formaction="@{~/staff/leave/delete/}+${leave.id}">Delete Leave</button>
+					th:formaction="@{~/staff/leave/delete/}+${leave.id}"
+					onclick="return confirm('Are you sure?')">Delete Leave</button>
 				<button class="btn btn-danger ms-3" type="submit"
 					th:if="${#strings.equals(leave.status,'APPROVED')}"
-					th:formaction="@{~/staff/leave/cancel/}+${leave.id}">Cancel Leave</button>
+					th:formaction="@{~/staff/leave/cancel/}+${leave.id}"
+					onclick="return confirm('Are you sure?')">Cancel Leave</button>
 				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
 			</div>
 		</form>

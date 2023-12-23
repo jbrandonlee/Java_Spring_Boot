@@ -9,7 +9,7 @@
 			<span th:text="${'- '}+${subordinateName}"></span>
 		</h1>
 		<div class="pt-4">
-			<div th:replace="~{fragments/layout.html :: pagination-bar}" th:with="currUrl=${currUrl}, pageSize=${pageSize}, currPage=${currPage}"/>
+			<div th:replace="~{fragments/layout.html :: pagination-bar}" />
 
 			<div th:if="${#lists.isEmpty(overtimeHistory)}">
 				<p class="text-center">The employee has not made any overtime claims.</p>

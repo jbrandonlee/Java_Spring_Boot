@@ -29,7 +29,8 @@
 					<a class="btn btn-dark text-decoration-none" th:href="@{~/staff/overtime/edit/}+${overtime.id}">Edit</a></span>
 				<button class="btn btn-danger ms-3" type="submit"
 					th:if="${#strings.equals(overtime.status,'APPLIED') or #strings.equals(overtime.status,'UPDATED')}"
-					th:formaction="@{~/staff/overtime/delete/}+${overtime.id}">Delete Overtime Claim</button>
+					th:formaction="@{~/staff/overtime/delete/}+${overtime.id}"
+					onclick="return confirm('Are you sure?')">Delete Overtime Claim</button>
 				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
 			</div>
 		</form>

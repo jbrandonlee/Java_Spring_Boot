@@ -144,8 +144,7 @@
 		</div>
 	</div>
 
-	<!-- https://getbootstrap.com/docs/5.3/components/pagination/#overview -->
-	<!-- Requires params currUrl, pageSize, currPage --> 
+	<!-- Requires params currUrl, pageSize, currPage, totalPages --> 
 	<div th:fragment="pagination-bar" id="pagination-bar">
 		<div class="row col-12 pt-4 pb-4">
 			<div class="col-8">
@@ -158,8 +157,7 @@
 							th:href="@{'' + ${currUrl} + '?page=' + ${currPage  - 1} + '&size=' + ${pageSize}}">Previous</a>
 					</li>
 					<li th:each="i : ${#numbers.sequence(1,totalPages)}" class="page-item"
-						th:classappend="${currPage == i} ? active : ''"
-						th:href="@{'' + ${currUrl} + '?page=' + ${i} + '&size=' + ${pageSize}}">
+						th:classappend="${currPage == i} ? active : ''">
 						<a class="page-link"
 							th:href="@{'' + ${currUrl} + '?page=' + ${i} + '&size=' + ${pageSize}}">[[${i}]]</a>
 					</li>
@@ -186,9 +184,4 @@
 		</div>
 	</div>
 
-	<div th:fragment="header" id="header">
-		<div th:if="${not #strings.isEmpty(usession)}">
-			<h2><em th:utext="'Hello ' + ${session.usession.user.name}"></em></h2>
-		</div>
-	</div>
 </body>
