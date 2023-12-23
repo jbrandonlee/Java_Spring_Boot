@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.lms.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,21 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 		LeaveEntitlement leaveEnt = findLeaveEntitlementByEmployeeAndType(employee, leaveTypeString);
 		leaveEnt.setLeaveBalance(leaveEnt.getLeaveBalance() + days);
 		return leaveEntitlementRepo.saveAndFlush(leaveEnt);
+	}
+
+	@Override
+	public List<LeaveEntitlement> findAll() {
+		return leaveEntitlementRepo.findAll();
+	}
+
+	@Override
+	public void save(LeaveEntitlement leaveEntitlement) {
+		leaveEntitlementRepo.save(leaveEntitlement);
+		
+	}
+
+	@Override
+	public Optional<LeaveEntitlement> findById(Integer id) {
+		return leaveEntitlementRepo.findById(id);
 	}
 }

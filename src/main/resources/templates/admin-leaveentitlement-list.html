@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Leave Entitlements</title>
+</head>
+<body>
+
+<div class="container mt-4">
+    <h2>Leave Entitlements</h2>
+    <a th:href="@{/leaveentitlement/create}" class="btn btn-primary mb-2">New Leave Entitlement</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Leave Type</th>
+                <th>Entitlement</th>
+                <th>Leave Balance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entitlement : ${leaveEntitlements}">
+                <td th:text="${entitlement.employee.name}">Employee Name</td>
+                <td th:text="${entitlement.leaveType.type}">Leave Type</td>
+                <td th:text="${entitlement.entitlement}">Entitlement</td>
+                <td th:text="${entitlement.leaveBalance}">Leave Balance</td>
+                <td>
+                    <a th:href="@{/leaveentitlement/{id}/edit(id=${entitlement.id})}" class="btn btn-sm btn-warning">Edit</a>
+                    <a th:href="@{/leaveentitlement/{id}/delete(id=${entitlement.id})}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

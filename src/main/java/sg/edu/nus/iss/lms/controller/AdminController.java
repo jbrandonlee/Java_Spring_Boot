@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.*;
 import sg.edu.nus.iss.lms.service.EmployeeService;
+import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
 import sg.edu.nus.iss.lms.service.LeaveTypeService;
 
 @Controller
@@ -25,6 +26,9 @@ public class AdminController {
 	
 	@Autowired
 	private LeaveTypeService leaveTypeService;
+	
+	@Autowired
+	private LeaveEntitlementService leaveEntitlementService;
 	
 	// -----------------------
 	// -- Manage Staff List --
@@ -111,33 +115,42 @@ public class AdminController {
 	public String leaveEntitlementList(Model model, HttpSession sessionObj) {
 		// Admin can see list of staff leave entitlements, edit, create
 		// Group by Staff
-
+		List<LeaveEntitlement> leaveEntitlements = leaveEntitlementService.findAll();
+		model.addAttribute("leaveEntitlements",leaveEntitlements);
 		return "admin-leaveentitlement-list";
 	}
 	
-	@GetMapping(value = "/leaveentitlement/{id}/create")
+	@GetMapping(value = "/leaveentitlement/create")
 	public String leaveEntitlementCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create leave entitlement and assign to staff
 		// If staff already has existing entitlement of type, reject
+		 LeaveEntitlement leaveEntitlement = new LeaveEntitlement();
+	        model.addAttribute("leaveEntitlement", leaveEntitlement);
 		return "admin-leaveentitlement-create";
 	}
 	
-	@PostMapping(value = "/leaveentitlement/{id}/create")
-	public String leaveEntitlementCreate(Model model, HttpSession sessionObj) {
-
+	@PostMapping(value = "/leaveentitlement/create")
+	public String leaveEntitlementCreate(@ModelAttribute("leaveEntitlement") LeaveEntitlement leaveEntitlement, Model model, HttpSession sessionObj) {
+		leaveEntitlementService.save(leaveEntitlement);
 		return "redirect:/admin/leaveentitlement";
 	}
 	
 	@GetMapping(value = "/leaveentitlement/{id}/edit")
-	public String leaveEntitlementEditForm(Model model, HttpSession sessionObj) {
+	public String leaveEntitlementEditForm(@PathVariable Integer id, Model model, HttpSession sessionObj) {
 		// Admin can edit staff account details
+		Optional<LeaveEntitlement> leaveEntitlement = leaveEntitlementService.findById(id);
+		 model.addAttribute("leaveEntitlement", leaveEntitlement);
 		return "admin-leaveentitlement-edit";
 	}
 	
 	@PostMapping(value = "/leaveentitlement/{id}/edit")
-	public String leaveEntitlementEdit(Model model, HttpSession sessionObj) {
+	public String leaveEntitlementEdit(@PathVariable Integer id,@ModelAttribute LeaveEntitlement leaveEntitlement, Model model, HttpSession sessionObj) {
+		
+    Optional<LeaveEntitlement> leaveEntitlementOptional = leaveEntitlementService.findById(id);
+    LeaveEntitlement currentLeaveEntitlement = leaveEntitlementOptional.get();
+    leaveEntitlementService.save(currentLeaveEntitlement); 
 
-		return "redirect:/admin/leaveentitlement";
+    return "redirect:/admin/leaveentitlement";
 	}
 
 	
