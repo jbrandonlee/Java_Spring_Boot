@@ -12,4 +12,5 @@ public interface LeaveTypeRepository extends JpaRepository<LeaveType, Integer> {
 	public List<String> findLeaveTypeNames();
 	
 	public LeaveType findByType(String type);
+
 }
