@@ -23,6 +23,7 @@ import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
+import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
 import sg.edu.nus.iss.lms.service.LeaveService;
@@ -87,6 +88,21 @@ public class StaffLeaveController {
 			return "leave-apply";
 		}
 		
+		// Validate Sufficient Leave Balance
+		LeaveEntitlement currLeaveEntitlement =
+				leaveEntitlementService.findLeaveEntitlementByEmployeeAndType((Employee) sessionObj.getAttribute("employee"), leaveForm.getLeaveTypeString());
+		double leaveBalance = currLeaveEntitlement.getLeaveBalance();
+		double leaveDuration = leaveService.calculateDeductibleDaysInLeave(leaveForm);
+		
+		if (leaveBalance < leaveDuration) {
+			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+			model.addAttribute("leaveEntitlement", leaveEntitlementService
+					.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
+			model.addAttribute("errorMsg", "You do not have sufficient leave balance.");
+			return "leave-apply";
+		}
+		
+		// Create Leave 
 		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
 		leaveForm.setLeaveType(currLeaveType);
 		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
@@ -180,6 +196,27 @@ public class StaffLeaveController {
 			HttpSession sessionObj) {
 		
 		if (bindingResult.hasErrors()) {
+			Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+			model.addAttribute("leave", leave);
+			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+			model.addAttribute("leaveEntitlement", leaveEntitlementService
+					.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
+			return "leave-edit";
+		}
+		
+		// Validate Sufficient Leave Balance
+		LeaveEntitlement currLeaveEntitlement =
+				leaveEntitlementService.findLeaveEntitlementByEmployeeAndType((Employee) sessionObj.getAttribute("employee"), leaveForm.getLeaveTypeString());
+		double leaveBalance = currLeaveEntitlement.getLeaveBalance();
+		double leaveDuration = leaveService.calculateDeductibleDaysInLeave(leaveForm);
+		
+		if (leaveBalance < leaveDuration) {
+			Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+			model.addAttribute("leave", leave);
+			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+			model.addAttribute("leaveEntitlement", leaveEntitlementService
+					.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
+			model.addAttribute("errorMsg", "You do not have sufficient leave balance.");
 			return "leave-edit";
 		}
 		

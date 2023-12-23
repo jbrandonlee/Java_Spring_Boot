@@ -84,7 +84,7 @@ public class AdminController {
 		return "redirect:/admin/account";
 	}
 
-
+	
 	// -----------------------------------
 	// -- Manage Staff LeaveEntitlement --
 	// -----------------------------------
@@ -92,12 +92,14 @@ public class AdminController {
 	public String leaveEntitlementList(Model model, HttpSession sessionObj) {
 		// Admin can see list of staff leave entitlements, edit, create
 		// Group by Staff
+
 		return "admin-leaveentitlement-list";
 	}
 	
 	@GetMapping(value = "/leaveentitlement/{id}/create")
 	public String leaveEntitlementCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create leave entitlement and assign to staff
+		// If staff already has existing entitlement of type, reject
 		return "admin-leaveentitlement-create";
 	}
 	
@@ -152,6 +154,7 @@ public class AdminController {
 
 		return "redirect:/admin/leavetype";
 	}
+	
 	
 	// ---------------------
 	// -- Manage Holidays --

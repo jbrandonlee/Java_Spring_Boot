@@ -67,6 +67,9 @@
 				<span class="ms-3"><a class="btn btn-outline-dark text-decoration-none" th:href="@{~/staff/overview}">Back to Overview</a></span>
 			</div>
 		</form>
+		<div class="row pt-4">
+			<div th:if="${errorMsg != null}" th:text="${errorMsg}" class="alert alert-warning"></div>
+		</div>
 	</main>
 </body>
 </html>

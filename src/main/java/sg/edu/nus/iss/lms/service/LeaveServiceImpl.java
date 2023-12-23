@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
+import sg.edu.nus.iss.lms.model.Leave.DaySection;
 import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
 import sg.edu.nus.iss.lms.repository.HolidayRepository;
 import sg.edu.nus.iss.lms.repository.LeaveRepository;
@@ -112,6 +113,8 @@ public class LeaveServiceImpl implements LeaveService {
 		// Else, weekends and public holidays are excluded
 		LocalDate startDate = leave.getStartDate();
 		LocalDate endDate = leave.getEndDate();
+		DaySection startDaySection = leave.getStartDaySection();
+		DaySection endDaySection = leave.getEndDaySection();
 		Set<DayOfWeek> weekend = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 		List<LocalDate> holidayDates = holidayRepo.findAllActiveHolidayDates();
 		
@@ -120,8 +123,16 @@ public class LeaveServiceImpl implements LeaveService {
 		        .count();
 		
 		// Assumes Leave startDate and endDate are working days (taken care of by LeaveValidator)
-		double halfDay = (leave.getStartDaySection() == leave.getEndDaySection()) ? 0.5 : 1.0;
-
+		double halfDay = 0.0;
+		
+		if (startDaySection == DaySection.AM && endDaySection == DaySection.PM) {
+			halfDay = 1.0;
+		} else if (startDaySection == DaySection.PM && endDaySection == DaySection.AM) {
+			halfDay = 0.0;
+		} else if (startDaySection == endDaySection) {
+			halfDay = 0.5;
+		}
+		
 		return fullDays + halfDay;
 	}
 }

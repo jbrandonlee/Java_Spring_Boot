@@ -89,7 +89,16 @@ public class Leave {
 	}
 
 	public double getCalendarDuration() {
-		double halfDay = (startDaySection == endDaySection) ? 0.5 : 1.0;
+		double halfDay = 0.0;
+		
+		if (startDaySection == DaySection.AM && endDaySection == DaySection.PM) {
+			halfDay = 1.0;
+		} else if (startDaySection == DaySection.PM && endDaySection == DaySection.AM) {
+			halfDay = 0.0;
+		} else if (startDaySection == endDaySection) {
+			halfDay = 0.5;
+		}
+		
 		long fullDays = startDate.until(endDate, ChronoUnit.DAYS);
 		return fullDays + halfDay;
 	}
