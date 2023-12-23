@@ -61,4 +61,10 @@ public class OvertimeClaim {
 	public enum ClaimStatus {
 		APPLIED, UPDATED, APPROVED, REJECTED, DELETED
 	}
+
+	@Override
+	public String toString() {
+		return "OvertimeClaim [id=" + id + ", employee=" + employee + ", startTime=" + startTime + ", endTime="
+				+ endTime + ", reason=" + reason + ", status=" + status + ", managerComment=" + managerComment + "]";
+	}
 }

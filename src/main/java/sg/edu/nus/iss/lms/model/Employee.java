@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +32,7 @@ public class Employee {
 	private LocalDate joinDate;
 	
 	private Integer managerId;
-	
+
 	@OneToMany(mappedBy="employee")
 	private List<Leave> leaves;
 	

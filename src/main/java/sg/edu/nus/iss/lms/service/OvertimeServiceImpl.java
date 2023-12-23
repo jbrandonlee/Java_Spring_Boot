@@ -57,7 +57,7 @@ public class OvertimeServiceImpl implements OvertimeService {
 	public List<OvertimeClaim> findCurrYearEmployeeOvertimes(Employee employee) {
 		return overtimeRepo.findCurrYearOvertimesByEmployeeId(employee.getId());
 	}
-	
+		
 	@Override
 	public Page<OvertimeClaim> getPaginatedOvertimes(int page, int pageSize, List<OvertimeClaim> listOvertimes) {
         Pageable pageRequest = PageRequest.of(page, pageSize);

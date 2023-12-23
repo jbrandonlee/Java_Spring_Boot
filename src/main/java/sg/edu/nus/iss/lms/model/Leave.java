@@ -3,6 +3,8 @@ package sg.edu.nus.iss.lms.model;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,13 +19,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Leave {
 	
 	@Id
@@ -109,5 +109,14 @@ public class Leave {
 	
 	public enum LeaveStatus {
 		APPLIED, UPDATED, APPROVED, REJECTED, CANCELLED, DELETED
+	}
+
+	@Override
+	public String toString() {
+		return "Leave [id=" + id + ", employee=" + employee + ", leaveType=" + leaveType + ", leaveTypeString="
+				+ leaveTypeString + ", startDate=" + startDate + ", startDaySection=" + startDaySection + ", endDate="
+				+ endDate + ", endDaySection=" + endDaySection + ", destination=" + destination + ", reason=" + reason
+				+ ", dissemination=" + dissemination + ", contact=" + contact + ", status=" + status
+				+ ", managerComment=" + managerComment + "]";
 	}
 }
