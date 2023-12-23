@@ -13,6 +13,6 @@ public interface LeaveEntitlementRepository extends JpaRepository<LeaveEntitleme
 	@Query("SELECT le FROM Employee e JOIN e.leaveEntitlements le WHERE e.id=:employeeId")
 	public List<LeaveEntitlement> findAllLeaveEntitlementByEmployeeId(@Param("employeeId")Integer employeeId);
 	
-	@Query("SELECT le FROM Employee e JOIN e.leaveEntitlements le JOIN le.leaveType lt WHERE e.id=:employeeId AND lt.type=:leaveTypeString")
+	@Query("SELECT le FROM Employee e JOIN e.leaveEntitlements le JOIN le.leaveType lt WHERE e.id=:employeeId AND lt.type=:leaveType")
 	public LeaveEntitlement findLeaveEntitlementByEmployeeIdAndType(@Param("employeeId")Integer employeeId, @Param("leaveType")String leaveTypeString);
 }

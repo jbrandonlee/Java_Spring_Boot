@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.OvertimeClaim;
+import sg.edu.nus.iss.lms.model.OvertimeClaim.ClaimStatus;
 import sg.edu.nus.iss.lms.repository.OvertimeRepository;
 
 @Service
@@ -19,6 +20,9 @@ import sg.edu.nus.iss.lms.repository.OvertimeRepository;
 public class OvertimeServiceImpl implements OvertimeService {
 	@Autowired
 	OvertimeRepository overtimeRepo;
+	
+	@Autowired
+	LeaveEntitlementService leaveEntService;
 	
 	// -- Employee --
 	@Override
@@ -28,6 +32,9 @@ public class OvertimeServiceImpl implements OvertimeService {
 	
 	@Override
 	public OvertimeClaim updateOvertime(OvertimeClaim overtime) {
+		if (overtime.getStatus() == ClaimStatus.APPROVED) {
+			leaveEntService.updateLeaveEntitlementBalanceByDays(overtime.getEmployee(), "Compensation", overtime.getClaimableCompensation());
+		}
 		return overtimeRepo.saveAndFlush(overtime);
 	}
 	

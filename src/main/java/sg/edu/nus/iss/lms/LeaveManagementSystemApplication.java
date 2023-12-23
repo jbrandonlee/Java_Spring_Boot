@@ -95,7 +95,8 @@ public class LeaveManagementSystemApplication {
 			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", finance, 2));
 			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", sales, null));
 			
-			accRepo.save(new Account("brandon", "password1", brandonStaff, staffRoles));
+			accRepo.save(new Account("brandonStaff", "password1", brandonStaff, staffRoles));
+			accRepo.save(new Account("brandonManager", "password1", brandonManager, managerRoles));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, compensation, 0));

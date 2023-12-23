@@ -25,4 +25,12 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 	public LeaveEntitlement findLeaveEntitlementByEmployeeAndType(Employee employee, String leaveTypeString) {
 		return leaveEntitlementRepo.findLeaveEntitlementByEmployeeIdAndType(employee.getId(), leaveTypeString);
 	};
+	
+	@Override
+	@Transactional(readOnly = false)
+	public LeaveEntitlement updateLeaveEntitlementBalanceByDays(Employee employee, String leaveTypeString, double days) {
+		LeaveEntitlement leaveEnt = findLeaveEntitlementByEmployeeAndType(employee, leaveTypeString);
+		leaveEnt.setLeaveBalance(leaveEnt.getLeaveBalance() + days);
+		return leaveEntitlementRepo.saveAndFlush(leaveEnt);
+	}
 }
