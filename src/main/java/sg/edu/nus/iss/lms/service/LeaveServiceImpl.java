@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.lms.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,12 @@ public class LeaveServiceImpl implements LeaveService{
 	public LeaveApplication findByLeaveId(int id) {
 		
 		return leaveRepo.findById(id).get();
+	}
+
+	@Override
+	public List<LeaveApplication> getOverlappingLeaves(LocalDate startDate, LocalDate endDate) {
+		
+		return leaveRepo.findOverlappingLeaves(startDate, endDate);
 	}
 
 }

@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.lms.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -28,5 +29,7 @@ public interface LeaveService {
 	void save(LeaveApplication leaveApplication);
 	
 	LeaveApplication findByLeaveId(int id);
+	
+	List<LeaveApplication> getOverlappingLeaves(LocalDate startDate, LocalDate endDate);
 
 }

@@ -48,6 +48,29 @@
 		<button type="submit">Update Status</button>
 		
 	</form>
+	
+	<h3>Overlapping Leaves</h3>
+    <div th:if="${not #lists.isEmpty(overlappingLeaves)}">
+        <p>These employees are on leave during this leave period:</p>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="leave : ${overlappingLeaves}">
+                    <td th:text="${leave.staff.employeeName}"></td>
+                    <td th:text="${leave.leaveStartDate}"></td>
+                    <td th:text="${leave.leaveEndDate}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p th:if="${#lists.isEmpty(overlappingLeaves)}">No overlapping leaves found.</p>
+    
 </body>
 
 </html>

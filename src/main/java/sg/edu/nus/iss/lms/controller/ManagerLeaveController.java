@@ -99,8 +99,13 @@ public class ManagerLeaveController {
     public String editProductForm(@PathVariable("id") int id, Model model) {
     	
 		LeaveApplication leaveApplication = lService.findByLeaveId(id);
+		
+		List<LeaveApplication> overlappingLeaves = lService.getOverlappingLeaves(leaveApplication.getLeaveStartDate(), leaveApplication.getLeaveEndDate());
 
         model.addAttribute("leaveApplication", leaveApplication); 
+        
+        model.addAttribute("overlappingLeaves", overlappingLeaves);
+        
         return "editLeave";
     }
 	
