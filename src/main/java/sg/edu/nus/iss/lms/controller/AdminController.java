@@ -1,5 +1,7 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,16 +9,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
+import sg.edu.nus.iss.lms.model.*;
+import sg.edu.nus.iss.lms.service.EmployeeService;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
+	@Autowired
+	private EmployeeService employeeService;
 	// -----------------------
 	// -- Manage Staff List --
 	// -----------------------
 	@GetMapping(value = "/staff")
 	public String staffList(Model model, HttpSession sessionObj) {
 		// Admin can see list of staff, edit staff, create new staff
+		List<Employee> staffList = employeeService.findAll();
+		model.addAttribute("staffList",staffList);
 		return "admin-staff-list";
 	}
 	
