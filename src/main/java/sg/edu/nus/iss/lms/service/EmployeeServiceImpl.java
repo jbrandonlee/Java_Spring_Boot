@@ -31,4 +31,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> findAllSubordinates(Employee manager) {
     	return employeeRepo.findAllSubordinates(manager.getId());
     }
+
+	@Override
+	public List<Employee> findAll() {
+		
+		return employeeRepo.findAll();
+	}
+
+	@Override
+	public Employee create(Employee employee) {
+		return employeeRepo.save(employee);
+		
+	}
 }

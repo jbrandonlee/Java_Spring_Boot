@@ -10,4 +10,6 @@ public interface EmployeeService {
 	public Employee findEmployeeById(Integer id);
 	public Employee findEmployeeByAccount(Account account);
 	public List<Employee> findAllSubordinates(Employee manager);
+	public List<Employee> findAll();
+	public Employee create(Employee employee);
 }

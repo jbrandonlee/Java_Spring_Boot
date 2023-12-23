@@ -1,34 +1,53 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import sg.edu.nus.iss.lms.model.*;
+import sg.edu.nus.iss.lms.service.EmployeeService;
+import sg.edu.nus.iss.lms.service.LeaveTypeService;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
+	@Autowired
+	private EmployeeService employeeService;
+	
+	@Autowired
+	private LeaveTypeService leaveTypeService;
+	
 	// -----------------------
 	// -- Manage Staff List --
 	// -----------------------
 	@GetMapping(value = "/staff")
 	public String staffList(Model model, HttpSession sessionObj) {
 		// Admin can see list of staff, edit staff, create new staff
+		List<Employee> staffList = employeeService.findAll();
+		model.addAttribute("staffList",staffList);
 		return "admin-staff-list";
 	}
 	
 	@GetMapping(value = "/staff/{id}/create")
 	public String staffCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create staff from empty form
+		model.addAttribute("employee", new Employee());
 		return "admin-staff-create";
 	}
 	
 	@PostMapping(value = "/staff/{id}/create")
-	public String staffCreate(Model model, HttpSession sessionObj) {
+	public String staffCreate(@Valid @ModelAttribute("employee") Employee employee,  Model model, HttpSession sessionObj) {
 
+		
 		return "redirect:/admin/staff";
 	}
 	
@@ -128,31 +147,45 @@ public class AdminController {
 	@GetMapping(value = "/leavetype")
 	public String leaveTypeList(Model model, HttpSession sessionObj) {
 		// Admin can see list of leavetypes
+		List<LeaveType> leaveTypeList = leaveTypeService.findAll();
+		model.addAttribute("leaveTypeList", leaveTypeList);
 		return "admin-leavetype-list";
 	}
 	
 	@GetMapping(value = "/leavetype/{id}/create")
 	public String leaveTypeCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create leave type
+		model.addAttribute("leaveType", new LeaveType());
 		return "admin-leavetype-create";
 	}
 	
 	@PostMapping(value = "/leavetype/{id}/create")
-	public String leaveTypeCreate(Model model, HttpSession sessionObj) {
+	public String leaveTypeCreate(@Valid @ModelAttribute("leaveType") LeaveType leaveType, Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/leavetype";
 	}
 	
 	@GetMapping(value = "/leavetype/{id}/edit")
-	public String leaveTypeEditForm(Model model, HttpSession sessionObj) {
+	public String leaveTypeEditForm(@PathVariable Integer id, Model model, HttpSession sessionObj) {
 		// Admin can edit staff account details
-		return "admin-leavetype-edit";
+		Optional<LeaveType> leaveType = leaveTypeService.findById(id);
+        if (leaveType != null) {
+            model.addAttribute("leaveType", leaveType);
+            return "admin-leavetype-edit";
+        } else {
+            return "redirect:/error";
+        }
 	}
 	
 	@PostMapping(value = "/leavetype/{id}/edit")
-	public String leaveTypeEdit(Model model, HttpSession sessionObj) {
+	public String leaveTypeEdit(@PathVariable Integer id, @ModelAttribute("leaveType") LeaveType leaveType, Model model, HttpSession sessionObj) {
 
-		return "redirect:/admin/leavetype";
+	    LeaveType updatedLeaveType = leaveTypeService.update(id, leaveType);
+	    if (updatedLeaveType != null) {
+	        return "redirect:/admin/leavetype";
+	    } else {
+	        return "redirect:/error";
+	    }
 	}
 	
 	
