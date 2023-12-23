@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Leave;
+import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
 import sg.edu.nus.iss.lms.repository.HolidayRepository;
 import sg.edu.nus.iss.lms.repository.LeaveRepository;
 
@@ -28,14 +29,26 @@ public class LeaveServiceImpl implements LeaveService {
 	@Autowired
 	HolidayRepository holidayRepo;
 	
+	@Autowired
+	LeaveEntitlementService leaveEntService;
+	
 	// -- Employee --	
 	@Override
 	public Leave createLeave(Leave leave) {
+		leaveEntService.updateLeaveEntitlementBalanceByDays(leave.getEmployee(), leave.getLeaveTypeString(), -calculateDeductibleDaysInLeave(leave));
 		return leaveRepo.saveAndFlush(leave);
 	}
 	
 	@Override
 	public Leave updateLeave(Leave leave) {
+		double originalDeduction = calculateDeductibleDaysInLeave(findEmployeeLeaveId(leave.getEmployee(), leave.getId()));
+		double currentDeduction = calculateDeductibleDaysInLeave(leave);
+		
+		if (leave.getStatus() == LeaveStatus.CANCELLED || leave.getStatus() == LeaveStatus.DELETED || leave.getStatus() == LeaveStatus.REJECTED) {
+			currentDeduction = 0;
+		}
+		
+		leaveEntService.updateLeaveEntitlementBalanceByDays(leave.getEmployee(), leave.getLeaveType().getType(), originalDeduction - currentDeduction);
 		return leaveRepo.saveAndFlush(leave);
 	}
 	
