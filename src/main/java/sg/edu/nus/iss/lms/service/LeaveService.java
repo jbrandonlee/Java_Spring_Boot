@@ -19,7 +19,7 @@ public interface LeaveService {
 	
 	// -- Manager --
 	public List<Leave> findAllSubordinatePendingLeaves(Employee manager);
-	public List<Leave> findAllSubordinateLeaveHistoryInDuration(Employee manager, Leave leave);
+	public List<Leave> findOverlappingSubordinateLeaves(Employee manager, Leave leave);
 	public List<Leave> findSubordinateLeaveHistory(Employee manager, Integer subordinateId);
 	public Leave findSubordinateLeaveById(Employee manager, Integer subordinateId, Integer leaveId);
 	

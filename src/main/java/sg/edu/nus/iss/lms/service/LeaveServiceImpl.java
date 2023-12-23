@@ -79,8 +79,8 @@ public class LeaveServiceImpl implements LeaveService {
 		return leaveRepo.findAllSubordinatePendingLeaves(manager.getId());
 	}
 	
-    public List<Leave> findAllSubordinateLeaveHistoryInDuration(Employee manager, Leave leave) {
-		return leaveRepo.findAllSubordinateLeaveHistoryInDuration(manager.getId(), leave.getStartDate(), leave.getEndDate());
+    public List<Leave> findOverlappingSubordinateLeaves(Employee manager, Leave leave) {
+		return leaveRepo.findOverlappingSubordinateLeaves(manager.getId(), leave.getStartDate(), leave.getEndDate());
 	}
 	
     public List<Leave> findSubordinateLeaveHistory(Employee manager, Integer subordinateId) {

@@ -108,9 +108,10 @@ public class ManagerLeaveController {
 										  @PathVariable(name = "id") Integer leaveId,
 										  Model model, HttpSession sessionObj) {
 		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
+		List<Leave> overlappingLeaves = leaveService.findOverlappingSubordinateLeaves((Employee) sessionObj.getAttribute("employee"), leave);
+		
 		model.addAttribute("leave", leave);
-		model.addAttribute("subordinateLeaves",
-				leaveService.findAllSubordinateLeaveHistoryInDuration((Employee) sessionObj.getAttribute("employee"), leave));
+		model.addAttribute("overlappingLeaves", overlappingLeaves);
 		return "subordinate-leave-details";
 	}
 	

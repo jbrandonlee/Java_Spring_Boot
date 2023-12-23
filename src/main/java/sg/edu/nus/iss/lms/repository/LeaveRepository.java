@@ -34,8 +34,8 @@ public interface LeaveRepository extends JpaRepository<Leave, Integer> {
 
 	// For Manager Approve View
 	// Does not take into account DaySection
-	@Query("SELECT l from Employee e Join e.leaves l WHERE e.managerId=:managerId AND ((l.startDate BETWEEN :startDate AND :endDate) OR (l.endDate BETWEEN :endDate AND :startDate)) ORDER BY l.startDate")
-	public List<Leave> findAllSubordinateLeaveHistoryInDuration(@Param("managerId") Integer managerId,
+	@Query("SELECT l from Employee e Join e.leaves l WHERE e.managerId=:managerId AND ((l.startDate BETWEEN :startDate AND :endDate) OR (l.endDate BETWEEN :endDate AND :startDate)) OR (:startDate BETWEEN l.startDate AND l.endDate) ORDER BY l.startDate")
+	public List<Leave> findOverlappingSubordinateLeaves(@Param("managerId") Integer managerId, 
 			@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
 	// Find one Subordinate's Leave History (Applied/Updated/Approved)
