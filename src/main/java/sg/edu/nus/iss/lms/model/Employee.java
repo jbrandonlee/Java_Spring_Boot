@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,9 +31,6 @@ public class Employee {
 	
 	private Integer managerId;
 	
-	@ManyToOne
-	private Department department;
-	
 	@OneToMany(mappedBy="employee")
 	private List<Leave> leaves;
 	
@@ -44,12 +40,11 @@ public class Employee {
 	@OneToMany(mappedBy="employee")
 	private List<OvertimeClaim> overtimes;
 	
-	public Employee(String name, String jobDesignation, Department department, Integer managerId) {
+	public Employee(String name, String jobDesignation, Integer managerId) {
 		this.name = name;
 		this.jobDesignation = jobDesignation;
 		this.joinDate = LocalDate.of(2020, 1, 1);
 		this.managerId = managerId;
-		this.department = department;
 		this.leaves = new ArrayList<Leave>();
 		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();
 		this.overtimes = new ArrayList<OvertimeClaim>();

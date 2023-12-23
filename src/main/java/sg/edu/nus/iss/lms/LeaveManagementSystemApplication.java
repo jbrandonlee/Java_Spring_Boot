@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import sg.edu.nus.iss.lms.model.Account;
-import sg.edu.nus.iss.lms.model.Department;
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Holiday;
 import sg.edu.nus.iss.lms.model.Leave;
@@ -30,7 +29,6 @@ import sg.edu.nus.iss.lms.model.OvertimeClaim;
 import sg.edu.nus.iss.lms.model.OvertimeClaim.ClaimStatus;
 import sg.edu.nus.iss.lms.model.Role;
 import sg.edu.nus.iss.lms.repository.AccountRepository;
-import sg.edu.nus.iss.lms.repository.DepartmentRepository;
 import sg.edu.nus.iss.lms.repository.EmployeeRepository;
 import sg.edu.nus.iss.lms.repository.HolidayRepository;
 import sg.edu.nus.iss.lms.repository.LeaveEntitlementRepository;
@@ -65,13 +63,8 @@ public class LeaveManagementSystemApplication {
     						   LeaveRepository leaveRepo,
     						   LeaveTypeRepository leaveTypeRepo,
     						   LeaveEntitlementRepository leaveEntitlementRepo,
-    						   OvertimeRepository overtimeRepo,
-    						   DepartmentRepository departmentRepo) {
+    						   OvertimeRepository overtimeRepo) {
 		return args -> {
-		    
-			// Initialize Departments
-			Department finance = departmentRepo.save(new Department("Finance"));
-			Department sales = departmentRepo.save(new Department("Sales"));
 
 			// Initialize LeaveTypes
 			LeaveType annual = leaveTypeRepo.save(new LeaveType("Annual"));
@@ -88,12 +81,12 @@ public class LeaveManagementSystemApplication {
 			List<Role> staffRoles = new ArrayList<Role>() {{ add(staff); }};
 			
 			// Create Employee Account with Entitlement & Leaves
-			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", finance, null));
-			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", finance, 1));
-			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", finance, 2));
-			Employee brandonStaff2 = empRepo.save(new Employee("BrandonStaff2","AdminStaff", finance, 2));
-			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", finance, 2));
-			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", sales, null));
+			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", null));
+			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", 1));
+			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", 2));
+			Employee brandonStaff2 = empRepo.save(new Employee("BrandonStaff2","AdminStaff", 2));
+			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", 2));
+			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", null));
 			
 			accRepo.save(new Account("brandonStaff", "password1", brandonStaff, staffRoles));
 			accRepo.save(new Account("brandonManager", "password1", brandonManager, managerRoles));
