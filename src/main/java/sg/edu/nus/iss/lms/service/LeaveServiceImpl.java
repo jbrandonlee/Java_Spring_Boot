@@ -83,9 +83,9 @@ public class LeaveServiceImpl implements LeaveService{
 	}
 
 	@Override
-	public List<LeaveApplication> getOverlappingLeaves(LocalDate startDate, LocalDate endDate) {
+	public List<LeaveApplication> getOverlappingLeaves(int managedBy, LocalDate startDate, LocalDate endDate) {
 		
-		return leaveRepo.findOverlappingLeaves(startDate, endDate);
+		return leaveRepo.findOverlappingLeaves(managedBy, startDate, endDate);
 	}
 
 }

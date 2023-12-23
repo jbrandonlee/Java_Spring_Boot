@@ -96,11 +96,13 @@ public class ManagerLeaveController {
 	}
 	
 	@RequestMapping("/pending/details/{id}")
-    public String editProductForm(@PathVariable("id") int id, Model model) {
+    public String editProductForm(HttpSession session, @PathVariable("id") int id, Model model) {
+		
+		Staff staff = (Staff) session.getAttribute("staff");
     	
 		LeaveApplication leaveApplication = lService.findByLeaveId(id);
 		
-		List<LeaveApplication> overlappingLeaves = lService.getOverlappingLeaves(leaveApplication.getLeaveStartDate(), leaveApplication.getLeaveEndDate());
+		List<LeaveApplication> overlappingLeaves = lService.getOverlappingLeaves(staff.getEmployeeId(), leaveApplication.getLeaveStartDate(), leaveApplication.getLeaveEndDate());
 
         model.addAttribute("leaveApplication", leaveApplication); 
         

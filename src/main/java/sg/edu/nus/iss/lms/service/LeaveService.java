@@ -30,6 +30,6 @@ public interface LeaveService {
 	
 	LeaveApplication findByLeaveId(int id);
 	
-	List<LeaveApplication> getOverlappingLeaves(LocalDate startDate, LocalDate endDate);
+	List<LeaveApplication> getOverlappingLeaves(int managedBy, LocalDate startDate, LocalDate endDate);
 
 }
