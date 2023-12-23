@@ -4,11 +4,14 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.*;
 import sg.edu.nus.iss.lms.service.EmployeeService;
 
@@ -31,12 +34,14 @@ public class AdminController {
 	@GetMapping(value = "/staff/{id}/create")
 	public String staffCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create staff from empty form
+		model.addAttribute("employee", new Employee());
 		return "admin-staff-create";
 	}
 	
 	@PostMapping(value = "/staff/{id}/create")
-	public String staffCreate(Model model, HttpSession sessionObj) {
+	public String staffCreate(@Valid @ModelAttribute("employee") Employee employee,  Model model, HttpSession sessionObj) {
 
+		
 		return "redirect:/admin/staff";
 	}
 	
