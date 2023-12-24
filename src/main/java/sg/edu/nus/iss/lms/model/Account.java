@@ -2,7 +2,6 @@ package sg.edu.nus.iss.lms.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
-	
 	@Id
 	@Size(min=3, max=20, message="Username must be 3-20 characters")
 	private String username;
@@ -29,6 +27,6 @@ public class Account {
 	@OneToOne
 	private Employee employee;
 	
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER)
 	private List<Role> roles;
 }

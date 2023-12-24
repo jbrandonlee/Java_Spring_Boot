@@ -93,7 +93,7 @@ public class LeaveManagementSystemApplication {
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, compensation, 0));
-			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 25), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Local", "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
+			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 26), DaySection.AM, LocalDate.of(2023, 12, 26), DaySection.PM, "Local", "Holiday", "person1", "contact1", LeaveStatus.APPROVED));
 			leaveRepo.save(new Leave(brandonStaff, medical, LocalDate.of(2023, 12, 27), DaySection.AM, LocalDate.of(2023, 12, 27), DaySection.PM, "Overseas", "Sick", "person2", "contact2", LeaveStatus.APPLIED));
 			leaveRepo.save(new Leave(brandonStaff, compensation, LocalDate.of(2023, 12, 28), DaySection.AM, LocalDate.of(2023, 12, 28), DaySection.AM, "Local", "Break", "person3", "contact3", LeaveStatus.REJECTED));
 			leaveRepo.save(new Leave(brandonStaff, annual, LocalDate.of(2023, 12, 29), DaySection.AM, LocalDate.of(2023, 12, 29), DaySection.PM, "Overseas", "Holiday", "person4", "contact4", LeaveStatus.APPROVED));

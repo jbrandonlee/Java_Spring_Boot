@@ -29,6 +29,8 @@
 						<td th:text="${account.employee.name}"></td>
 						<td>
 							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/admin/account/edit/}+${account.username}">Edit</a></span>
+							<span><a class="btn btn-sm btn-outline-danger" th:href="@{~/admin/account/delete/}+${account.username}"
+									onclick="return confirm('Are you sure?')">Delete</a></span>
 						</td>
 					</tr>									
 				</table>

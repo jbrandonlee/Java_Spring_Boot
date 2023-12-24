@@ -28,6 +28,8 @@
 						<td th:text="${(holiday.isActive) ? 'Active' : 'Disabled'}"></td>
 						<td>
 							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/admin/holiday/edit/}+${holiday.id}">Edit</a></span>
+							<span><a class="btn btn-sm btn-outline-danger" th:href="@{~/admin/holiday/delete/}+${holiday.id}"
+									onclick="return confirm('Are you sure?')">Delete</a></span>
 						</td>
 					</tr>									
 				</table>

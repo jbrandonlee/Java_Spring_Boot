@@ -73,9 +73,8 @@ public class AdminController {
 			Model model, HttpSession sessionObj) {
 		
 		if (bindingResult.hasErrors()) {
-			List<Integer> managerIdList = employeeService.findAllManagerIDs();
 			model.addAttribute("employee", new Employee());
-			model.addAttribute("managerIdList", managerIdList);
+			model.addAttribute("managerIdList", employeeService.findAllManagerIDs());
 			return "admin-staff-create";
 		}
 		
@@ -86,14 +85,23 @@ public class AdminController {
 	@GetMapping(value = "/staff/edit/{id}")
 	public String staffEditForm(@PathVariable(name="id") Integer employeeId,
 			Model model, HttpSession sessionObj) {
-		// Admin can edit staff details
+		model.addAttribute("employee", employeeService.findEmployeeById(employeeId));
+		model.addAttribute("managerIdList", employeeService.findAllManagerIDs());
 		return "admin-staff-edit";
 	}
 	
 	@PostMapping(value = "/staff/edit/{id}")
 	public String staffEdit(@PathVariable(name="id") Integer employeeId,
+			@Valid @ModelAttribute("staff") Employee employee, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
-
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("employee", employeeService.findEmployeeById(employeeId));
+			model.addAttribute("managerIdList", employeeService.findAllManagerIDs());
+			return "admin-staff-edit";
+		}
+		
+		employeeService.updateEmployee(employee);
 		return "redirect:/admin/staff";
 	}
 	
@@ -123,11 +131,9 @@ public class AdminController {
 			Model model, HttpSession sessionObj) {
 		
 		if (bindingResult.hasErrors()) {
-			List<Role> roleList = roleService.findAllRoles();
-			List<Integer> employeeIdList = employeeService.findAllEmployeeIDNoAccount();
 			model.addAttribute("account", new Account());
-			model.addAttribute("roleList", roleList);
-			model.addAttribute("employeeIdList", employeeIdList);
+			model.addAttribute("roleList", roleService.findAllRoles());
+			model.addAttribute("employeeIdList", employeeService.findAllEmployeeIDNoAccount());
 			return "admin-account-create";
 		}
 		
@@ -147,21 +153,42 @@ public class AdminController {
 	@GetMapping(value = "/account/edit/{id}")
 	public String accountEditForm(@PathVariable(name="id") String accountId,
 			Model model, HttpSession sessionObj) {
-		// Admin can edit account details (username/pass/roles)
+		model.addAttribute("account", accountService.findAccountById(accountId));
+		model.addAttribute("roleList", roleService.findAllRoles());
+		model.addAttribute("employeeIdList", employeeService.findAllEmployeeIDNoAccount());
 		return "admin-account-edit";
 	}
 	
 	@PostMapping(value = "/account/edit/{id}")
 	public String accountEdit(@PathVariable(name="id") String accountId,
+			@Valid @ModelAttribute("account") Account account, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("account", accountService.findAccountById(accountId));
+			model.addAttribute("roleList", roleService.findAllRoles());
+			model.addAttribute("employeeIdList", employeeService.findAllEmployeeIDNoAccount());
+			return "admin-account-create";
+		}
+		
+		List<Role> roles = new ArrayList<Role>();
+	    account.getRoles().forEach(role -> {
+	      Role completeRole = roleService.findRoleById(role.getId());
+	      roles.add(completeRole);
+	    });
+
+	    account.setRoles(roles);
+		account.setEmployee(employeeService.findEmployeeById(account.getEmployee().getId()));
+		accountService.updateAccount(account);
 
 		return "redirect:/admin/account";
 	}
 	
-	@PostMapping(value = "/account/delete/{id}")
+	@GetMapping(value = "/account/delete/{id}")
 	public String accountDelete(@PathVariable(name="id") String accountId,
 			Model model, HttpSession sessionObj) {
-		// Admin can delete an account tied to a staff, staff is not affected
+		Account account = accountService.findAccountById(accountId);
+		accountService.removeAccount(account);
 		return "redirect:/admin/account";
 	}
 
@@ -190,9 +217,8 @@ public class AdminController {
 			Model model, HttpSession sessionObj) {
 		
 		if (bindingResult.hasErrors()) {
-			List<Integer> employeeIdList = employeeService.findAllEmployeeIDs();
 			model.addAttribute("leaveEntitlement", new LeaveEntitlement());
-			model.addAttribute("employeeIdList", employeeIdList);
+			model.addAttribute("employeeIdList", employeeService.findAllEmployeeIDs());
 			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 			return "admin-leave-entitlement-create";
 		}
@@ -207,13 +233,27 @@ public class AdminController {
 	@GetMapping(value = "/leave_entitlement/edit/{id}")
 	public String leaveEntitlementEditForm(@PathVariable(name="id") Integer leaveEntId,
 			Model model, HttpSession sessionObj) {
-		// Admin can edit staff account details
+		model.addAttribute("leaveEntitlement", leaveEntService.findLeaveEntById(leaveEntId));
+		model.addAttribute("employeeIdList", employeeService.findAllEmployeeIDs());
+		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		return "admin-leave-entitlement-edit";
 	}
 	
 	@PostMapping(value = "/leave_entitlement/edit/{id}")
 	public String leaveEntitlementEdit(@PathVariable(name="id") Integer leaveEntId,
+			@Valid @ModelAttribute("leaveEntitlement") LeaveEntitlement leaveEnt, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("leaveEntitlement", leaveEntService.findLeaveEntById(leaveEntId));
+			model.addAttribute("employeeIdList", employeeService.findAllEmployeeIDs());
+			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+			return "admin-leave-entitlement-create";
+		}
+		
+		leaveEnt.setEmployee(employeeService.findEmployeeById(leaveEnt.getEmployee().getId()));
+		leaveEnt.setLeaveType(leaveTypeService.findByType(leaveEnt.getLeaveType().getType()));
+		leaveEntService.updateLeaveEntitlement(leaveEnt);
 
 		return "redirect:/admin/leave_entitlement";
 	}
@@ -240,6 +280,7 @@ public class AdminController {
 			Model model, HttpSession sessionObj) {
 
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("leaveType", new LeaveType());
 			return "admin-leave-type-create";
 		}
 		
@@ -250,14 +291,21 @@ public class AdminController {
 	@GetMapping(value = "/leave_type/edit/{id}")
 	public String leaveTypeEditForm(@PathVariable(name="id") Integer leaveTypeId,
 			Model model, HttpSession sessionObj) {
-		// Admin can edit staff account details
+		model.addAttribute("leaveType", leaveTypeService.findLeaveTypeById(leaveTypeId));
 		return "admin-leave-type-edit";
 	}
 	
 	@PostMapping(value = "/leave_type/edit/{id}")
 	public String leaveTypeEdit(@PathVariable(name="id") Integer leaveTypeId,
+			@Valid @ModelAttribute("leaveType") LeaveType leaveType, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
 
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("leaveType", leaveTypeService.findLeaveTypeById(leaveTypeId));
+			return "admin-leave-type-create";
+		}
+		
+		leaveTypeService.updateLeaveType(leaveType);
 		return "redirect:/admin/leave_type";
 	}
 	
@@ -283,6 +331,7 @@ public class AdminController {
 			Model model, HttpSession sessionObj) {
 
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("holiday", new Holiday());
 			return "admin-holiday-create";
 		}
 		
@@ -293,21 +342,29 @@ public class AdminController {
 	@GetMapping(value = "/holiday/edit/{id}")
 	public String holidayEditForm(@PathVariable(name="id") Integer holidayId,
 			Model model, HttpSession sessionObj) {
-		// Admin can edit holiday date / observed date
+		model.addAttribute("holiday", holidayService.findHolidayById(holidayId));
 		return "admin-holiday-edit";
 	}
 	
 	@PostMapping(value = "/holiday/edit/{id}")
 	public String holidayEdit(@PathVariable(name="id") Integer holidayId,
+			@Valid @ModelAttribute("holiday") Holiday holiday, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
 
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("holiday", holidayService.findHolidayById(holidayId));
+			return "admin-holiday-create";
+		}
+		
+		holidayService.updateHoliday(holiday);
 		return "redirect:/admin/holiday";
 	}
 	
-	@PostMapping(value = "/holiday/delete/{id}")
+	@GetMapping(value = "/holiday/delete/{id}")
 	public String holidayDelete(@PathVariable(name="id") Integer holidayId,
 			Model model, HttpSession sessionObj) {
-
+		Holiday holiday = holidayService.findHolidayById(holidayId);
+		holidayService.removeHoliday(holiday);
 		return "redirect:/admin/holiday";
 	}
 }

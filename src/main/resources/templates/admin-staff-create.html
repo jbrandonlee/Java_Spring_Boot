@@ -25,6 +25,7 @@
 			<div class="form-group col-12">
     			<label for="managerId" class="form-label">Manager ID</label>
     			<select class="form-select" name="managerId">
+					<option th:value="${null}" th:text="None"></option>
 					<option th:each="managerId : ${managerIdList}" th:value="${managerId}" th:text="${managerId}"></option>
 				</select>
   			</div>

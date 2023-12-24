@@ -27,6 +27,12 @@ public class HolidayServiceImpl implements HolidayService {
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
+	public void removeHoliday(Holiday holiday) {
+		holidayRepo.delete(holiday);
+	}
+	
+	@Override
 	public List<Holiday> findAllHolidays() {
 		return holidayRepo.findAll();
 	}

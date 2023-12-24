@@ -27,6 +27,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
+	public void removeAccount(Account account) {
+		accRepo.delete(account);
+	}
+	
+	@Override
 	public Account authenticate(String username, String password) {
 		return accRepo.findAccountByUsernamePassword(username, password);
 	}
