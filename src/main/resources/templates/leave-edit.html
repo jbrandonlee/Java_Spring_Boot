@@ -13,7 +13,7 @@
 		<form class="row g-4 pt-4" action="#" th:action="@{'/staff/leave/edit/'}+${leave.id}" th:object="${leave}" method="post">
 			<div class="form-group col-12">
 				<label for="leaveType" class="form-label">Leave Type</label>
-				<select class="form-select" name="leaveTypeString">
+				<select class="form-select" name="leaveType.type">
 					<option th:each="type : ${leaveTypes}" th:value="${type}" th:text="${type}" th:selected="${#strings.equals(leave.leaveType.type, type)}"></option>
 				</select>
 			</div>

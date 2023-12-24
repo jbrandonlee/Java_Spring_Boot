@@ -90,7 +90,7 @@ public class StaffLeaveController {
 		
 		// Validate Sufficient Leave Balance
 		LeaveEntitlement currLeaveEntitlement =
-				leaveEntitlementService.findLeaveEntitlementByEmployeeAndType((Employee) sessionObj.getAttribute("employee"), leaveForm.getLeaveTypeString());
+				leaveEntitlementService.findLeaveEntitlementByEmployeeAndType((Employee) sessionObj.getAttribute("employee"), leaveForm.getLeaveType().getType());
 		double leaveBalance = currLeaveEntitlement.getLeaveBalance();
 		double leaveDuration = leaveService.calculateDeductibleDaysInLeave(leaveForm);
 		
@@ -103,7 +103,7 @@ public class StaffLeaveController {
 		}
 		
 		// Create Leave 
-		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
+		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveType().getType());
 		leaveForm.setLeaveType(currLeaveType);
 		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
 		leaveForm.setStatus(LeaveStatus.APPLIED);
@@ -206,7 +206,7 @@ public class StaffLeaveController {
 		
 		// Validate Sufficient Leave Balance
 		LeaveEntitlement currLeaveEntitlement =
-				leaveEntitlementService.findLeaveEntitlementByEmployeeAndType((Employee) sessionObj.getAttribute("employee"), leaveForm.getLeaveTypeString());
+				leaveEntitlementService.findLeaveEntitlementByEmployeeAndType((Employee) sessionObj.getAttribute("employee"), leaveForm.getLeaveType().getType());
 		double leaveBalance = currLeaveEntitlement.getLeaveBalance();
 		double leaveDuration = leaveService.calculateDeductibleDaysInLeave(leaveForm);
 		
@@ -221,7 +221,7 @@ public class StaffLeaveController {
 		}
 		
 		leaveForm.setId(leaveId);
-		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveTypeString());
+		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveType().getType());
 		leaveForm.setLeaveType(currLeaveType);
 		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
 		leaveForm.setStatus(LeaveStatus.UPDATED);

@@ -36,7 +36,7 @@ public class LeaveServiceImpl implements LeaveService {
 	// -- Employee --	
 	@Override
 	public Leave createLeave(Leave leave) {
-		leaveEntService.updateLeaveEntitlementBalanceByDays(leave.getEmployee(), leave.getLeaveTypeString(), -calculateDeductibleDaysInLeave(leave));
+		leaveEntService.updateLeaveEntitlementBalanceByDays(leave.getEmployee(), leave.getLeaveType().getType(), -calculateDeductibleDaysInLeave(leave));
 		return leaveRepo.saveAndFlush(leave);
 	}
 	

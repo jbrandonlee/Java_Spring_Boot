@@ -33,7 +33,7 @@ public class LeaveValidator implements Validator {
 		Leave leave = (Leave) obj;
 		LocalDate leaveStartDate = leave.getStartDate();
 		LocalDate leaveEndDate = leave.getEndDate();		
-		String leaveTypeString = leave.getLeaveTypeString();
+		String leaveTypeString = leave.getLeaveType().getType();
 		double leaveDeductibleDays = leaveService.calculateDeductibleDaysInLeave(leave);
 		
 		// Require Contact if Destination is Overseas

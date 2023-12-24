@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,10 +34,7 @@ public class Leave {
 
 	@ManyToOne
 	private LeaveType leaveType;
-	
-	@Transient
-	private String leaveTypeString;
-	
+
 	@NotNull(message = "Start Date must not be empty.")
 	@Future(message = "Start Date must be after today.")
 	private LocalDate startDate;
