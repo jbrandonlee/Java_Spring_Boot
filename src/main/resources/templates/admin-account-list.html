@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout.html :: html_head}" />
+
+<body>
+	<div th:include="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Admin'"/>
+	<main>
+		<h1 class="display-5">List of Accounts</h1>
+		<div class="pt-4">
+			<div th:if="${#lists.isEmpty(accountList)}">
+				<p class="text-center">There are no created accounts.</p>
+			</div>
+			
+			<div th:if="${not #lists.isEmpty(accountList)}">
+				<table class="table table-sm table-bordered border-light" width="100%">
+					<thead class="table-light border-light-subtle">
+						<tr>
+							<td>Username</td>
+							<td>Password</td>
+							<td>Staff Id</td>
+							<td>Staff Name</td>
+							<td>Action</td>
+						</tr>
+					</thead>
+					<tr th:each="account : ${accountList}">
+						<td th:text="${account.username}"></td>
+						<td th:text="${'********'}"></td>
+						<td th:text="${account.employee.id}"></td>
+						<td th:text="${account.employee.name}"></td>
+						<td>
+							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/admin/account/edit/}+${account.username}">Edit</a></span>
+						</td>
+					</tr>									
+				</table>
+			</div>
+			<div class="d-flex flex-row-reverse">
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/admin/account/create}">Create New Account</a></span>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

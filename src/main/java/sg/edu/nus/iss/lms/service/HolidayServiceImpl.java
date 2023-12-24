@@ -17,6 +17,16 @@ public class HolidayServiceImpl implements HolidayService {
 	HolidayRepository holidayRepo;
 	
 	@Override
+	public List<Holiday> findAllHolidays() {
+		return holidayRepo.findAll();
+	}
+	
+	@Override
+	public Holiday findHolidayById(Integer id) {
+		return holidayRepo.findById(id).orElse(null);
+	}
+	
+	@Override
 	public List<Holiday> findAllActiveHolidays() {
 		return holidayRepo.findAllActiveHolidays();
 	}
@@ -25,4 +35,5 @@ public class HolidayServiceImpl implements HolidayService {
 	public List<LocalDate> findAllActiveHolidayDates() {
 		return holidayRepo.findAllActiveHolidayDates();
 	}
+
 }

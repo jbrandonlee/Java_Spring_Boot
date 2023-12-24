@@ -3,7 +3,7 @@
 <head th:replace="~{fragments/layout.html :: html_head}" />
 
 <body>
-	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Manager'"/>
+	<div th:include="~{fragments/layout.html :: offcanvas_nav}" th:with="parentPage='Manager'"/>
 	<main>
 		<h1 class="display-5">Subordinate List</h1>
 		<div class="pt-4">
@@ -18,7 +18,6 @@
 						<tr>
 							<td>Name</td>
 							<td>Job Title</td>
-							<td>Department</td>
 							<td>Join Date</td>
 							<td>View</td>
 						</tr>
@@ -26,7 +25,6 @@
 					<tr th:each="staff : ${subordinateList}">
 						<td th:text="${staff.name}"></td>
 						<td th:text="${staff.jobDesignation}"></td>
-						<td th:text="${staff.department.name}"></td>
 						<td th:text="${staff.joinDate}"></td>
 						<td>
 							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${staff.id}+${'/leave'}">Leaves</a></span>

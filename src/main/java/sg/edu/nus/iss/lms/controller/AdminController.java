@@ -1,45 +1,82 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import sg.edu.nus.iss.lms.model.Account;
+import sg.edu.nus.iss.lms.model.Employee;
+import sg.edu.nus.iss.lms.model.Holiday;
+import sg.edu.nus.iss.lms.model.LeaveEntitlement;
+import sg.edu.nus.iss.lms.model.LeaveType;
+import sg.edu.nus.iss.lms.service.AccountService;
+import sg.edu.nus.iss.lms.service.EmployeeService;
+import sg.edu.nus.iss.lms.service.HolidayService;
+import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
+import sg.edu.nus.iss.lms.service.LeaveTypeService;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
+	
+	@Autowired
+	EmployeeService employeeService;
+	
+	@Autowired
+	AccountService accountService;
+	
+	@Autowired
+	LeaveEntitlementService leaveEntService;
+	
+	@Autowired
+	LeaveTypeService leaveTypeService;
+	
+	@Autowired
+	HolidayService holidayService;
+	
 	// -----------------------
 	// -- Manage Staff List --
 	// -----------------------
-	@GetMapping(value = "/staff")
+	@GetMapping(value = {"", "/", "/staff"})
 	public String staffList(Model model, HttpSession sessionObj) {
-		// Admin can see list of staff, edit staff, create new staff
+		List<Employee> staffList = employeeService.findAllEmployees();
+		model.addAttribute("staffList", staffList);
 		return "admin-staff-list";
 	}
 	
-	@GetMapping(value = "/staff/{id}/create")
+	@GetMapping(value = "/staff/create")
 	public String staffCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create staff from empty form
 		return "admin-staff-create";
 	}
 	
-	@PostMapping(value = "/staff/{id}/create")
-	public String staffCreate(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/staff/create")
+	public String staffCreate(@Valid @ModelAttribute("staff") Employee employee, BindingResult bindingResult,
+			Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/staff";
 	}
 	
-	@GetMapping(value = "/staff/{id}/edit")
-	public String staffEditForm(Model model, HttpSession sessionObj) {
+	@GetMapping(value = "/staff/edit/{id}")
+	public String staffEditForm(@PathVariable(name="id") Integer employeeId,
+			Model model, HttpSession sessionObj) {
 		// Admin can edit staff details
 		return "admin-staff-edit";
 	}
 	
-	@PostMapping(value = "/staff/{id}/edit")
-	public String staffEdit(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/staff/edit/{id}")
+	public String staffEdit(@PathVariable(name="id") Integer employeeId,
+			Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/staff";
 	}
@@ -48,38 +85,43 @@ public class AdminController {
 	// -------------------------
 	// -- Manage Account List --
 	// -------------------------
-	@GetMapping(value = {"", "/", "/account"})
+	@GetMapping(value = "/account")
 	public String accountList(Model model, HttpSession sessionObj) {
-		// Admin can see list of accounts, edit accounts, create new account
+		List<Account> accountList = accountService.findAllAccounts();
+		model.addAttribute("accountList", accountList);
 		return "admin-account-list";
 	}
 	
-	@GetMapping(value = "/account/{id}/create")
+	@GetMapping(value = "/account/create")
 	public String accountCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create account from empty form, assign staff to it, set roles
 		return "admin-account-create";
 	}
 	
-	@PostMapping(value = "/account/{id}/create")
-	public String accountCreate(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/account/create")
+	public String accountCreate(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult,
+			Model model, HttpSession sessionObj) {
 		
 		return "redirect:/admin/account";
 	}
 	
-	@GetMapping(value = "/account/{id}/edit")
-	public String accountEditForm(Model model, HttpSession sessionObj) {
+	@GetMapping(value = "/account/edit/{id}")
+	public String accountEditForm(@PathVariable(name="id") String accountId,
+			Model model, HttpSession sessionObj) {
 		// Admin can edit account details (username/pass/roles)
 		return "admin-account-edit";
 	}
 	
-	@PostMapping(value = "/account/{id}/edit")
-	public String accountEdit(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/account/edit/{id}")
+	public String accountEdit(@PathVariable(name="id") String accountId,
+			Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/account";
 	}
 	
-	@PostMapping(value = "/account/{id}/delete")
-	public String accountDisable(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/account/delete/{id}")
+	public String accountDelete(@PathVariable(name="id") String accountId,
+			Model model, HttpSession sessionObj) {
 		// Admin can delete an account tied to a staff, staff is not affected
 		return "redirect:/admin/account";
 	}
@@ -88,71 +130,77 @@ public class AdminController {
 	// -----------------------------------
 	// -- Manage Staff LeaveEntitlement --
 	// -----------------------------------
-	@GetMapping(value = "/leaveentitlement")
+	@GetMapping(value = "/leave_entitlement")
 	public String leaveEntitlementList(Model model, HttpSession sessionObj) {
-		// Admin can see list of staff leave entitlements, edit, create
-		// Group by Staff
-
-		return "admin-leaveentitlement-list";
+		List<LeaveEntitlement> leaveEntList = leaveEntService.findAllLeaveEnts();
+		model.addAttribute("leaveEntList", leaveEntList);
+		return "admin-leave-entitlement-list";
 	}
 	
-	@GetMapping(value = "/leaveentitlement/{id}/create")
+	@GetMapping(value = "/leave_entitlement/create")
 	public String leaveEntitlementCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create leave entitlement and assign to staff
 		// If staff already has existing entitlement of type, reject
-		return "admin-leaveentitlement-create";
+		return "admin-leave-entitlement-create";
 	}
 	
-	@PostMapping(value = "/leaveentitlement/{id}/create")
-	public String leaveEntitlementCreate(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/leave_entitlement/create")
+	public String leaveEntitlementCreate(@Valid @ModelAttribute("leaveEntitlement") LeaveEntitlement leaveEnt, BindingResult bindingResult,
+			Model model, HttpSession sessionObj) {
 
-		return "redirect:/admin/leaveentitlement";
+		return "redirect:/admin/leave_entitlement";
 	}
 	
-	@GetMapping(value = "/leaveentitlement/{id}/edit")
-	public String leaveEntitlementEditForm(Model model, HttpSession sessionObj) {
+	@GetMapping(value = "/leave_entitlement/edit/{id}")
+	public String leaveEntitlementEditForm(@PathVariable(name="id") Integer leaveEntId,
+			Model model, HttpSession sessionObj) {
 		// Admin can edit staff account details
-		return "admin-leaveentitlement-edit";
+		return "admin-leave-entitlement-edit";
 	}
 	
-	@PostMapping(value = "/leaveentitlement/{id}/edit")
-	public String leaveEntitlementEdit(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/leave_entitlement/edit/{id}")
+	public String leaveEntitlementEdit(@PathVariable(name="id") Integer leaveEntId,
+			Model model, HttpSession sessionObj) {
 
-		return "redirect:/admin/leaveentitlement";
+		return "redirect:/admin/leave_entitlement";
 	}
 
 	
 	// -----------------------
 	// -- Manage LeaveTypes --
 	// -----------------------
-	@GetMapping(value = "/leavetype")
+	@GetMapping(value = "/leave_type")
 	public String leaveTypeList(Model model, HttpSession sessionObj) {
-		// Admin can see list of leavetypes
-		return "admin-leavetype-list";
+		List<LeaveType> leaveTypeList = leaveTypeService.findAllLeaveTypes();
+		model.addAttribute("leaveTypeList", leaveTypeList);
+		return "admin-leave-type-list";
 	}
 	
-	@GetMapping(value = "/leavetype/{id}/create")
+	@GetMapping(value = "/leave_type/create")
 	public String leaveTypeCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create leave type
-		return "admin-leavetype-create";
+		return "admin-leave-type-create";
 	}
 	
-	@PostMapping(value = "/leavetype/{id}/create")
-	public String leaveTypeCreate(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/leave_type/create")
+	public String leaveTypeCreate(@Valid @ModelAttribute("leaveType") LeaveType leaveType, BindingResult bindingResult,
+			Model model, HttpSession sessionObj) {
 
-		return "redirect:/admin/leavetype";
+		return "redirect:/admin/leave_type";
 	}
 	
-	@GetMapping(value = "/leavetype/{id}/edit")
-	public String leaveTypeEditForm(Model model, HttpSession sessionObj) {
+	@GetMapping(value = "/leave_type/edit/{id}")
+	public String leaveTypeEditForm(@PathVariable(name="id") Integer leaveTypeId,
+			Model model, HttpSession sessionObj) {
 		// Admin can edit staff account details
-		return "admin-leavetype-edit";
+		return "admin-leave-type-edit";
 	}
 	
-	@PostMapping(value = "/leavetype/{id}/edit")
-	public String leaveTypeEdit(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/leave_type/edit/{id}")
+	public String leaveTypeEdit(@PathVariable(name="id") Integer leaveTypeId,
+			Model model, HttpSession sessionObj) {
 
-		return "redirect:/admin/leavetype";
+		return "redirect:/admin/leave_type";
 	}
 	
 	
@@ -161,36 +209,41 @@ public class AdminController {
 	// ---------------------
 	@GetMapping(value = "/holiday")
 	public String holidayList(Model model, HttpSession sessionObj) {
-		// Admin can see list of holidays
+		List<Holiday> holidayList = holidayService.findAllHolidays();
+		model.addAttribute("holidayList", holidayList);
 		return "admin-holiday-list";
 	}
 	
-	@GetMapping(value = "/holiday/{id}/create")
+	@GetMapping(value = "/holiday/create")
 	public String holidayCreateForm(Model model, HttpSession sessionObj) {
 		// Admin can create new holiday
 		return "admin-holiday-create";
 	}
 	
-	@PostMapping(value = "/holiday/{id}/create")
-	public String holidayCreate(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/holiday/create")
+	public String holidayCreate(@Valid @ModelAttribute("holiday") Holiday holiday, BindingResult bindingResult,
+			Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/holiday";
 	}
 	
-	@GetMapping(value = "/holiday/{id}/edit")
-	public String holidayEditForm(Model model, HttpSession sessionObj) {
+	@GetMapping(value = "/holiday/edit/{id}")
+	public String holidayEditForm(@PathVariable(name="id") Integer holidayId,
+			Model model, HttpSession sessionObj) {
 		// Admin can edit holiday date / observed date
 		return "admin-holiday-edit";
 	}
 	
-	@PostMapping(value = "/holiday/{id}/edit")
-	public String holidayEdit(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/holiday/edit/{id}")
+	public String holidayEdit(@PathVariable(name="id") Integer holidayId,
+			Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/holiday";
 	}
 	
-	@PostMapping(value = "/holiday/{id}/delete")
-	public String holidayDelete(Model model, HttpSession sessionObj) {
+	@PostMapping(value = "/holiday/delete/{id}")
+	public String holidayDelete(@PathVariable(name="id") Integer holidayId,
+			Model model, HttpSession sessionObj) {
 
 		return "redirect:/admin/holiday";
 	}

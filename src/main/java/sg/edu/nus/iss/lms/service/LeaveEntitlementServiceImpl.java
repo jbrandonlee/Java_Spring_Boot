@@ -33,4 +33,14 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 		leaveEnt.setLeaveBalance(leaveEnt.getLeaveBalance() + days);
 		return leaveEntitlementRepo.saveAndFlush(leaveEnt);
 	}
+	
+	@Override
+	public List<LeaveEntitlement> findAllLeaveEnts() {
+		return leaveEntitlementRepo.findAll();
+	}
+	
+	@Override
+	public LeaveEntitlement findLeaveEntById(Integer id) {
+		return leaveEntitlementRepo.findById(id).orElse(null);
+	}
 }

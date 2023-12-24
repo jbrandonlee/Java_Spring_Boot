@@ -17,6 +17,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	EmployeeRepository employeeRepo;
 
 	@Override
+	public List<Employee> findAllEmployees() {
+		return employeeRepo.findAll();
+	}
+	
+	@Override
 	public Employee findEmployeeById(Integer id) {
 		return employeeRepo.findById(id).orElse(null);
 	}

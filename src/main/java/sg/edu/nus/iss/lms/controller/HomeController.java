@@ -43,6 +43,7 @@ public class HomeController {
 		}
 		
 		Employee emp = empService.findEmployeeByAccount(acc);
+		sessionObj.setAttribute("account", acc);
 		sessionObj.setAttribute("employee", emp);
 		
 		return "redirect:/staff/overview";

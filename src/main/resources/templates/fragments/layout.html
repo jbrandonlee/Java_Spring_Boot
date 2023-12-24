@@ -45,48 +45,53 @@
 					<div class="offcanvas-body">
 						<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 							<li class="nav-item">
-								<a class="nav-link active" aria-current="page" href="/">Home</a>
+								<a class="nav-link" aria-current="page" href="/">Home</a>
 							</li>
-							<div id="nav-admin">
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Administrator
-									</a>
-									<ul class="dropdown-menu dropdown-menu-dark">
-										<li><a class="dropdown-item" href="#">Overview</a></li>
-										<li><a class="dropdown-item" href="#">Manage Accounts</a></li>
-										<li><a class="dropdown-item" href="#">Manage Staff</a></li>
-										<li><a class="dropdown-item" href="#">Manage Calendar</a></li>
-										<li><a class="dropdown-item" href="#">Manage Leaves</a></li>
-									</ul>
-								</li>
-							</div>
-							<div id="nav-manager">
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Manager
-									</a>
-									<ul class="dropdown-menu dropdown-menu-dark">
-										<li><a class="dropdown-item" href="/manager/overview">Overview</a></li>
-										<li><a class="dropdown-item" href="/manager/staff">View Subordinate List</a></li>
-										<li><a class="dropdown-item" href="/manager/leave/pending">View Pending Leaves</a></li>
-										<li><a class="dropdown-item" href="/manager/overtime/pending">View Pending Overtime Claims</a></li>
-									</ul>
-								</li>
-							</div>
-							<div id="nav-personal">
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Personal
-									</a>
-									<ul class="dropdown-menu dropdown-menu-dark">
-										<li><a class="dropdown-item" href="/staff/overview">Overview</a></li>
-										<li><a class="dropdown-item" href="/staff/leave/apply">Apply Leave</a></li>
-										<li><a class="dropdown-item" href="/staff/overtime/apply">Apply Overtime Claim</a></li>
-										<li><a class="dropdown-item" href="/staff/leave/history">View Leave History</a></li>
-										<li><a class="dropdown-item" href="/staff/overtime/history">View Overtime History</a></li>
-									</ul>
-								</li>
+							<div th:each="role : ${#ctx.session.account.roles}">
+								<div id="nav-admin" th:if="${role.id == 'admin'}">
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+										   th:classappend="${(parentPage == 'Admin') ? 'active' : ''}">
+											Administrator
+										</a>
+										<ul class="dropdown-menu dropdown-menu-dark" th:classappend="${(parentPage == 'Admin') ? 'show' : ''}"}>
+											<li><a class="dropdown-item" href="/admin/account">Manage Accounts</a></li>
+											<li><a class="dropdown-item" href="/admin/staff">Manage Staff</a></li>
+											<li><a class="dropdown-item" href="/admin/leave_type">Manage Leave Types</a></li>
+											<li><a class="dropdown-item" href="/admin/leave_entitlement">Manage Leave Entitlements</a></li>
+											<li><a class="dropdown-item" href="/admin/holiday">Manage Holidays</a></li>
+										</ul>
+									</li>
+								</div>
+								<div id="nav-manager" th:if="${role.id == 'manager'}">
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+										   th:classappend="${(parentPage == 'Manager') ? 'active' : ''}">
+											Manager
+										</a>
+										<ul class="dropdown-menu dropdown-menu-dark" th:classappend="${(parentPage == 'Manager') ? 'show' : ''}">
+											<li><a class="dropdown-item" href="/manager/overview">Overview</a></li>
+											<li><a class="dropdown-item" href="/manager/staff">View Subordinate List</a></li>
+											<li><a class="dropdown-item" href="/manager/leave/pending">View Pending Leaves</a></li>
+											<li><a class="dropdown-item" href="/manager/overtime/pending">View Pending Overtime Claims</a></li>
+										</ul>
+									</li>
+								</div>
+								<div id="nav-personal" th:if="${role.id == 'staff'}">
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+										   th:classappend="${(parentPage == 'Staff') ? 'active' : ''}">
+											Personal
+										</a>
+										<ul class="dropdown-menu dropdown-menu-dark" th:classappend="${(parentPage == 'Staff') ? 'show' : ''}">
+											<li><a class="dropdown-item" href="/staff/overview">Overview</a></li>
+											<li><a class="dropdown-item" href="/staff/leave/apply">Apply Leave</a></li>
+											<li><a class="dropdown-item" href="/staff/overtime/apply">Apply Overtime Claim</a></li>
+											<li><a class="dropdown-item" href="/staff/leave/history">View Leave History</a></li>
+											<li><a class="dropdown-item" href="/staff/overtime/history">View Overtime History</a></li>
+										</ul>
+									</li>
+								</div>
 							</div>
 							<li class="nav-item">
 								<a class="nav-link" href="/logout">Logout</a>

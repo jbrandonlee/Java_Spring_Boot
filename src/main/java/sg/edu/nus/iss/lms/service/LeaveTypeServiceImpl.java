@@ -15,11 +15,23 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 	@Autowired
 	LeaveTypeRepository leaveTypeRepo;
 	
+	@Override
 	public List<String> getTypeNames() {
 		return leaveTypeRepo.findLeaveTypeNames();
 	}
 	
+	@Override
 	public LeaveType findByType(String type) {
 		return leaveTypeRepo.findByType(type);
+	}
+	
+	@Override
+	public List<LeaveType> findAllLeaveTypes() {
+		return leaveTypeRepo.findAll();
+	}
+	
+	@Override
+	public LeaveType findLeaveTypeById(Integer id) {
+		return leaveTypeRepo.findById(id).orElse(null);
 	}
 }

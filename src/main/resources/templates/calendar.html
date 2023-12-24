@@ -78,10 +78,9 @@
 <!-- https://fullcalendar.io/docs/initialize-globals -->
 <!-- Pass Public Holiday as Event Type 1 -->
 <!-- Pass Employee Leaves as Event Type 2 -->
-<!-- Filter by Department? -->
 
 <body>
-	<div th:replace="~{fragments/layout.html :: offcanvas_nav}" />
+	<div th:include="~{fragments/layout.html :: offcanvas_nav}" />
 	<main id="calendar-main">
 		<h1 class="display-5">Employee Leave Calendar</h1>
 		<div class="pt-5"></div>

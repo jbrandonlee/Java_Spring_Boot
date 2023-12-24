@@ -73,8 +73,8 @@ public class LeaveManagementSystemApplication {
 			
 			// Initialize Roles
 			Role admin = roleRepo.save(new Role("admin", "Admin", "System Administrator"));
-			Role staff = roleRepo.save(new Role("staff", "Staff", "Staff Member"));
 			Role manager = roleRepo.save(new Role("manager", "Manager", "Manager"));
+			Role staff = roleRepo.save(new Role("staff", "Staff", "Staff Member"));
 			
 			List<Role> allRoles = new ArrayList<Role>() {{ add(admin); add(manager); add(staff); }};
 			List<Role> managerRoles = new ArrayList<Role>() {{ add(manager); add(staff); }};
@@ -89,7 +89,7 @@ public class LeaveManagementSystemApplication {
 			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", null));
 			
 			accRepo.save(new Account("brandonStaff", "password1", brandonStaff, staffRoles));
-			accRepo.save(new Account("brandonManager", "password1", brandonManager, managerRoles));
+			accRepo.save(new Account("brandonManager", "password1", brandonManager, allRoles));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, annual, 18));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, medical, 60));
 			leaveEntitlementRepo.save(new LeaveEntitlement(brandonStaff, compensation, 0));
