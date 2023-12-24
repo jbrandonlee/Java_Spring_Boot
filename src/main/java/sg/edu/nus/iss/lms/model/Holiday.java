@@ -44,6 +44,14 @@ public class Holiday {
 	@JsonProperty("public")
 	private boolean isActive;
 	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	
+	public void setIsActive(boolean state) {
+		this.isActive = state;
+	}
+	
 	public Holiday(String name, LocalDate date, LocalDate observed, boolean isActive) {
 		this.name = name;
 		this.date = date;

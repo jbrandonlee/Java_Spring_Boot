@@ -197,6 +197,10 @@ public class AdminController {
 			return "admin-leave-entitlement-create";
 		}
 		
+		leaveEnt.setEmployee(employeeService.findEmployeeById(leaveEnt.getEmployee().getId()));
+		leaveEnt.setLeaveType(leaveTypeService.findByType(leaveEnt.getLeaveType().getType()));
+		leaveEntService.createLeaveEntitlement(leaveEnt);
+		
 		return "redirect:/admin/leave_entitlement";
 	}
 	
@@ -239,6 +243,7 @@ public class AdminController {
 			return "admin-leave-type-create";
 		}
 		
+		leaveTypeService.createLeaveType(leaveType);
 		return "redirect:/admin/leave_type";
 	}
 	
@@ -281,6 +286,7 @@ public class AdminController {
 			return "admin-holiday-create";
 		}
 		
+		holidayService.createHoliday(holiday);
 		return "redirect:/admin/holiday";
 	}
 	
