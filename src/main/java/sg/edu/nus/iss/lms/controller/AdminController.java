@@ -19,6 +19,7 @@ import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Holiday;
 import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
+import sg.edu.nus.iss.lms.model.Role;
 import sg.edu.nus.iss.lms.service.AccountService;
 import sg.edu.nus.iss.lms.service.EmployeeService;
 import sg.edu.nus.iss.lms.service.HolidayService;
@@ -56,7 +57,9 @@ public class AdminController {
 	
 	@GetMapping(value = "/staff/create")
 	public String staffCreateForm(Model model, HttpSession sessionObj) {
-		// Admin can create staff from empty form
+		List<Integer> managerIdList = null;
+		model.addAttribute("employee", new Employee());
+		model.addAttribute("managerIdList", managerIdList);
 		return "admin-staff-create";
 	}
 	
@@ -94,7 +97,11 @@ public class AdminController {
 	
 	@GetMapping(value = "/account/create")
 	public String accountCreateForm(Model model, HttpSession sessionObj) {
-		// Admin can create account from empty form, assign staff to it, set roles
+		List<Role> roleList = null;
+		List<Integer> employeeIdList = null;  		// Staff List must be without Account
+		model.addAttribute("account", new Account());
+		model.addAttribute("roleList", roleList);
+		model.addAttribute("employeeIdList", employeeIdList);
 		return "admin-account-create";
 	}
 	
@@ -139,15 +146,18 @@ public class AdminController {
 	
 	@GetMapping(value = "/leave_entitlement/create")
 	public String leaveEntitlementCreateForm(Model model, HttpSession sessionObj) {
-		// Admin can create leave entitlement and assign to staff
-		// If staff already has existing entitlement of type, reject
+		// Validate: If staff already has existing entitlement of type, reject
+		List<Integer> employeeIdList = null;
+		model.addAttribute("leaveEntitlement", new LeaveEntitlement());
+		model.addAttribute("employeeIdList", employeeIdList);
+		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		return "admin-leave-entitlement-create";
 	}
 	
 	@PostMapping(value = "/leave_entitlement/create")
 	public String leaveEntitlementCreate(@Valid @ModelAttribute("leaveEntitlement") LeaveEntitlement leaveEnt, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
-
+		
 		return "redirect:/admin/leave_entitlement";
 	}
 	
@@ -178,7 +188,7 @@ public class AdminController {
 	
 	@GetMapping(value = "/leave_type/create")
 	public String leaveTypeCreateForm(Model model, HttpSession sessionObj) {
-		// Admin can create leave type
+		model.addAttribute("leaveType", new LeaveType());
 		return "admin-leave-type-create";
 	}
 	
@@ -216,7 +226,7 @@ public class AdminController {
 	
 	@GetMapping(value = "/holiday/create")
 	public String holidayCreateForm(Model model, HttpSession sessionObj) {
-		// Admin can create new holiday
+		model.addAttribute("holiday", new Holiday());
 		return "admin-holiday-create";
 	}
 	

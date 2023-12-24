@@ -81,12 +81,12 @@ public class LeaveManagementSystemApplication {
 			List<Role> staffRoles = new ArrayList<Role>() {{ add(staff); }};
 			
 			// Create Employee Account with Entitlement & Leaves
-			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", null));
-			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", 1));
-			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", 2));
-			Employee brandonStaff2 = empRepo.save(new Employee("BrandonStaff2","AdminStaff", 2));
-			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", 2));
-			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", null));
+			Employee brandonBoss = empRepo.save(new Employee("Lee Junhui Brandon","Boss", LocalDate.of(2023, 02, 01), null));
+			Employee brandonManager = empRepo.save(new Employee("BrandonManager","Manager", LocalDate.of(2023, 02, 01), 1));
+			Employee brandonStaff = empRepo.save(new Employee("BrandonStaff","AdminStaff", LocalDate.of(2023, 02, 01), 2));
+			Employee brandonStaff2 = empRepo.save(new Employee("BrandonStaff2","AdminStaff", LocalDate.of(2023, 02, 01), 2));
+			Employee brandonStaff3 = empRepo.save(new Employee("BrandonStaff3","AdminStaff", LocalDate.of(2023, 02, 01), 2));
+			Employee alexStaff = empRepo.save(new Employee("AlexStaff","ProfessionalStaff", LocalDate.of(2023, 02, 01), null));
 			
 			accRepo.save(new Account("brandonStaff", "password1", brandonStaff, staffRoles));
 			accRepo.save(new Account("brandonManager", "password1", brandonManager, allRoles));

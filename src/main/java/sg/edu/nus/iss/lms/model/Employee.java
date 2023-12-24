@@ -40,10 +40,10 @@ public class Employee {
 	@OneToMany(mappedBy="employee")
 	private List<OvertimeClaim> overtimes;
 	
-	public Employee(String name, String jobDesignation, Integer managerId) {
+	public Employee(String name, String jobDesignation, LocalDate joinDate, Integer managerId) {
 		this.name = name;
 		this.jobDesignation = jobDesignation;
-		this.joinDate = LocalDate.of(2020, 1, 1);
+		this.joinDate = joinDate;
 		this.managerId = managerId;
 		this.leaves = new ArrayList<Leave>();
 		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();

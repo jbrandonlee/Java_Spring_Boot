@@ -28,13 +28,13 @@
 						<td th:text="${leaveEnt.entitlement}"></td>
 						<td th:text="${leaveEnt.leaveBalance}"></td>
 						<td>
-							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/admin/leave-entitlement/edit/}+${leaveEnt.id}">Edit</a></span>
+							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/admin/leave_entitlement/edit/}+${leaveEnt.id}">Edit</a></span>
 						</td>
 					</tr>									
 				</table>
 			</div>
 			<div class="d-flex flex-row-reverse">
-				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/admin/leave-entitlement/create}">Create New Leave Entitlement</a></span>
+				<span class="ms-3"><a class="btn btn-sm btn-dark text-decoration-none" th:href="@{~/admin/leave_entitlement/create}">Create New Leave Entitlement</a></span>
 			</div>
 		</div>
 	</main>
