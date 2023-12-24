@@ -17,6 +17,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	EmployeeRepository employeeRepo;
 
 	@Override
+	public Employee createEmployee(Employee employee) {
+		return employeeRepo.saveAndFlush(employee);
+	}
+	
+	@Override
+	public Employee updateEmployee(Employee employee) {
+		return employeeRepo.saveAndFlush(employee);
+	}
+	
+	@Override
 	public List<Employee> findAllEmployees() {
 		return employeeRepo.findAll();
 	}

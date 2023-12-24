@@ -17,6 +17,16 @@ public class HolidayServiceImpl implements HolidayService {
 	HolidayRepository holidayRepo;
 	
 	@Override
+	public Holiday createHoliday(Holiday holiday) {
+		return holidayRepo.saveAndFlush(holiday);
+	}
+	
+	@Override
+	public Holiday updateHoliday(Holiday holiday) {
+		return holidayRepo.saveAndFlush(holiday);
+	}
+	
+	@Override
 	public List<Holiday> findAllHolidays() {
 		return holidayRepo.findAll();
 	}

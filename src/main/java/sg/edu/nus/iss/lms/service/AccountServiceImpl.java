@@ -15,6 +15,16 @@ import sg.edu.nus.iss.lms.repository.AccountRepository;
 public class AccountServiceImpl implements AccountService {
 	@Autowired
 	AccountRepository accRepo;
+
+	@Override
+	public Account createAccount(Account account) {
+		return accRepo.saveAndFlush(account);
+	}
+	
+	@Override
+	public Account updateAccount(Account account) {
+		return accRepo.saveAndFlush(account);
+	}
 	
 	@Override
 	public Account authenticate(String username, String password) {

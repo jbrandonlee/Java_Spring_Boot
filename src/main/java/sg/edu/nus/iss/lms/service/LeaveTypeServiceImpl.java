@@ -16,6 +16,16 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 	LeaveTypeRepository leaveTypeRepo;
 	
 	@Override
+	public LeaveType createLeaveType(LeaveType leaveType) {
+		return leaveTypeRepo.saveAndFlush(leaveType);
+	}
+	
+	@Override
+	public LeaveType updateLeaveType(LeaveType leaveType) {
+		return leaveTypeRepo.saveAndFlush(leaveType);
+	}
+	
+	@Override
 	public List<String> getTypeNames() {
 		return leaveTypeRepo.findLeaveTypeNames();
 	}

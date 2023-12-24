@@ -16,7 +16,13 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
 	RoleRepository roleRepo;
 	
+	@Override
 	public List<Role> findAllRoles() {
 		return roleRepo.findAll();
+	}
+	
+	@Override
+	public Role findRoleById(String id) {
+		return roleRepo.findById(id).orElse(null);
 	}
 }

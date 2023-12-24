@@ -17,6 +17,16 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 	LeaveEntitlementRepository leaveEntitlementRepo;
 	
 	@Override
+	public LeaveEntitlement createLeaveEntitlement(LeaveEntitlement leaveEntitlement) {
+		return leaveEntitlementRepo.saveAndFlush(leaveEntitlement);
+	}
+	
+	@Override
+	public LeaveEntitlement updateLeaveEntitlement(LeaveEntitlement leaveEntitlement) {
+		return leaveEntitlementRepo.saveAndFlush(leaveEntitlement);
+	}
+	
+	@Override
 	public List<LeaveEntitlement> findAllLeaveEntitlementByEmployee(Employee employee) {
 		return leaveEntitlementRepo.findAllLeaveEntitlementByEmployeeId(employee.getId());
 	};

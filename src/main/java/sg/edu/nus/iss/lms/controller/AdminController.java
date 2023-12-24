@@ -1,5 +1,6 @@
 package sg.edu.nus.iss.lms.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,15 @@ public class AdminController {
 	@PostMapping(value = "/staff/create")
 	public String staffCreate(@Valid @ModelAttribute("staff") Employee employee, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
-
+		
+		if (bindingResult.hasErrors()) {
+			List<Integer> managerIdList = employeeService.findAllManagerIDs();
+			model.addAttribute("employee", new Employee());
+			model.addAttribute("managerIdList", managerIdList);
+			return "admin-staff-create";
+		}
+		
+		employeeService.createEmployee(employee);
 		return "redirect:/admin/staff";
 	}
 	
@@ -102,7 +111,7 @@ public class AdminController {
 	@GetMapping(value = "/account/create")
 	public String accountCreateForm(Model model, HttpSession sessionObj) {
 		List<Role> roleList = roleService.findAllRoles();
-		List<Integer> employeeIdList = employeeService.findAllEmployeeIDNoAccount();  		// Staff List must be without Account
+		List<Integer> employeeIdList = employeeService.findAllEmployeeIDNoAccount();
 		model.addAttribute("account", new Account());
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("employeeIdList", employeeIdList);
@@ -112,6 +121,25 @@ public class AdminController {
 	@PostMapping(value = "/account/create")
 	public String accountCreate(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
+		
+		if (bindingResult.hasErrors()) {
+			List<Role> roleList = roleService.findAllRoles();
+			List<Integer> employeeIdList = employeeService.findAllEmployeeIDNoAccount();
+			model.addAttribute("account", new Account());
+			model.addAttribute("roleList", roleList);
+			model.addAttribute("employeeIdList", employeeIdList);
+			return "admin-account-create";
+		}
+		
+		List<Role> roles = new ArrayList<Role>();
+	    account.getRoles().forEach(role -> {
+	      Role completeRole = roleService.findRoleById(role.getId());
+	      roles.add(completeRole);
+	    });
+
+	    account.setRoles(roles);
+		account.setEmployee(employeeService.findEmployeeById(account.getEmployee().getId()));
+		accountService.createAccount(account);
 		
 		return "redirect:/admin/account";
 	}
@@ -150,7 +178,6 @@ public class AdminController {
 	
 	@GetMapping(value = "/leave_entitlement/create")
 	public String leaveEntitlementCreateForm(Model model, HttpSession sessionObj) {
-		// Validate: If staff already has existing entitlement of type, reject
 		List<Integer> employeeIdList = employeeService.findAllEmployeeIDs();
 		model.addAttribute("leaveEntitlement", new LeaveEntitlement());
 		model.addAttribute("employeeIdList", employeeIdList);
@@ -161,6 +188,14 @@ public class AdminController {
 	@PostMapping(value = "/leave_entitlement/create")
 	public String leaveEntitlementCreate(@Valid @ModelAttribute("leaveEntitlement") LeaveEntitlement leaveEnt, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
+		
+		if (bindingResult.hasErrors()) {
+			List<Integer> employeeIdList = employeeService.findAllEmployeeIDs();
+			model.addAttribute("leaveEntitlement", new LeaveEntitlement());
+			model.addAttribute("employeeIdList", employeeIdList);
+			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
+			return "admin-leave-entitlement-create";
+		}
 		
 		return "redirect:/admin/leave_entitlement";
 	}
@@ -200,6 +235,10 @@ public class AdminController {
 	public String leaveTypeCreate(@Valid @ModelAttribute("leaveType") LeaveType leaveType, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
 
+		if (bindingResult.hasErrors()) {
+			return "admin-leave-type-create";
+		}
+		
 		return "redirect:/admin/leave_type";
 	}
 	
@@ -238,6 +277,10 @@ public class AdminController {
 	public String holidayCreate(@Valid @ModelAttribute("holiday") Holiday holiday, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
 
+		if (bindingResult.hasErrors()) {
+			return "admin-holiday-create";
+		}
+		
 		return "redirect:/admin/holiday";
 	}
 	

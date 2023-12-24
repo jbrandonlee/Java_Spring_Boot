@@ -6,6 +6,8 @@ import sg.edu.nus.iss.lms.model.Account;
 import sg.edu.nus.iss.lms.model.Employee;
 
 public interface EmployeeService {
+	public Employee createEmployee(Employee employee);
+	public Employee updateEmployee(Employee employee);
 	public List<Employee> findAllEmployees();
 	public Employee findEmployeeById(Integer id);
 	public Employee findEmployeeByAccount(Account account);
