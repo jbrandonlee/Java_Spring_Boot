@@ -9,6 +9,10 @@ public interface LeaveTypeService {
 	public List<String> getTypeNames();
 	public LeaveType findByType(String type);
 	public List<LeaveType> findAll();
-	public Optional<LeaveType> findById(Integer id);
+	public LeaveType findById(Integer id);
 	public LeaveType update(Integer id, LeaveType leaveType);
+
+	void save(LeaveType leaveType);
+
+    void deleteOneById(Integer id);
 }

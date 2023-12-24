@@ -7,7 +7,7 @@
 
 <div class="container mt-4">
     <h2>Edit Leave Type</h2>
-    <form th:action="@{/leavetype/{id}/edit(id=${leaveType.id})}" th:object="${leaveType}" method="post">
+    <form th:action="@{~/admin/leavetype/edit/} + ${leaveType.id}" th:object="${leaveType}" method="post">
         <div class="form-group">
             <label for="type">Type:</label>
             <input type="text" id="type" th:field="*{type}" class="form-control" required>

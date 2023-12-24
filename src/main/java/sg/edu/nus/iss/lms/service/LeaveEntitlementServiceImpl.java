@@ -12,7 +12,7 @@ import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.repository.LeaveEntitlementRepository;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 	@Autowired
 	LeaveEntitlementRepository leaveEntitlementRepo;
@@ -49,5 +49,13 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 	@Override
 	public Optional<LeaveEntitlement> findById(Integer id) {
 		return leaveEntitlementRepo.findById(id);
+	}
+
+	@Override
+	public List<LeaveEntitlement> findByEmployeeId(Integer employeeId) {
+
+		List<LeaveEntitlement> leaveEntitlementsList = leaveEntitlementRepo.findAllLeaveEntitlementByEmployeeId(employeeId);
+
+		return leaveEntitlementsList;
 	}
 }

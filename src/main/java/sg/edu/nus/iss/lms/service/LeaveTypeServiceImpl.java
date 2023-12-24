@@ -11,7 +11,7 @@ import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.repository.LeaveTypeRepository;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class LeaveTypeServiceImpl implements LeaveTypeService {
 	@Autowired
 	LeaveTypeRepository leaveTypeRepo;
@@ -30,19 +30,35 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 	}
 
 	@Override
-	public Optional<LeaveType> findById(Integer id) {
-		return Optional.ofNullable(leaveTypeRepo.getById(id));
+	public LeaveType findById(Integer id) {
+		Optional<LeaveType> leaveType = leaveTypeRepo.findById(id);
+		return leaveType.get();
 	}
 
 	@Override
 	public LeaveType update(Integer id, LeaveType leaveType) {
 		Optional<LeaveType> optionalLeaveType = leaveTypeRepo.findById(id);
 		if (optionalLeaveType.isPresent()) {
+			optionalLeaveType.get().setType(leaveType.getType());
+			leaveTypeRepo.save(optionalLeaveType.get());
 			LeaveType existingLeaveType = optionalLeaveType.get();
-
-			return leaveTypeRepo.save(existingLeaveType);
+			return existingLeaveType;
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void save(LeaveType leaveType) {
+		leaveTypeRepo.save(leaveType);
+	}
+
+	/**
+	 *
+	 * @param id
+	 */
+	@Override
+	public void deleteOneById(Integer id) {
+		leaveTypeRepo.deleteById(id);
 	}
 }

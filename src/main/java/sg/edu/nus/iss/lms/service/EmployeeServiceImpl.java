@@ -11,7 +11,7 @@ import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.repository.EmployeeRepository;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeRepository employeeRepo;

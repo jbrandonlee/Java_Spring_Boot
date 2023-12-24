@@ -13,4 +13,6 @@ public interface LeaveEntitlementService {
 	public List<LeaveEntitlement> findAll();
 	public void save(LeaveEntitlement leaveEntitlement);
 	public Optional<LeaveEntitlement> findById(Integer id);
+
+    List<LeaveEntitlement> findByEmployeeId(Integer employeeId);
 }

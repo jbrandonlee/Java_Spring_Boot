@@ -49,4 +49,15 @@ public class Employee {
 		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();
 		this.overtimes = new ArrayList<OvertimeClaim>();
 	}
+
+	@Override
+	public String toString() {
+		return "Employee{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", jobDesignation='" + jobDesignation + '\'' +
+				", joinDate=" + joinDate +
+				", managerId=" + managerId +
+				'}';
+	}
 }
