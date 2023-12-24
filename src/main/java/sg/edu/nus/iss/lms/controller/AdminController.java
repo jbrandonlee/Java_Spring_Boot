@@ -25,6 +25,7 @@ import sg.edu.nus.iss.lms.service.EmployeeService;
 import sg.edu.nus.iss.lms.service.HolidayService;
 import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
 import sg.edu.nus.iss.lms.service.LeaveTypeService;
+import sg.edu.nus.iss.lms.service.RoleService;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -45,6 +46,9 @@ public class AdminController {
 	@Autowired
 	HolidayService holidayService;
 	
+	@Autowired
+	RoleService roleService;
+	
 	// -----------------------
 	// -- Manage Staff List --
 	// -----------------------
@@ -57,7 +61,7 @@ public class AdminController {
 	
 	@GetMapping(value = "/staff/create")
 	public String staffCreateForm(Model model, HttpSession sessionObj) {
-		List<Integer> managerIdList = null;
+		List<Integer> managerIdList = employeeService.findAllManagerIDs();
 		model.addAttribute("employee", new Employee());
 		model.addAttribute("managerIdList", managerIdList);
 		return "admin-staff-create";
@@ -97,8 +101,8 @@ public class AdminController {
 	
 	@GetMapping(value = "/account/create")
 	public String accountCreateForm(Model model, HttpSession sessionObj) {
-		List<Role> roleList = null;
-		List<Integer> employeeIdList = null;  		// Staff List must be without Account
+		List<Role> roleList = roleService.findAllRoles();
+		List<Integer> employeeIdList = employeeService.findAllEmployeeIDNoAccount();  		// Staff List must be without Account
 		model.addAttribute("account", new Account());
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("employeeIdList", employeeIdList);
@@ -147,7 +151,7 @@ public class AdminController {
 	@GetMapping(value = "/leave_entitlement/create")
 	public String leaveEntitlementCreateForm(Model model, HttpSession sessionObj) {
 		// Validate: If staff already has existing entitlement of type, reject
-		List<Integer> employeeIdList = null;
+		List<Integer> employeeIdList = employeeService.findAllEmployeeIDs();
 		model.addAttribute("leaveEntitlement", new LeaveEntitlement());
 		model.addAttribute("employeeIdList", employeeIdList);
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());

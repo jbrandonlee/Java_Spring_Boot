@@ -18,8 +18,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
 	public List<Employee> findAllSubordinates(@Param("managerId") Integer managerId);
 	
 	@Query("SELECT e.id FROM Employee e")
-	public List<String> findAllEmployeeIDs();
+	public List<Integer> findAllEmployeeIDs();
 	
-	@Query("SELECT DISTINCT m FROM Employee e, Employee m where e.managerId = m.id ")
-	public List<Employee> findAllManagers();
+	@Query("SELECT e.id FROM Employee e WHERE e.id NOT IN (SELECT a.employee.id FROM Account a WHERE a.employee.id IS NOT NULL)")
+	public List<Integer> findAllEmployeeIDNoAccount();
+
+	@Query("SELECT e.id FROM Account a JOIN a.employee e JOIN a.roles r WHERE r.id='manager'")
+	public List<Integer> findAllManagerIDs();
 }

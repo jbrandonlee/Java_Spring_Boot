@@ -35,4 +35,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> findAllSubordinates(Employee manager) {
     	return employeeRepo.findAllSubordinates(manager.getId());
     }
+	
+	@Override
+	public List<Integer> findAllEmployeeIDs() {
+		return employeeRepo.findAllEmployeeIDs();
+	}
+	
+	@Override
+	public List<Integer> findAllEmployeeIDNoAccount() {
+		return employeeRepo.findAllEmployeeIDNoAccount();
+	}
+	
+	@Override
+	public List<Integer> findAllManagerIDs() {
+		return employeeRepo.findAllManagerIDs();
+	}
 }
