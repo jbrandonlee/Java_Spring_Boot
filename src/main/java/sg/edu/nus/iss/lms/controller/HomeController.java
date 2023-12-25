@@ -59,9 +59,5 @@ public class HomeController {
 		sessionObj.invalidate();
 		return "redirect:/login";
 	}
-	
-	@GetMapping(value = "/calendar")
-	public String calendar(Model model) {
-		return "calendar";
-	}
+
 }
