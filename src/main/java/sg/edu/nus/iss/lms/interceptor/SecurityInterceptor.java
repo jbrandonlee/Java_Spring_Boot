@@ -43,12 +43,9 @@ public class SecurityInterceptor implements HandlerInterceptor {
 		Account account = (Account) sessionObj.getAttribute("account");
 	    List<Role> userRoles = account.getRoles();
 	    List<String> userRoleNames = new ArrayList<>();
-	    
 	    for (Role role : userRoles) {
 	    	userRoleNames.add(role.getId());
 	    }
-	    
-	    System.out.println(userRoleNames);
 	    
 	    if (uri.startsWith("/admin") && !userRoleNames.contains("admin")) {
 	    	throw new UnauthorizedException();

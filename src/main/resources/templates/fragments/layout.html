@@ -39,7 +39,8 @@
 					</div>
 					<div class="offcanvas-subheader">
 						<div class="offcanvas-image-container mx-auto d-block">
-							<image class="offcanvas-profile-image" th:src="@{/image/1.png}"></image>	
+							<image class="offcanvas-profile-image" th:src="@{/image/}+${#ctx.session.employee.id}+${'.png'}"
+								onerror="if (this.src != '0.png') this.src = '/image/0.png';"></image>
 						</div>
 					</div>
 					<div class="offcanvas-body">
