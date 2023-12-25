@@ -26,13 +26,15 @@ public class OvertimeServiceImpl implements OvertimeService {
 	
 	// -- Employee --
 	@Override
+	@Transactional(readOnly = false)
 	public OvertimeClaim createOvertime(OvertimeClaim overtime) {
 		return overtimeRepo.saveAndFlush(overtime);
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public OvertimeClaim updateOvertime(OvertimeClaim overtime) {
-		if (overtime.getStatus() == ClaimStatus.APPROVED) {
+		if (overtime.getClaimStatus() == ClaimStatus.APPROVED) {
 			leaveEntService.updateLeaveEntitlementBalanceByDays(overtime.getEmployee(), "Compensation", overtime.getClaimableCompensation());
 		}
 		return overtimeRepo.saveAndFlush(overtime);

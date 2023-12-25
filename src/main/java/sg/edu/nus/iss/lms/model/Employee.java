@@ -32,7 +32,7 @@ public class Employee {
 	private Integer managerId;
 	
 	@OneToMany(mappedBy="employee")
-	private List<Leave> leaves;
+	private List<LeaveApplication> leaves;
 	
 	@OneToMany(mappedBy="employee")
 	private List<LeaveEntitlement> leaveEntitlements;
@@ -45,7 +45,7 @@ public class Employee {
 		this.jobDesignation = jobDesignation;
 		this.joinDate = joinDate;
 		this.managerId = managerId;
-		this.leaves = new ArrayList<Leave>();
+		this.leaves = new ArrayList<LeaveApplication>();
 		this.leaveEntitlements = new ArrayList<LeaveEntitlement>();
 		this.overtimes = new ArrayList<OvertimeClaim>();
 	}

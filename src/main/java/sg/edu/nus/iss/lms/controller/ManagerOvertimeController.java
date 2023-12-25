@@ -97,7 +97,7 @@ public class ManagerOvertimeController {
 							   Model model, HttpSession sessionObj) {
 		OvertimeClaim overtime = overtimeService.findSubordinateOvertimeById((Employee) sessionObj.getAttribute("employee"), subordinateId, overtimeId);
 		overtime.setManagerComment(overtimeForm.getManagerComment());
-		overtime.setStatus(ClaimStatus.APPROVED);
+		overtime.setClaimStatus(ClaimStatus.APPROVED);
 		overtimeService.updateOvertime(overtime);
 		return "redirect:/manager/overview";
 	}
@@ -109,7 +109,7 @@ public class ManagerOvertimeController {
 							  Model model, HttpSession sessionObj) {
 		OvertimeClaim overtime = overtimeService.findSubordinateOvertimeById((Employee) sessionObj.getAttribute("employee"), subordinateId, overtimeId);
 		overtime.setManagerComment(overtimeForm.getManagerComment());
-		overtime.setStatus(ClaimStatus.REJECTED);
+		overtime.setClaimStatus(ClaimStatus.REJECTED);
 		overtimeService.updateOvertime(overtime);
 		return "redirect:/manager/overview";
 	}

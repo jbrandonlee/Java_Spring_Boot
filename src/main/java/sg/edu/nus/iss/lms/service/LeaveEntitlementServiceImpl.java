@@ -17,11 +17,13 @@ public class LeaveEntitlementServiceImpl implements LeaveEntitlementService {
 	LeaveEntitlementRepository leaveEntitlementRepo;
 	
 	@Override
+	@Transactional(readOnly = false)
 	public LeaveEntitlement createLeaveEntitlement(LeaveEntitlement leaveEntitlement) {
 		return leaveEntitlementRepo.saveAndFlush(leaveEntitlement);
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public LeaveEntitlement updateLeaveEntitlement(LeaveEntitlement leaveEntitlement) {
 		return leaveEntitlementRepo.saveAndFlush(leaveEntitlement);
 	}

@@ -17,11 +17,13 @@ public class AccountServiceImpl implements AccountService {
 	AccountRepository accRepo;
 
 	@Override
+	@Transactional(readOnly = false)
 	public Account createAccount(Account account) {
 		return accRepo.saveAndFlush(account);
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public Account updateAccount(Account account) {
 		return accRepo.saveAndFlush(account);
 	}

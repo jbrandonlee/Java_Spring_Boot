@@ -21,8 +21,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
-import sg.edu.nus.iss.lms.model.Leave;
-import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
+import sg.edu.nus.iss.lms.model.LeaveApplication;
+import sg.edu.nus.iss.lms.model.LeaveApplication.LeaveStatus;
 import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.service.LeaveEntitlementService;
@@ -70,7 +70,7 @@ public class StaffLeaveController {
 	// CREATE
 	@GetMapping(value = "/leave/apply")
 	public String staffLeaveApplicationForm(Model model, HttpSession sessionObj) {
-		model.addAttribute("leave", new Leave());
+		model.addAttribute("leave", new LeaveApplication());
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		model.addAttribute("leaveEntitlement", leaveEntitlementService
 				.findAllLeaveEntitlementByEmployee((Employee) sessionObj.getAttribute("employee")));
@@ -78,7 +78,7 @@ public class StaffLeaveController {
 	}
 
 	@PostMapping(value = "/leave/apply")
-	public String staffApplyLeave(@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
+	public String staffApplyLeave(@Valid @ModelAttribute("leave") LeaveApplication leaveForm, BindingResult bindingResult,
 			Model model, HttpSession sessionObj) {
 
 		if (bindingResult.hasErrors()) {
@@ -106,7 +106,7 @@ public class StaffLeaveController {
 		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveType().getType());
 		leaveForm.setLeaveType(currLeaveType);
 		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
-		leaveForm.setStatus(LeaveStatus.APPLIED);
+		leaveForm.setLeaveStatus(LeaveStatus.APPLIED);
 		leaveService.createLeave(leaveForm);
 
 		return "redirect:/staff/overview";
@@ -120,7 +120,7 @@ public class StaffLeaveController {
 		int currPage = page.orElse(1);
 		int pageSize = size.orElse(10);
 
-		List<Leave> leaveHistory = leaveService
+		List<LeaveApplication> leaveHistory = leaveService
 				.findEmployeeLeavesCurrYear((Employee) sessionObj.getAttribute("employee"));
 
 		// Clamp PageNumber between 1 to MaxPage
@@ -128,8 +128,8 @@ public class StaffLeaveController {
 		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
 		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
 
-		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
-		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
+		Page<LeaveApplication> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
+		List<LeaveApplication> leaveHistoryPaged = leaveHistoryPage.getContent();
 
 		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("currUrl", request.getRequestURI().toString());
@@ -149,7 +149,7 @@ public class StaffLeaveController {
 		int currPage = page.orElse(1);
 		int pageSize = size.orElse(10);
 
-		List<Leave> leaveHistory = leaveService
+		List<LeaveApplication> leaveHistory = leaveService
 				.findAllEmployeeLeaves((Employee) sessionObj.getAttribute("employee"));
 
 		// Clamp PageNumber between 1 to MaxPage
@@ -157,8 +157,8 @@ public class StaffLeaveController {
 		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
 		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
 
-		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
-		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
+		Page<LeaveApplication> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
+		List<LeaveApplication> leaveHistoryPaged = leaveHistoryPage.getContent();
 
 		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("currUrl", request.getRequestURI().toString());
@@ -174,7 +174,7 @@ public class StaffLeaveController {
 	// RETRIEVE ONE
 	@GetMapping(value = "/leave/details/{id}")
 	public String staffLeaveDetail(@PathVariable(name = "id") Integer leaveId, Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		LeaveApplication leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
 		return "leave-details";
 	}
@@ -182,7 +182,7 @@ public class StaffLeaveController {
 	// UPDATE
 	@GetMapping(value = "/leave/edit/{id}")
 	public String staffLeaveEditForm(@PathVariable(name = "id") Integer leaveId, Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		LeaveApplication leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 		model.addAttribute("leave", leave);
 		model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 		model.addAttribute("leaveEntitlement", leaveEntitlementService
@@ -192,11 +192,11 @@ public class StaffLeaveController {
 
 	@PostMapping(value = "/leave/edit/{id}")
 	public String staffEditLeave(@PathVariable(name = "id") Integer leaveId,
-			@Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult, Model model,
+			@Valid @ModelAttribute("leave") LeaveApplication leaveForm, BindingResult bindingResult, Model model,
 			HttpSession sessionObj) {
 		
 		if (bindingResult.hasErrors()) {
-			Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+			LeaveApplication leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 			model.addAttribute("leave", leave);
 			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 			model.addAttribute("leaveEntitlement", leaveEntitlementService
@@ -211,7 +211,7 @@ public class StaffLeaveController {
 		double leaveDuration = leaveService.calculateDeductibleDaysInLeave(leaveForm);
 		
 		if (leaveBalance < leaveDuration) {
-			Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+			LeaveApplication leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
 			model.addAttribute("leave", leave);
 			model.addAttribute("leaveTypes", leaveTypeService.getTypeNames());
 			model.addAttribute("leaveEntitlement", leaveEntitlementService
@@ -224,7 +224,7 @@ public class StaffLeaveController {
 		LeaveType currLeaveType = leaveTypeService.findByType(leaveForm.getLeaveType().getType());
 		leaveForm.setLeaveType(currLeaveType);
 		leaveForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
-		leaveForm.setStatus(LeaveStatus.UPDATED);
+		leaveForm.setLeaveStatus(LeaveStatus.UPDATED);
 		leaveService.updateLeave(leaveForm);
 
 		return "redirect:/staff/overview";
@@ -233,8 +233,8 @@ public class StaffLeaveController {
 	// CANCEL
 	@PostMapping(value = "/leave/cancel/{id}")
 	public String staffCancelLeave(@PathVariable(name = "id") Integer leaveId, Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
-		leave.setStatus(LeaveStatus.CANCELLED);
+		LeaveApplication leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		leave.setLeaveStatus(LeaveStatus.CANCELLED);
 		leaveService.updateLeave(leave);
 		return "redirect:/staff/overview";
 	}
@@ -242,8 +242,8 @@ public class StaffLeaveController {
 	// DELETE
 	@PostMapping(value = "/leave/delete/{id}")
 	public String staffDeleteLeave(@PathVariable(name = "id") Integer leaveId, Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
-		leave.setStatus(LeaveStatus.DELETED);
+		LeaveApplication leave = leaveService.findEmployeeLeaveId((Employee) sessionObj.getAttribute("employee"), leaveId);
+		leave.setLeaveStatus(LeaveStatus.DELETED);
 		leaveService.updateLeave(leave);
 		return "redirect:/staff/overview";
 	}

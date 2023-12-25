@@ -39,10 +39,10 @@
 							<span th:text="${leave.endDaySection}"></span>
 						</td>
 						<td th:text="${leaveService.calculateDeductibleDaysInLeave(leave)} + ${' days'}"></td>
-						<td class="fw-normal" th:text="${leave.status}"
-							th:classappend="${ (leave.status.toString() == 'APPLIED' || leave.status.toString() == 'UPDATED') ? 'text-primary' : 
-											   (leave.status.toString() == 'APPROVED') ? 'text-success' :
-											   (leave.status.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
+						<td class="fw-normal" th:text="${leave.leaveStatus}"
+							th:classappend="${ (leave.leaveStatus.toString() == 'APPLIED' || leave.leaveStatus.toString() == 'UPDATED') ? 'text-primary' : 
+											   (leave.leaveStatus.toString() == 'APPROVED') ? 'text-success' :
+											   (leave.leaveStatus.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
 						<td>
 							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/staff/leave/details/}+${leave.id}">View</a></span>
 						</td>

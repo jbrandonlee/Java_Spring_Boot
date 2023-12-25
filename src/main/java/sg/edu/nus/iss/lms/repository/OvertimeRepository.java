@@ -19,20 +19,20 @@ public interface OvertimeRepository extends JpaRepository<OvertimeClaim, Integer
 	public List<OvertimeClaim> findAllOvertimesByEmployeeId(@Param("employeeId")Integer employeeId);
 	
 	// Find All Employee OvertimeClaims Non-Deleted
-	@Query("SELECT o FROM Employee e JOIN e.overtimes o WHERE e.id=:employeeId AND o.status NOT IN ('DELETED') ORDER BY o.startTime")
+	@Query("SELECT o FROM Employee e JOIN e.overtimes o WHERE e.id=:employeeId AND o.claimStatus NOT IN ('DELETED') ORDER BY o.startTime")
 	public List<OvertimeClaim> findActiveOvertimesByEmployeeId(@Param("employeeId")Integer employeeId);
 
 	// Find All Employee OvertimeClaims Non-Deleted in Current Year
-	@Query("SELECT o FROM Employee e JOIN e.overtimes o WHERE e.id=:employeeId AND YEAR(o.startTime)=YEAR(NOW()) AND o.status NOT IN ('DELETED') ORDER BY o.startTime")
+	@Query("SELECT o FROM Employee e JOIN e.overtimes o WHERE e.id=:employeeId AND YEAR(o.startTime)=YEAR(NOW()) AND o.claimStatus NOT IN ('DELETED') ORDER BY o.startTime")
 	public List<OvertimeClaim> findCurrYearOvertimesByEmployeeId(@Param("employeeId")Integer employeeId);
 
 	// -- Manager --
 	// Find all Subordinate's OvertimeClaims Pending Approve/Reject
-	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND o.status IN ('APPLIED', 'UPDATED') ORDER BY o.startTime")
+	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND o.claimStatus IN ('APPLIED', 'UPDATED') ORDER BY o.startTime")
 	public List<OvertimeClaim> findAllSubordinatePendingOvertimes(@Param("managerId") Integer managerId);
 
 	// Find one Subordinate's OvertimeClaim History (Applied/Updated/Approved/Rejected)
-	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND e.id=:employeeId AND o.status IN ('APPLIED', 'UPDATED', 'APPROVED', 'REJECTED') ORDER BY o.startTime")
+	@Query("SELECT o from Employee e JOIN e.overtimes o WHERE e.managerId=:managerId AND e.id=:employeeId AND o.claimStatus IN ('APPLIED', 'UPDATED', 'APPROVED', 'REJECTED') ORDER BY o.startTime")
 	public List<OvertimeClaim> findSubordinateOvertimeHistory(@Param("managerId") Integer managerId, @Param("employeeId") Integer employeeId);
 	
 	// Find one Subordinate's OvertimeClaim Details

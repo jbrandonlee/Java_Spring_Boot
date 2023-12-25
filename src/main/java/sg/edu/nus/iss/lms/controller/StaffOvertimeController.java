@@ -57,7 +57,7 @@ public class StaffOvertimeController {
 		}
 		
 		overtimeForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
-		overtimeForm.setStatus(ClaimStatus.APPLIED);
+		overtimeForm.setClaimStatus(ClaimStatus.APPLIED);
 		overtimeService.createOvertime(overtimeForm);
 
 		return "redirect:/staff/overview";
@@ -146,7 +146,7 @@ public class StaffOvertimeController {
 		
 		overtimeForm.setId(overtimeId);
 		overtimeForm.setEmployee((Employee) sessionObj.getAttribute("employee"));
-		overtimeForm.setStatus(ClaimStatus.UPDATED);
+		overtimeForm.setClaimStatus(ClaimStatus.UPDATED);
 		overtimeService.updateOvertime(overtimeForm);
 		return "redirect:/staff/overview";
 	}
@@ -155,7 +155,7 @@ public class StaffOvertimeController {
 	@PostMapping(value = "/delete/{id}")
 	public String staffDeleteOvertime(@PathVariable(name = "id") Integer overtimeId, Model model, HttpSession sessionObj) {
 		OvertimeClaim overtime = overtimeService.findEmployeeOvertimeId((Employee) sessionObj.getAttribute("employee"), overtimeId);
-		overtime.setStatus(ClaimStatus.DELETED);
+		overtime.setClaimStatus(ClaimStatus.DELETED);
 		overtimeService.updateOvertime(overtime);
 		return "redirect:/staff/overview";
 	}

@@ -10,8 +10,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import sg.edu.nus.iss.lms.model.Leave;
-import sg.edu.nus.iss.lms.model.Leave.DaySection;
+import sg.edu.nus.iss.lms.model.LeaveApplication;
+import sg.edu.nus.iss.lms.model.LeaveApplication.DaySection;
 import sg.edu.nus.iss.lms.service.HolidayService;
 import sg.edu.nus.iss.lms.service.LeaveService;
 
@@ -25,12 +25,12 @@ public class LeaveValidator implements Validator {
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return Leave.class.isAssignableFrom(clazz);
+		return LeaveApplication.class.isAssignableFrom(clazz);
 	}
 
 	@Override
 	public void validate(Object obj, Errors errors) {
-		Leave leave = (Leave) obj;
+		LeaveApplication leave = (LeaveApplication) obj;
 		LocalDate leaveStartDate = leave.getStartDate();
 		LocalDate leaveEndDate = leave.getEndDate();		
 		String leaveTypeString = leave.getLeaveType().getType();

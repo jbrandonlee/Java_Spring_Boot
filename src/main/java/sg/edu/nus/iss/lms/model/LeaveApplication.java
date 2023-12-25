@@ -23,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Leave {
+public class LeaveApplication {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -62,15 +62,15 @@ public class Leave {
 	private String contact;
 	
 	@Enumerated(EnumType.STRING)
-	private LeaveStatus status;
+	private LeaveStatus leaveStatus;
 	
 	private String managerComment;
 	
-	public Leave(Employee employee, LeaveType leaveType,
+	public LeaveApplication(Employee employee, LeaveType leaveType,
 			LocalDate startDate, DaySection startDaySection,
 			LocalDate endDate, DaySection endDaySection,
 			String destination, String reason, String dissemination, String contact,
-			LeaveStatus status) {
+			LeaveStatus leaveStatus) {
 		this.employee = employee;
 		this.leaveType = leaveType;
 		this.startDate = startDate;
@@ -81,7 +81,7 @@ public class Leave {
 		this.reason = reason;
 		this.dissemination = dissemination;
 		this.contact = contact;
-		this.status = status;
+		this.leaveStatus = leaveStatus;
 	}
 
 	public double getCalendarDuration() {

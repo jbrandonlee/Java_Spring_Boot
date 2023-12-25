@@ -22,7 +22,7 @@
 			<div class="form-group col-md-2">
 				<label for="startDaySection" class="form-label">&nbsp;</label>
 				<select class="form-select" name="startDaySection">
-					<option th:each="daySection : ${T(sg.edu.nus.iss.lms.model.Leave.DaySection).values()}" th:value="${daySection}" th:text="${daySection}"></option>
+					<option th:each="daySection : ${T(sg.edu.nus.iss.lms.model.LeaveApplication.DaySection).values()}" th:value="${daySection}" th:text="${daySection}"></option>
 				</select>
 			</div>
 			<div class="form-group col-md-4">
@@ -33,7 +33,7 @@
 			<div class="form-group col-md-2">
 				<label for="endDaySection" class="form-label">&nbsp;</label>
 				<select class="form-select" name="endDaySection">
-					<option th:each="daySection : ${T(sg.edu.nus.iss.lms.model.Leave.DaySection).values()}" th:value="${daySection}" th:text="${daySection}"></option>
+					<option th:each="daySection : ${T(sg.edu.nus.iss.lms.model.LeaveApplication.DaySection).values()}" th:value="${daySection}" th:text="${daySection}"></option>
 				</select>
 			</div>
 			<div class="form-group col-12">

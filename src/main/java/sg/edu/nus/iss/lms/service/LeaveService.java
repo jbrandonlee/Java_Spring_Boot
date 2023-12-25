@@ -5,25 +5,25 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import sg.edu.nus.iss.lms.model.Employee;
-import sg.edu.nus.iss.lms.model.Leave;
+import sg.edu.nus.iss.lms.model.LeaveApplication;
 
 public interface LeaveService {
 	// -- Employee --
-	public Leave createLeave(Leave leave);
-	public Leave updateLeave(Leave leave);
-	public List<Leave> findAllEmployeeLeaves(Employee employee);
-	public List<Leave> findEmployeeLeavesCurrYear(Employee employee);
-	public List<Leave> findEmployeeLeavesUpcoming(Employee employee);
-	public Leave findEmployeeLeaveId(Employee employee, Integer leaveId);
+	public LeaveApplication createLeave(LeaveApplication leave);
+	public LeaveApplication updateLeave(LeaveApplication leave);
+	public List<LeaveApplication> findAllEmployeeLeaves(Employee employee);
+	public List<LeaveApplication> findEmployeeLeavesCurrYear(Employee employee);
+	public List<LeaveApplication> findEmployeeLeavesUpcoming(Employee employee);
+	public LeaveApplication findEmployeeLeaveId(Employee employee, Integer leaveId);
 
 	
 	// -- Manager --
-	public List<Leave> findAllSubordinatePendingLeaves(Employee manager);
-	public List<Leave> findOverlappingSubordinateLeaves(Employee manager, Leave leave);
-	public List<Leave> findSubordinateLeaveHistory(Employee manager, Integer subordinateId);
-	public Leave findSubordinateLeaveById(Employee manager, Integer subordinateId, Integer leaveId);
+	public List<LeaveApplication> findAllSubordinatePendingLeaves(Employee manager);
+	public List<LeaveApplication> findOverlappingSubordinateLeaves(Employee manager, LeaveApplication leave);
+	public List<LeaveApplication> findSubordinateLeaveHistory(Employee manager, Integer subordinateId);
+	public LeaveApplication findSubordinateLeaveById(Employee manager, Integer subordinateId, Integer leaveId);
 	
 	// -- Utility --
-	public Page<Leave> getPaginatedLeaves(int page, int pageSize, List<Leave> listLeaves);
-	public double calculateDeductibleDaysInLeave(Leave leave);
+	public Page<LeaveApplication> getPaginatedLeaves(int page, int pageSize, List<LeaveApplication> listLeaves);
+	public double calculateDeductibleDaysInLeave(LeaveApplication leave);
 }

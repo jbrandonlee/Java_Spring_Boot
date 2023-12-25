@@ -37,16 +37,16 @@ public class OvertimeClaim {
 	private String reason;
 	
 	@Enumerated(EnumType.STRING)
-	private ClaimStatus status;
+	private ClaimStatus claimStatus;
 	
 	private String managerComment;
 	
-	public OvertimeClaim(Employee employee, LocalDateTime startTime, LocalDateTime endTime, String reason, ClaimStatus status) {
+	public OvertimeClaim(Employee employee, LocalDateTime startTime, LocalDateTime endTime, String reason, ClaimStatus claimStatus) {
 		this.employee = employee;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.reason = reason;
-		this.status = status;
+		this.claimStatus = claimStatus;
 	}
 	
 	public double getDuration() {

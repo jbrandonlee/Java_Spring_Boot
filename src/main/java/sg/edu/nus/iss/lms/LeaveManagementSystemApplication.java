@@ -20,9 +20,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import sg.edu.nus.iss.lms.model.Account;
 import sg.edu.nus.iss.lms.model.Employee;
 import sg.edu.nus.iss.lms.model.Holiday;
-import sg.edu.nus.iss.lms.model.Leave;
-import sg.edu.nus.iss.lms.model.Leave.DaySection;
-import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
+import sg.edu.nus.iss.lms.model.LeaveApplication;
+import sg.edu.nus.iss.lms.model.LeaveApplication.DaySection;
+import sg.edu.nus.iss.lms.model.LeaveApplication.LeaveStatus;
 import sg.edu.nus.iss.lms.model.LeaveEntitlement;
 import sg.edu.nus.iss.lms.model.LeaveType;
 import sg.edu.nus.iss.lms.model.OvertimeClaim;
@@ -54,7 +54,20 @@ public class LeaveManagementSystemApplication {
     						   LeaveEntitlementRepository leaveEntitlementRepo,
     						   OvertimeRepository overtimeRepo) {
 		return args -> {
-
+			
+			// Add Holiday Mock Data from 2022-2024
+			// -- Free access to the API only gives data for 2022.
+			// -- 2023 & 2024 mock data are duplicated from 2022 data. 
+		    for (Holiday holiday : getHolidaysFromAPI()) {
+		    	holidayRepo.saveAndFlush(holiday);
+		    	
+		    	Holiday holiday2023 = new Holiday(holiday.getName(), holiday.getDate().plusYears(1), holiday.getObserved().plusYears(1), holiday.getIsActive());
+		    	holidayRepo.saveAndFlush(holiday2023);
+		    	
+		    	Holiday holiday2024 = new Holiday(holiday.getName(), holiday.getDate().plusYears(2), holiday.getObserved().plusYears(2), holiday.getIsActive());
+		    	holidayRepo.saveAndFlush(holiday2024);
+		    }
+			
 			// Initialize LeaveTypes
 			LeaveType annual = leaveTypeRepo.save(new LeaveType("Annual"));
 			LeaveType medical = leaveTypeRepo.save(new LeaveType("Medical"));
@@ -103,51 +116,36 @@ public class LeaveManagementSystemApplication {
 			
 			// Create Leaves for Manager1, Staff1a, Staff1b, Staff2a
 			// -- Note that this will throw ConstraintViolationException if the Leave Dates are not AFTER LocalDate.now().
-			leaveRepo.save(new Leave(manager1, medical, LocalDate.of(2024, 2, 2), DaySection.AM, LocalDate.of(2024, 2, 2), DaySection.PM, "Local", "1 Day Medical Leave", "No remaining work.", "NIL", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(manager1, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 19), DaySection.PM, "Overseas", "15 Day Leave", "No remaining work.", "Mobile: 81234567", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(manager1, compensation, LocalDate.of(2024, 2, 20), DaySection.AM, LocalDate.of(2024, 2, 20), DaySection.AM, "Local", "Half-Day Compensation Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(manager1, medical, LocalDate.of(2024, 2, 2), DaySection.AM, LocalDate.of(2024, 2, 2), DaySection.PM, "Local", "1 Day Medical Leave", "No remaining work.", "NIL", LeaveStatus.APPROVED));
+			leaveRepo.save(new LeaveApplication(manager1, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 19), DaySection.PM, "Overseas", "15 Day Leave", "No remaining work.", "Mobile: 81234567", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(manager1, compensation, LocalDate.of(2024, 2, 20), DaySection.AM, LocalDate.of(2024, 2, 20), DaySection.AM, "Local", "Half-Day Compensation Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 			
-			leaveRepo.save(new Leave(staff1a, compensation, LocalDate.of(2024, 1, 10), DaySection.AM, LocalDate.of(2024, 1, 10), DaySection.AM, "Local", "Half-Day Compensation Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, medical, LocalDate.of(2024, 1, 11), DaySection.AM, LocalDate.of(2024, 1, 11), DaySection.AM, "Local", "1-Day Medical Appt", "No remaining work.", "NIL", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 1, 12), DaySection.AM, LocalDate.of(2024, 1, 18), DaySection.PM, "Overseas", "1 Week Leave", "No remaining work.", "Mobile: 91234567", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 1, 19), DaySection.AM, LocalDate.of(2024, 1, 19), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.UPDATED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 1, 22), DaySection.AM, LocalDate.of(2024, 1, 22), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.DELETED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 1, 23), DaySection.AM, LocalDate.of(2024, 1, 23), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 1, 24), DaySection.AM, LocalDate.of(2024, 1, 25), DaySection.PM, "Local", "2 Day Leave", "No remaining work.", "NIL", LeaveStatus.REJECTED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 1, 26), DaySection.AM, LocalDate.of(2024, 1, 26), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.CANCELLED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 5), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 2, 6), DaySection.AM, LocalDate.of(2024, 2, 6), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 2, 7), DaySection.AM, LocalDate.of(2024, 2, 7), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 2, 8), DaySection.AM, LocalDate.of(2024, 2, 8), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 2, 9), DaySection.AM, LocalDate.of(2024, 2, 9), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1a, annual, LocalDate.of(2024, 2, 12), DaySection.AM, LocalDate.of(2024, 2, 26), DaySection.PM, "Overseas", "15 Day Leave", "No remaining work.", "Mobile: 91234567", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, compensation, LocalDate.of(2024, 1, 10), DaySection.AM, LocalDate.of(2024, 1, 10), DaySection.AM, "Local", "Half-Day Compensation Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, medical, LocalDate.of(2024, 1, 11), DaySection.AM, LocalDate.of(2024, 1, 11), DaySection.AM, "Local", "1-Day Medical Appt", "No remaining work.", "NIL", LeaveStatus.APPROVED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 12), DaySection.AM, LocalDate.of(2024, 1, 18), DaySection.PM, "Overseas", "1 Week Leave", "No remaining work.", "Mobile: 91234567", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 19), DaySection.AM, LocalDate.of(2024, 1, 19), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.UPDATED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 22), DaySection.AM, LocalDate.of(2024, 1, 22), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.DELETED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 23), DaySection.AM, LocalDate.of(2024, 1, 23), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPROVED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 24), DaySection.AM, LocalDate.of(2024, 1, 25), DaySection.PM, "Local", "2 Day Leave", "No remaining work.", "NIL", LeaveStatus.REJECTED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 26), DaySection.AM, LocalDate.of(2024, 1, 26), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.CANCELLED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 5), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 2, 6), DaySection.AM, LocalDate.of(2024, 2, 6), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 2, 7), DaySection.AM, LocalDate.of(2024, 2, 7), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 2, 8), DaySection.AM, LocalDate.of(2024, 2, 8), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 2, 9), DaySection.AM, LocalDate.of(2024, 2, 9), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 2, 12), DaySection.AM, LocalDate.of(2024, 2, 26), DaySection.PM, "Overseas", "15 Day Leave", "No remaining work.", "Mobile: 91234567", LeaveStatus.APPLIED));
 			overtimeRepo.save(new OvertimeClaim(staff1a, LocalDateTime.of(LocalDate.of(2023, 12, 1), LocalTime.of(18, 0)), LocalDateTime.of(LocalDate.of(2023, 12, 1), LocalTime.of(22, 0)), "4hrs OT", ClaimStatus.APPLIED));
 			overtimeRepo.save(new OvertimeClaim(staff1a, LocalDateTime.of(LocalDate.of(2023, 12, 2), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 12, 3), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.APPLIED));
 			overtimeRepo.save(new OvertimeClaim(staff1a, LocalDateTime.of(LocalDate.of(2023, 12, 3), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 12, 3), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPLIED));
 			overtimeRepo.save(new OvertimeClaim(staff1a, LocalDateTime.of(LocalDate.of(2023, 12, 4), LocalTime.of(18, 30)), LocalDateTime.of(LocalDate.of(2023, 12, 5), LocalTime.of(0, 0)), "5.5hrs OT", ClaimStatus.REJECTED));
 			overtimeRepo.save(new OvertimeClaim(staff1a, LocalDateTime.of(LocalDate.of(2023, 12, 5), LocalTime.of(9, 0)), LocalDateTime.of(LocalDate.of(2023, 12, 5), LocalTime.of(18, 0)), "9hours OT", ClaimStatus.APPROVED));
 			
-			leaveRepo.save(new Leave(staff1b, annual, LocalDate.of(2024, 1, 10), DaySection.AM, LocalDate.of(2024, 1, 12), DaySection.PM, "Local", "Overlapping Leave", "No remaining work.", "Mobile: 92234567", LeaveStatus.APPROVED));
-			leaveRepo.save(new Leave(staff1b, annual, LocalDate.of(2024, 1, 16), DaySection.AM, LocalDate.of(2024, 1, 16), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff1b, annual, LocalDate.of(2024, 1, 17), DaySection.AM, LocalDate.of(2024, 1, 17), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.REJECTED));
-			leaveRepo.save(new Leave(staff2a, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 5), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff2a, annual, LocalDate.of(2024, 2, 6), DaySection.AM, LocalDate.of(2024, 2, 6), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new Leave(staff2a, annual, LocalDate.of(2024, 2, 7), DaySection.AM, LocalDate.of(2024, 2, 7), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			
-			/* -- Add Holiday Mock Data from 2022-2024 --
-			 * Free access to the API only gives data for 2022.
-			 * 2023 & 2024 mock data are duplicated from 2022 data.
-			 */
-			/*
-		    for (Holiday holiday : getHolidaysFromAPI()) {
-		    	holidayRepo.saveAndFlush(holiday);
-		    	
-		    	Holiday holiday2023 = new Holiday(holiday.getName(), holiday.getDate().plusYears(1), holiday.getObserved().plusYears(1), holiday.isActive());
-		    	holidayRepo.saveAndFlush(holiday2023);
-		    	
-		    	Holiday holiday2024 = new Holiday(holiday.getName(), holiday.getDate().plusYears(2), holiday.getObserved().plusYears(2), holiday.isActive());
-		    	holidayRepo.saveAndFlush(holiday2024);
-		    }*/
+			leaveRepo.save(new LeaveApplication(staff1b, annual, LocalDate.of(2024, 1, 10), DaySection.AM, LocalDate.of(2024, 1, 12), DaySection.PM, "Local", "Overlapping Leave", "No remaining work.", "Mobile: 92234567", LeaveStatus.APPROVED));
+			leaveRepo.save(new LeaveApplication(staff1b, annual, LocalDate.of(2024, 1, 16), DaySection.AM, LocalDate.of(2024, 1, 16), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff1b, annual, LocalDate.of(2024, 1, 17), DaySection.AM, LocalDate.of(2024, 1, 17), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.REJECTED));
+			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 5), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 6), DaySection.AM, LocalDate.of(2024, 2, 6), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 7), DaySection.AM, LocalDate.of(2024, 2, 7), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 		};
 	}
     

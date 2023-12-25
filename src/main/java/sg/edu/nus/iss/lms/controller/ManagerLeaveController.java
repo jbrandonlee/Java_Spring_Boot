@@ -22,8 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import sg.edu.nus.iss.lms.model.Employee;
-import sg.edu.nus.iss.lms.model.Leave;
-import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
+import sg.edu.nus.iss.lms.model.LeaveApplication;
+import sg.edu.nus.iss.lms.model.LeaveApplication.LeaveStatus;
 import sg.edu.nus.iss.lms.service.EmployeeService;
 import sg.edu.nus.iss.lms.service.LeaveService;
 import sg.edu.nus.iss.lms.service.OvertimeService;
@@ -52,10 +52,10 @@ public class ManagerLeaveController {
 	
 	@GetMapping(value = "/leave/pending")
 	public String pendingLeaves(Model model, HttpSession sessionObj) {
-		List<Leave> leavePending = leaveService.findAllSubordinatePendingLeaves((Employee) sessionObj.getAttribute("employee"));
-		Map<Integer, List<Leave>> leavePendingByEmployee = new HashMap<>();
+		List<LeaveApplication> leavePending = leaveService.findAllSubordinatePendingLeaves((Employee) sessionObj.getAttribute("employee"));
+		Map<Integer, List<LeaveApplication>> leavePendingByEmployee = new HashMap<>();
 		
-		for (Leave leave : leavePending) {
+		for (LeaveApplication leave : leavePending) {
 			Integer employeeId = leave.getEmployee().getId();
 			
 			if(!leavePendingByEmployee.containsKey(employeeId)) {
@@ -82,15 +82,15 @@ public class ManagerLeaveController {
 		int currPage = page.orElse(1);
 		int pageSize = size.orElse(10);
 		
-		List<Leave> leaveHistory = leaveService.findSubordinateLeaveHistory((Employee) sessionObj.getAttribute("employee"), subordinateId);
+		List<LeaveApplication> leaveHistory = leaveService.findSubordinateLeaveHistory((Employee) sessionObj.getAttribute("employee"), subordinateId);
 		
 		// Clamp PageNumber between 1 to MaxPage
 		int maxPage = (int) Math.ceil(leaveHistory.size() / (double) pageSize);
 		int getPageNum = Math.max(1, Math.min(maxPage, currPage));
 		getPageNum = getPageNum - 1; // Convert 1-Index to 0-Index
 
-		Page<Leave> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
-		List<Leave> leaveHistoryPaged = leaveHistoryPage.getContent();
+		Page<LeaveApplication> leaveHistoryPage = leaveService.getPaginatedLeaves(getPageNum, pageSize, leaveHistory);
+		List<LeaveApplication> leaveHistoryPaged = leaveHistoryPage.getContent();
 
 		model.addAttribute("leaveService", leaveService);
 		model.addAttribute("subordinateName", employeeService.findEmployeeById(subordinateId).getName());
@@ -107,8 +107,8 @@ public class ManagerLeaveController {
 	public String subordinateLeaveDetails(@PathVariable(name = "sid") Integer subordinateId,
 										  @PathVariable(name = "id") Integer leaveId,
 										  Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
-		List<Leave> overlappingLeaves = leaveService.findOverlappingSubordinateLeaves((Employee) sessionObj.getAttribute("employee"), leave);
+		LeaveApplication leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
+		List<LeaveApplication> overlappingLeaves = leaveService.findOverlappingSubordinateLeaves((Employee) sessionObj.getAttribute("employee"), leave);
 		
 		model.addAttribute("leave", leave);
 		model.addAttribute("overlappingLeaves", overlappingLeaves);
@@ -118,11 +118,11 @@ public class ManagerLeaveController {
 	@PostMapping(value = "/staff/{sid}/leave/{id}/approve")
 	public String approveLeave(@PathVariable(name = "sid") Integer subordinateId,
 							   @PathVariable(name = "id") Integer leaveId,
-							   @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
+							   @Valid @ModelAttribute("leave") LeaveApplication leaveForm, BindingResult bindingResult,
 							   Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
+		LeaveApplication leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
 		leave.setManagerComment(leaveForm.getManagerComment());
-		leave.setStatus(LeaveStatus.APPROVED);
+		leave.setLeaveStatus(LeaveStatus.APPROVED);
 		leaveService.updateLeave(leave);
 		return "redirect:/manager/overview";
 	}
@@ -130,11 +130,11 @@ public class ManagerLeaveController {
 	@PostMapping(value = "/staff/{sid}/leave/{id}/reject")
 	public String rejectLeave(@PathVariable(name = "sid") Integer subordinateId,
 							  @PathVariable(name = "id") Integer leaveId,
-							  @Valid @ModelAttribute("leave") Leave leaveForm, BindingResult bindingResult,
+							  @Valid @ModelAttribute("leave") LeaveApplication leaveForm, BindingResult bindingResult,
 							  Model model, HttpSession sessionObj) {
-		Leave leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
+		LeaveApplication leave = leaveService.findSubordinateLeaveById((Employee) sessionObj.getAttribute("employee"), subordinateId, leaveId);
 		leave.setManagerComment(leaveForm.getManagerComment());
-		leave.setStatus(LeaveStatus.REJECTED);
+		leave.setLeaveStatus(LeaveStatus.REJECTED);
 		leaveService.updateLeave(leave);
 		return "redirect:/manager/overview";
 	}

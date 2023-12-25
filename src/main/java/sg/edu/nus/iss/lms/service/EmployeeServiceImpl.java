@@ -17,11 +17,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	EmployeeRepository employeeRepo;
 
 	@Override
+	@Transactional(readOnly = false)
 	public Employee createEmployee(Employee employee) {
 		return employeeRepo.saveAndFlush(employee);
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public Employee updateEmployee(Employee employee) {
 		return employeeRepo.saveAndFlush(employee);
 	}

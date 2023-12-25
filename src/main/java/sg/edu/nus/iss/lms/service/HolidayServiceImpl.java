@@ -17,11 +17,13 @@ public class HolidayServiceImpl implements HolidayService {
 	HolidayRepository holidayRepo;
 	
 	@Override
+	@Transactional(readOnly = false)
 	public Holiday createHoliday(Holiday holiday) {
 		return holidayRepo.saveAndFlush(holiday);
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public Holiday updateHoliday(Holiday holiday) {
 		return holidayRepo.saveAndFlush(holiday);
 	}

@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import sg.edu.nus.iss.lms.model.Employee;
-import sg.edu.nus.iss.lms.model.Leave;
-import sg.edu.nus.iss.lms.model.Leave.DaySection;
-import sg.edu.nus.iss.lms.model.Leave.LeaveStatus;
+import sg.edu.nus.iss.lms.model.LeaveApplication;
+import sg.edu.nus.iss.lms.model.LeaveApplication.DaySection;
+import sg.edu.nus.iss.lms.model.LeaveApplication.LeaveStatus;
 import sg.edu.nus.iss.lms.repository.HolidayRepository;
 import sg.edu.nus.iss.lms.repository.LeaveRepository;
 
@@ -35,17 +35,19 @@ public class LeaveServiceImpl implements LeaveService {
 	
 	// -- Employee --	
 	@Override
-	public Leave createLeave(Leave leave) {
+	@Transactional(readOnly = false)
+	public LeaveApplication createLeave(LeaveApplication leave) {
 		leaveEntService.updateLeaveEntitlementBalanceByDays(leave.getEmployee(), leave.getLeaveType().getType(), -calculateDeductibleDaysInLeave(leave));
 		return leaveRepo.saveAndFlush(leave);
 	}
 	
 	@Override
-	public Leave updateLeave(Leave leave) {
+	@Transactional(readOnly = false)
+	public LeaveApplication updateLeave(LeaveApplication leave) {
 		double originalDeduction = calculateDeductibleDaysInLeave(findEmployeeLeaveId(leave.getEmployee(), leave.getId()));
 		double currentDeduction = calculateDeductibleDaysInLeave(leave);
 		
-		if (leave.getStatus() == LeaveStatus.CANCELLED || leave.getStatus() == LeaveStatus.DELETED || leave.getStatus() == LeaveStatus.REJECTED) {
+		if (leave.getLeaveStatus() == LeaveStatus.CANCELLED || leave.getLeaveStatus() == LeaveStatus.DELETED || leave.getLeaveStatus() == LeaveStatus.REJECTED) {
 			currentDeduction = 0;
 		}
 		
@@ -54,57 +56,57 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 	
 	@Override
-	public List<Leave> findAllEmployeeLeaves(Employee employee) {
+	public List<LeaveApplication> findAllEmployeeLeaves(Employee employee) {
 		return leaveRepo.findAllLeaveByEmployeeId(employee.getId());
 	}
 
 	@Override
-	public List<Leave> findEmployeeLeavesCurrYear(Employee employee) {
+	public List<LeaveApplication> findEmployeeLeavesCurrYear(Employee employee) {
 		return leaveRepo.findCurrYearLeaveByEmployeeId(employee.getId());
 	}
 	
 	@Override
-	public List<Leave> findEmployeeLeavesUpcoming(Employee employee) {
+	public List<LeaveApplication> findEmployeeLeavesUpcoming(Employee employee) {
 		return leaveRepo.findUpcomingLeaveByEmployeeId(employee.getId());
 	}
 	
 	@Override
-	public Leave findEmployeeLeaveId(Employee employee, Integer leaveId) {
+	public LeaveApplication findEmployeeLeaveId(Employee employee, Integer leaveId) {
 		return leaveRepo.findEmployeeLeaveById(employee.getId(), leaveId);
 	}
 	
     
     // -- Manager --
-    public List<Leave> findAllSubordinatePendingLeaves(Employee manager) {
+    public List<LeaveApplication> findAllSubordinatePendingLeaves(Employee manager) {
 		return leaveRepo.findAllSubordinatePendingLeaves(manager.getId());
 	}
 	
-    public List<Leave> findOverlappingSubordinateLeaves(Employee manager, Leave leave) {
-		return leaveRepo.findOverlappingSubordinateLeaves(manager.getId(), leave.getStartDate(), leave.getEndDate());
+    public List<LeaveApplication> findOverlappingSubordinateLeaves(Employee manager, LeaveApplication leave) {
+		return leaveRepo.findOverlappingSubordinateLeaves(manager.getId(), leave.getId(), leave.getStartDate(), leave.getEndDate());
 	}
 	
-    public List<Leave> findSubordinateLeaveHistory(Employee manager, Integer subordinateId) {
+    public List<LeaveApplication> findSubordinateLeaveHistory(Employee manager, Integer subordinateId) {
 		return leaveRepo.findSubordinateLeaveHistory(manager.getId(), subordinateId);
 	}
 	
-    public Leave findSubordinateLeaveById(Employee manager, Integer subordinateId, Integer leaveId) {
+    public LeaveApplication findSubordinateLeaveById(Employee manager, Integer subordinateId, Integer leaveId) {
 		return leaveRepo.findSubordinateLeaveById(manager.getId(), subordinateId, leaveId);
 	}
     
     // -- Utility --
     @Override
-    public Page<Leave> getPaginatedLeaves(int page, int pageSize, List<Leave> listLeaves) {
+    public Page<LeaveApplication> getPaginatedLeaves(int page, int pageSize, List<LeaveApplication> listLeaves) {
         Pageable pageRequest = PageRequest.of(page, pageSize);
 
         int start = (int) pageRequest.getOffset();
         int end = Math.min((start + pageRequest.getPageSize()), listLeaves.size());
 
-        List<Leave> pageContent = listLeaves.subList(start, end);
+        List<LeaveApplication> pageContent = listLeaves.subList(start, end);
         return new PageImpl<>(pageContent, pageRequest, listLeaves.size());
     }
     
 	@Override
-	public double calculateDeductibleDaysInLeave(Leave leave) {
+	public double calculateDeductibleDaysInLeave(LeaveApplication leave) {
 		// If Leave Period > 14 days, weekends and public holidays are included
 		if (leave.getCalendarDuration() > 14) {
 			return leave.getCalendarDuration();

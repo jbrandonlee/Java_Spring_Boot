@@ -16,11 +16,13 @@ public class LeaveTypeServiceImpl implements LeaveTypeService {
 	LeaveTypeRepository leaveTypeRepo;
 	
 	@Override
+	@Transactional(readOnly = false)
 	public LeaveType createLeaveType(LeaveType leaveType) {
 		return leaveTypeRepo.saveAndFlush(leaveType);
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public LeaveType updateLeaveType(LeaveType leaveType) {
 		return leaveTypeRepo.saveAndFlush(leaveType);
 	}
