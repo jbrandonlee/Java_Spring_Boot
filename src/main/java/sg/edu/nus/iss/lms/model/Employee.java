@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,10 +25,13 @@ public class Employee {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotBlank(message = "Name must not be empty.")
 	private String name;
 	
+	@NotBlank(message = "Job Designation must not be empty.")
 	private String jobDesignation;
 	
+	@NotNull(message = "Join Date must not be empty.")
 	private LocalDate joinDate;
 	
 	private Integer managerId;

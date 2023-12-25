@@ -36,7 +36,7 @@ public class HolidayServiceImpl implements HolidayService {
 	
 	@Override
 	public List<Holiday> findAllHolidays() {
-		return holidayRepo.findAll();
+		return holidayRepo.findAllHolidaysDateOrder();
 	}
 	
 	@Override
