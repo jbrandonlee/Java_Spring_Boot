@@ -25,7 +25,12 @@ public class HomeController {
 	private EmployeeService empService;
 	
 	@GetMapping(value = { "/", "/login", "/home" })
-	public String login(Model model) {
+	public String login(Model model, HttpSession sessionObj) {
+		
+		if (sessionObj.getAttribute("account") != null) {
+			return "redirect:/staff/overview";
+		}
+		
 		model.addAttribute("account", new Account());
 		return "login";
 	}
@@ -50,7 +55,8 @@ public class HomeController {
 	}
 	
 	@GetMapping(value = "/logout")
-	public String logout(Model model) {
+	public String logout(Model model, HttpSession sessionObj) {
+		sessionObj.invalidate();
 		return "redirect:/login";
 	}
 	
