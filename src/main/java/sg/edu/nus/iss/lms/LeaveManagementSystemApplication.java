@@ -54,7 +54,7 @@ public class LeaveManagementSystemApplication {
     						   LeaveEntitlementRepository leaveEntitlementRepo,
     						   OvertimeRepository overtimeRepo) {
 		return args -> {
-			
+			/*
 			// Add Holiday Mock Data from 2022-2024
 			// -- Free access to the API only gives data for 2022.
 			// -- 2023 & 2024 mock data are duplicated from 2022 data. 
@@ -146,6 +146,7 @@ public class LeaveManagementSystemApplication {
 			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 5), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 6), DaySection.AM, LocalDate.of(2024, 2, 6), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 7), DaySection.AM, LocalDate.of(2024, 2, 7), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
+			*/
 		};
 	}
     

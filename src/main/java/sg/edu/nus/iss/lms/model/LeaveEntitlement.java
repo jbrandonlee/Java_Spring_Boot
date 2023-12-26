@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,10 +21,10 @@ public class LeaveEntitlement {
 	@ManyToOne
 	private LeaveType leaveType;
 	
-	@NotBlank(message = "Assigned Leave Entitlement must not be empty.")
+	@NotNull(message = "Assigned Leave Entitlement must not be empty.")
 	private double entitlement;
 	
-	@NotBlank(message = "Assigned Leave Balance must not be empty.")
+	@NotNull(message = "Assigned Leave Balance must not be empty.")
 	private double leaveBalance;
 	
 	@ManyToOne
