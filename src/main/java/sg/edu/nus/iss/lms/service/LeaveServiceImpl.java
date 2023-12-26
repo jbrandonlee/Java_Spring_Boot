@@ -120,6 +120,10 @@ public class LeaveServiceImpl implements LeaveService {
 		Set<DayOfWeek> weekend = EnumSet.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 		List<LocalDate> holidayDates = holidayRepo.findAllActiveHolidayDates();
 		
+		if (endDate.isBefore(startDate)) {
+			return 0.0;
+		}
+		
 		long fullDays = startDate.datesUntil(endDate)
 		        .filter(d -> !weekend.contains(d.getDayOfWeek()) && !holidayDates.contains(d))
 		        .count();

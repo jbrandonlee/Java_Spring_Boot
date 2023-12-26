@@ -167,7 +167,7 @@ public class StaffLeaveController {
 		model.addAttribute("totalPages", leaveHistoryPage.getTotalPages());
 		model.addAttribute("totalItems", leaveHistoryPage.getTotalElements());
 		model.addAttribute("leaveHistory", leaveHistoryPaged);
-		model.addAttribute("showAll", false);
+		model.addAttribute("showAll", true);
 		return "leave-history";
 	}
 

@@ -115,7 +115,7 @@ public class StaffOvertimeController {
 		model.addAttribute("totalPages", overtimeHistoryPage.getTotalPages());
 		model.addAttribute("totalItems", overtimeHistoryPage.getTotalElements());
 		model.addAttribute("overtimeHistory", overtimeHistoryPaged);
-		model.addAttribute("showAll", false);
+		model.addAttribute("showAll", true);
 		return "overtime-history";
 	}
 

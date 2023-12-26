@@ -45,7 +45,6 @@
 											   (overtime.claimStatus.toString() == 'APPROVED') ? 'text-success' :
 											   (overtime.claimStatus.toString() == 'REJECTED') ? 'text-danger' : 'text-secondary'}"></td>
 						<td>
-						<td>
 							<span><a class="btn btn-sm btn-outline-primary" th:href="@{~/manager/staff/}+${overtime.employee.id}+${'/overtime/'}+${overtime.id}">View</a></span>
 						</td>
 					</tr>

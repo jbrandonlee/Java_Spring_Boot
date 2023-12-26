@@ -54,7 +54,7 @@ public class LeaveManagementSystemApplication {
     						   LeaveEntitlementRepository leaveEntitlementRepo,
     						   OvertimeRepository overtimeRepo) {
 		return args -> {
-			/*
+			
 			// Add Holiday Mock Data from 2022-2024
 			// -- Free access to the API only gives data for 2022.
 			// -- 2023 & 2024 mock data are duplicated from 2022 data. 
@@ -121,7 +121,7 @@ public class LeaveManagementSystemApplication {
 			leaveRepo.save(new LeaveApplication(manager1, compensation, LocalDate.of(2024, 2, 20), DaySection.AM, LocalDate.of(2024, 2, 20), DaySection.AM, "Local", "Half-Day Compensation Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 			
 			leaveRepo.save(new LeaveApplication(staff1a, compensation, LocalDate.of(2024, 1, 10), DaySection.AM, LocalDate.of(2024, 1, 10), DaySection.AM, "Local", "Half-Day Compensation Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			leaveRepo.save(new LeaveApplication(staff1a, medical, LocalDate.of(2024, 1, 11), DaySection.AM, LocalDate.of(2024, 1, 11), DaySection.AM, "Local", "1-Day Medical Appt", "No remaining work.", "NIL", LeaveStatus.APPROVED));
+			leaveRepo.save(new LeaveApplication(staff1a, medical, LocalDate.of(2024, 1, 11), DaySection.AM, LocalDate.of(2024, 1, 11), DaySection.PM, "Local", "1-Day Medical Appt", "No remaining work.", "NIL", LeaveStatus.APPROVED));
 			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 12), DaySection.AM, LocalDate.of(2024, 1, 18), DaySection.PM, "Overseas", "1 Week Leave", "No remaining work.", "Mobile: 91234567", LeaveStatus.APPLIED));
 			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 19), DaySection.AM, LocalDate.of(2024, 1, 19), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.UPDATED));
 			leaveRepo.save(new LeaveApplication(staff1a, annual, LocalDate.of(2024, 1, 22), DaySection.AM, LocalDate.of(2024, 1, 22), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.DELETED));
@@ -146,7 +146,7 @@ public class LeaveManagementSystemApplication {
 			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 5), DaySection.AM, LocalDate.of(2024, 2, 5), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 6), DaySection.AM, LocalDate.of(2024, 2, 6), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
 			leaveRepo.save(new LeaveApplication(staff2a, annual, LocalDate.of(2024, 2, 7), DaySection.AM, LocalDate.of(2024, 2, 7), DaySection.PM, "Local", "1 Day Leave", "No remaining work.", "NIL", LeaveStatus.APPLIED));
-			*/
+			
 		};
 	}
     
